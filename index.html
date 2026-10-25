@@ -743,8 +743,8 @@ img.band{height:auto;object-fit:cover}
   // ---- ページの切りかえ（戻るボタンにも対応）----
   const pages=[...document.querySelectorAll('.page')];
   const TITLES={top:'',story:'STORY',experience:'体験とワークショップ',goods:'GOODS',contact:'お問い合わせ'};
-  const TOP_TITLE=document.title,md0=document.querySelector('meta[name="description"]'),TOP_DESC=md0?md0.content:'';
-  const cn0=document.querySelector('link[rel="canonical"]'),SITE=cn0?cn0.href.replace(/\/$/,''):location.origin;
+  const TOP_TITLE='wai marbling studio｜マーブリングとアートのスタジオ（名古屋）',TOP_DESC='名古屋のマーブリングスタジオ、wai marbling studio。水に浮かべた色で、あなただけの模様を。フェスやイベントでのボディマーブリング、ワークショップ、オリジナルグッズ。';
+  const cn0=document.querySelector('link[rel="canonical"]'),SITE=cn0?new URL(cn0.href).origin:location.origin;
   const DESCS={story:'wai marbling studio のはじまり。TikTokで見た1本の動画から、名古屋でマーブリングをはじめるまでのお話。',
     experience:'フェスやイベントのブースで、水面に描いた模様を腕に写しとるボディマーブリング。体験の流れと、体験の前に知っておいてほしいこと。',
     goods:'マーブリングの模様をそのまま閉じこめた、wai marbling studio のオリジナルグッズ。第1弾のステッカーを準備中です。',
