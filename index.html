@@ -128,6 +128,9 @@ a{color:inherit}
 .ev-y{font-family:var(--font-en);font-size:12px;letter-spacing:.08em;color:var(--accent)}
 @media (max-width:480px){.ev li{grid-template-columns:1fr auto;gap:4px 12px}.ev-y{grid-column:1/-1}}
 .ev b{font-family:var(--font-jp);font-weight:400;font-size:clamp(14px,3.6vw,17px);letter-spacing:.12em}
+.ev-n{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ev-l{font-size:11px;letter-spacing:.1em;color:var(--muted);text-decoration:none;align-self:flex-start;border-bottom:1px solid var(--line);line-height:1.6;transition:color .2s}
+.ev-l:hover{color:var(--accent)}
 .ev-p{font-size:12px;color:var(--muted);letter-spacing:.14em}
 .gd{display:grid;grid-template-columns:1fr;gap:32px;align-items:center}
 @media (min-width:600px){.gd{grid-template-columns:200px minmax(0,1fr);gap:48px}}
@@ -146,7 +149,7 @@ a{color:inherit}
 .sns a:hover{opacity:.6}
 .follow{overflow:hidden}
 .follow .sec-in{position:relative;z-index:1}
-.wm{position:absolute;left:50%;top:50%;width:min(92vw,820px);transform:translate(-50%,-46%) rotate(-6deg);color:var(--accent);opacity:.07;pointer-events:none;z-index:0}
+.wm{position:absolute;left:50%;top:50%;width:min(92vw,820px);transform:translate(-50%,-46%) rotate(-6deg);color:var(--accent);opacity:.11;pointer-events:none;z-index:0}
 .wm .logo{width:100%;height:auto}
 .ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;flex:none}
 .ic .f{fill:currentColor;stroke:none}
@@ -272,17 +275,20 @@ img.band{height:auto;object-fit:cover}
 .foot-sns{display:flex;gap:22px;font-family:var(--font-en);font-size:11px;letter-spacing:.2em}
 .foot-sns a{color:var(--fg);text-decoration:none;display:flex;padding:6px;transition:opacity .2s}.foot-sns a:hover{opacity:.6}
 .xp{display:grid;grid-template-columns:1fr;gap:40px}
-@media (min-width:860px){.xp{grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:72px;align-items:start}}
+@media (min-width:860px){.xp{grid-template-columns:minmax(0,.78fr) minmax(0,1.4fr);gap:64px;align-items:start}}
 .xp-h{display:flex;flex-direction:column;gap:22px}
 .xp-h p{color:var(--fg)}
 .xp-b{display:flex;flex-direction:column;gap:24px;min-width:0}
 .xp-cards{display:grid;grid-template-columns:1fr;gap:14px}
-@media (min-width:600px){.xp-cards{grid-template-columns:1fr 1fr}}
-.xp-card{background:color-mix(in srgb,var(--accent) 7%,var(--bg));border-radius:20px;padding:26px 24px 28px;display:flex;flex-direction:column;gap:8px}
+
+.xp-card{background:color-mix(in srgb,var(--accent) 7%,var(--bg));border-radius:20px;padding:24px 26px 26px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:baseline}
+.xp-card .xp-desc{grid-column:1/-1}
+@media (min-width:600px){.xp-card{grid-template-columns:28px 150px 1fr;padding:26px 30px}.xp-card .xp-desc{grid-column:auto}}
 .xp-no{font-family:var(--font-en);font-size:12px;letter-spacing:.2em;color:var(--accent)}
 .xp-name{margin:0;font-size:18px;font-weight:400;letter-spacing:.12em}
+.xp-desc span{display:inline-block}
 .xp-desc{margin:0;font-size:13.5px;line-height:1.95;color:var(--fg);opacity:.82}
-.xp-facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--line)}
+.xp-facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);border-block:1px solid var(--line)}
 .xp-facts li{display:flex;flex-direction:column;align-items:center;gap:2px;padding:18px 6px;text-align:center}
 .xp-facts li+li{border-left:1px solid var(--line)}
 .xp-facts span{font-size:11px;letter-spacing:.14em;color:var(--muted)}
@@ -372,16 +378,14 @@ img.band{height:auto;object-fit:cover}
       </div>
       <div class="xp-b">
         <div class="xp-cards">
-          <div class="xp-card"><span class="xp-no">01</span><p class="xp-name">おまかせ 2色</p><p class="xp-desc">好きな色を1色えらんで、もう1色はその色に合う色をおまかせで。</p></div>
-          <div class="xp-card"><span class="xp-no">02</span><p class="xp-name">フルオーダー</p><p class="xp-desc">何色でも、ぜんぶ好きな色をえらべます。</p></div>
+          <div class="xp-card"><span class="xp-no">01</span><p class="xp-name">おまかせ 2色</p><p class="xp-desc"><span>好きな色を1色えらんで、</span><span>もう1色は、その色に合う色をおまかせで。</span></p></div>
+          <div class="xp-card"><span class="xp-no">02</span><p class="xp-name">フルオーダー</p><p class="xp-desc"><span>何色でも、ぜんぶ好きな色を</span><span>えらべます。</span></p></div>
         </div>
         <ul class="xp-facts">
-          <li><span>写す場所</span><b>片腕</b></li>
           <li><span>時間</span><b>5〜10<small>分</small></b></li>
           <li><span>落とし方</span><b>お風呂で</b></li>
         </ul>
-        <p class="xp-note">料金は、出店するイベントによってちがいます。</p>
-        <div class="xp-ws"><span class="eyebrow">WORKSHOP</span><p><span>紙や布に写すマーブリングや、</span><span>アートのワークショップも行っています。</span></p><a class="more" href="#contact" data-go="contact">開催を相談する</a></div>
+        <div class="xp-ws"><span class="eyebrow">WORKSHOP</span><p><span>紙や布に写すマーブリングや、</span><span>アートのワークショップも、</span><span>これからひらいていきたいと思っています。</span></p><a class="more" href="#contact" data-go="contact">開催を相談する</a></div>
       </div>
     </div>
   </section>
@@ -409,10 +413,10 @@ img.band{height:auto;object-fit:cover}
         <p class="small">次の出店は、Instagramでお知らせします。</p>
       </div>
       <ol class="ev">
-        <li><span class="ev-y">2026.10.03</span><b>SECRET BASE JAM</b><span class="ev-p">千葉</span></li>
-        <li><span class="ev-y">2026.09.26</span><b>LEOFES</b><span class="ev-p">大阪</span></li>
-        <li><span class="ev-y">2026.08.14–15</span><b>RISING SUN ROCK FESTIVAL</b><span class="ev-p">北海道</span></li>
-        <li><span class="ev-y">2026.05.16–17</span><b>FREEDOM NAGOYA</b><span class="ev-p">愛知</span></li>
+        <li><span class="ev-y">2026.10.03</span><div class="ev-n"><b>SECRET BASE JAM</b><a class="ev-l" href="https://secretbasejam.com/" target="_blank" rel="noopener">公式サイト<span aria-hidden="true"> ↗</span></a></div><span class="ev-p">千葉</span></li>
+        <li><span class="ev-y">2026.09.26</span><div class="ev-n"><b>LEOFES</b><a class="ev-l" href="https://leodrat.com/" target="_blank" rel="noopener">公式サイト<span aria-hidden="true"> ↗</span></a></div><span class="ev-p">大阪</span></li>
+        <li><span class="ev-y">2026.08.14–15</span><div class="ev-n"><b>RISING SUN ROCK FESTIVAL</b><a class="ev-l" href="https://rsr.wess.co.jp/" target="_blank" rel="noopener">公式サイト<span aria-hidden="true"> ↗</span></a></div><span class="ev-p">北海道</span></li>
+        <li><span class="ev-y">2026.05.16–17</span><div class="ev-n"><b>FREEDOM NAGOYA</b><a class="ev-l" href="https://freedom.radcreation.jp/" target="_blank" rel="noopener">公式サイト<span aria-hidden="true"> ↗</span></a></div><span class="ev-p">愛知</span></li>
       </ol>
     </div>
   </section>
@@ -491,7 +495,7 @@ img.band{height:auto;object-fit:cover}
       <div class="menu-item"><p class="m-name">おまかせ 2色</p><p class="m-desc">好きな色を1色えらんで、もう1色はその色に合う色をおまかせで。</p></div>
       <div class="menu-item"><p class="m-name">フルオーダー</p><p class="m-desc">何色でも、ぜんぶ好きな色をえらべます。</p></div>
     </div>
-    <p class="small">水槽の大きさのため、片腕のみとなります。料金は出店するイベントによってちがうので、各イベントのお知らせをご覧ください。</p>
+    <p class="small">水槽の大きさのため、片腕のみとなります。</p>
 
     <h2>体験の流れ</h2>
     <ol class="steps">
@@ -504,7 +508,7 @@ img.band{height:auto;object-fit:cover}
     </ol>
 
     <h2>ワークショップ</h2>
-    <p>ボディマーブリングのほかに、紙や布に模様を写すマーブリングや、アートのワークショップも行っています。イベントやお店での開催のご相談は、お問い合わせからお気軽にどうぞ。</p>
+    <p>ボディマーブリングのほかに、紙や布に模様を写すマーブリングや、アートのワークショップも、これからひらいていきたいと思っています。イベントやお店での開催に興味のある方は、お問い合わせからお気軽にどうぞ。</p>
     <a class="more" href="#contact" data-go="contact">開催を相談する</a>
 
     <h2>体験の前に</h2>
