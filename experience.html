@@ -120,7 +120,7 @@ a{color:inherit}
 .page.pin{animation:pagein .6s ease both}
 @keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .sec{position:relative;border-top:1px solid var(--line);padding-block:clamp(72px,12vh,140px)}
-.sec-in{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.sec-in{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
 .sec h2,.read h2{font-weight:300;font-size:clamp(21px,5.2vw,28px);line-height:1.8;letter-spacing:.12em;margin:0;text-wrap:balance}
 .sec h3{font-weight:400;font-size:16px;letter-spacing:.14em;margin:6px 0 8px}
 .sec p,.read p{margin:0;max-width:34em}
@@ -171,6 +171,7 @@ a{color:inherit}
 .photo{object-fit:cover;height:auto}
 img.band{height:auto;object-fit:cover}
 .tile.tall{max-width:380px;justify-self:center;border-radius:999px 999px 0 0}
+@media (min-width:760px){.two .tile.tall{justify-self:end;max-width:420px}}
 .tile.round{aspect-ratio:1;border-radius:50%}
 .more{align-self:flex-start;font-family:var(--font-en);font-size:12px;letter-spacing:.24em;text-decoration:none;border-bottom:1px solid var(--fg);padding-bottom:4px}
 .more::after{content:"  →"}
@@ -369,7 +370,7 @@ img.band{height:auto;object-fit:cover}
         <p>そのとき、みんなが「これ見て！」と自分の模様を見せ合っていた顔が、いまもwaiの真ん中にあります。</p>
         <a class="more" href="/story" data-go="story">ストーリーを読む</a>
       </div>
-      <img class="tile tall photo" src="img/story-arm-700.jpg" srcset="img/story-arm-700.jpg 700w, img/story-arm-1200.jpg 1200w" sizes="(min-width:760px) 380px, 88vw" alt="水槽の模様に腕を入れて、模様を写しとっているところ" loading="lazy" decoding="async">
+      <img class="tile tall photo" src="img/story-arm-700.jpg" srcset="img/story-arm-700.jpg 700w, img/story-arm-1200.jpg 1200w" sizes="(min-width:760px) 420px, 88vw" alt="水槽の模様に腕を入れて、模様を写しとっているところ" loading="lazy" decoding="async">
     </div>
   </section>
 
