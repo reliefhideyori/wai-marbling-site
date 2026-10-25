@@ -54,8 +54,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;font-family:var(--font-en);font-size:11px;font-weight:400;letter-spacing:.22em}
 
 .hero{display:flex;flex-direction:column;align-items:center;padding-block:clamp(56px,11vh,128px) clamp(72px,14vh,160px)}
-@media (max-width:640px){.hero{padding-top:clamp(36px,6vh,72px)}}
-.arch{display:block;width:max(180px,min(58vw,300px,calc((100svh - 310px)*.714)));aspect-ratio:3/4.2;max-width:100%;border-radius:999px 999px 0 0;background:var(--line)}
+@media (max-width:640px){.hero{padding-top:clamp(12px,2.6vh,48px)}.big-en{margin-bottom:14px}.pattern{margin-top:14px}.pick{gap:12px;margin-top:16px}.pick .btn{margin-top:10px}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.arch-w{max-width:100%}
+.arch{display:block;width:max(180px,min(58vw,300px,calc((100svh - 368px)*.714)));aspect-ratio:3/4.2;max-width:100%;border-radius:999px 999px 0 0;background:var(--line)}
 .stage{display:flex;flex-direction:column;align-items:center;width:100%;max-width:1080px}
 .side-r{display:none}
 .big-en{margin:0 0 22px;font-family:var(--font-en);font-weight:400;font-size:11px;letter-spacing:.32em;text-transform:uppercase;display:flex;gap:.7em}
@@ -63,7 +65,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tiny-en{margin:0;font-family:var(--font-en);font-size:10px;letter-spacing:.32em;color:var(--muted)}
 @media (min-width:900px){
   .stage{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:clamp(40px,6vw,96px)}
-  .arch{width:max(240px,min(clamp(300px,24vw,360px),calc((100svh - 270px)*.714)))}
+  .arch{width:max(200px,min(clamp(300px,24vw,360px),calc((100svh - 350px)*.714)))}
   .hero{padding-top:clamp(24px,4vh,56px)}
   .side{display:flex;flex-direction:column;gap:18px}
   .side-l{justify-content:flex-start;padding-top:12%}
@@ -85,7 +87,11 @@ h1.copy{margin:clamp(64px,10vh,112px) 0 0;font-weight:300;font-size:clamp(19px,4
 .lead{margin:10px 0 0;font-size:12px;color:var(--muted);letter-spacing:.16em;text-align:center}
 
 .pick{margin-top:clamp(20px,3vh,32px);width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;gap:16px}
-.pick-q{margin:0;font-size:11px;letter-spacing:.2em;color:var(--muted);text-align:center;min-height:2em}
+.pick-q{margin:0;font-size:11px;letter-spacing:.2em;color:var(--muted);text-align:center}
+.pick-q #now:not(:empty)::before{content:"　"}
+.chips.hinting .chip::before{animation:breathe 2.8s ease-in-out infinite;animation-delay:calc(var(--i)*.12s + 2.4s)}
+@keyframes breathe{0%,70%,100%{transform:none}35%{transform:scale(1.16)}}
+@media (prefers-reduced-motion:reduce){.chips.hinting .chip::before{animation:none}}
 .chips{display:flex;justify-content:space-between;width:100%}
 .chip{position:relative;width:28px;height:28px;flex:0 1 28px;touch-action:manipulation;border:0;padding:0;background:transparent;cursor:pointer}
 .chip::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .25s ease}
@@ -100,7 +106,7 @@ h1.copy{margin:clamp(64px,10vh,112px) 0 0;font-weight:300;font-size:clamp(19px,4
 
 .eyebrow{font-family:var(--font-en);font-size:11px;letter-spacing:.32em;color:var(--accent)}
 a{color:inherit}
-.page{animation:pagein .6s ease both}
+.page.pin{animation:pagein .6s ease both}
 @keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .sec{border-top:1px solid var(--line);padding-block:clamp(72px,12vh,140px)}
 .sec-in{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
@@ -140,6 +146,8 @@ a{color:inherit}
 @media (min-width:760px){.three{grid-template-columns:repeat(3,1fr);gap:40px}}
 .three>div{min-width:0}
 .tile{display:block;width:100%;aspect-ratio:4/5;background:var(--line);transition:background-color .6s}
+.photo{object-fit:cover;height:auto}
+img.band{height:auto;object-fit:cover}
 .tile.tall{max-width:380px;justify-self:center;border-radius:999px 999px 0 0}
 .tile.round{aspect-ratio:1;border-radius:50%}
 .more{align-self:flex-start;font-family:var(--font-en);font-size:12px;letter-spacing:.24em;text-decoration:none;border-bottom:1px solid var(--fg);padding-bottom:4px}
@@ -153,7 +161,7 @@ a{color:inherit}
 .m-price span{font-size:14px;margin-right:2px}
 .m-desc{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media (min-width:760px){.gallery{grid-template-columns:repeat(4,1fr);gap:16px}}
+@media (min-width:760px){.gallery{grid-template-columns:repeat(3,1fr);gap:16px}}
 .gallery figure,.goods figure,.wide{margin:0;position:relative;min-width:0}
 .gallery figcaption{position:absolute;left:10px;bottom:8px;font-size:10px;letter-spacing:.14em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.45)}
 .list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
@@ -193,14 +201,16 @@ a{color:inherit}
 .js [data-rv]{opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.7,.2,1) var(--d,0s),transform 1.1s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
 .js [data-rv].in{opacity:1;transform:none}
 /* ファーストビュー：窓が下から開き、文字が一行ずつ */
-.js .hero .arch{will-change:clip-path;clip-path:inset(100% 0 0 0 round 999px 999px 0 0);animation:archin 1.5s cubic-bezier(.65,0,.25,1) .15s forwards}
-@keyframes archin{to{clip-path:inset(0 0 0 0 round 999px 999px 0 0)}}
-.js .hero .big-en span,.js .hero .side-l .tiny-en,.js .hero .side-r>*,.js .hero .pattern,.js .hero .copy,.js .hero .lead,.js .hero .pick{opacity:0;transform:translateY(16px);animation:upin 1.1s cubic-bezier(.2,.7,.2,1) forwards}
-.js .hero .big-en span:nth-child(1){animation-delay:.55s}.js .hero .big-en span:nth-child(2){animation-delay:.68s}.js .hero .big-en span:nth-child(3){animation-delay:.81s}.js .hero .side-l .tiny-en{animation-delay:.94s}
-.js .hero .side-r>*:nth-child(1){animation-delay:1s}.js .hero .side-r>*:nth-child(2){animation-delay:1.12s}.js .hero .side-r>*:nth-child(3){animation-delay:1.24s}.js .hero .side-r>*:nth-child(4){animation-delay:1.36s}
-.js .hero .pattern{animation-delay:1.1s}.js .hero .pick{animation-delay:1.25s}.js .hero .copy{animation-delay:1.4s}.js .hero .lead{animation-delay:1.5s}
+.js .hero .arch-w{opacity:0;transform:translateY(22px) scale(.985)}
+.js.ready .hero .arch-w{animation:archin 1.6s cubic-bezier(.2,.7,.2,1) .05s forwards}
+@keyframes archin{to{opacity:1;transform:none}}
+.js .hero .big-en span,.js .hero .side-l .tiny-en,.js .hero .side-r>*,.js .hero .pattern,.js .hero .pick{opacity:0;transform:translateY(16px)}
+.js.ready .hero .big-en span,.js.ready .hero .side-l .tiny-en,.js.ready .hero .side-r>*,.js.ready .hero .pattern,.js.ready .hero .pick{animation:upin 1.1s cubic-bezier(.2,.7,.2,1) forwards}
+.js.ready .hero .big-en span:nth-child(1){animation-delay:.3s}.js.ready .hero .big-en span:nth-child(2){animation-delay:.4s}.js.ready .hero .big-en span:nth-child(3){animation-delay:.5s}.js.ready .hero .side-l .tiny-en{animation-delay:.6s}
+.js.ready .hero .side-r>*:nth-child(1){animation-delay:.55s}.js.ready .hero .side-r>*:nth-child(2){animation-delay:.65s}.js.ready .hero .side-r>*:nth-child(3){animation-delay:.75s}.js.ready .hero .side-r>*:nth-child(4){animation-delay:.85s}
+.js.ready .hero .pattern{animation-delay:.7s}.js.ready .hero .pick{animation-delay:.82s}
 @keyframes upin{to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.page{animation:none}.js [data-rv]{opacity:1;transform:none;transition:none}.js .hero .arch{will-change:clip-path;clip-path:none;animation:none}.js .hero *{animation:none!important;opacity:1!important;transform:none!important}}
+@media (prefers-reduced-motion:reduce){.page.pin{animation:none}.js [data-rv]{opacity:1;transform:none;transition:none}.js .hero .arch-w{opacity:1;transform:none}.js .hero *{animation:none!important;opacity:1!important;transform:none!important}}
 
 /* ---- 模様を保存 ---- */
 .save{font:inherit;font-size:12px;letter-spacing:.18em;color:var(--fg);background:none;border:0;border-bottom:1px solid currentColor;padding:6px 0 4px;margin-top:6px;cursor:pointer;transition:opacity .3s}
@@ -266,12 +276,13 @@ a{color:inherit}
 <!-- ===== TOP ===== -->
 <div class="page" data-page="top">
   <section class="hero pad">
+    <h1 class="sr">wai marbling studio｜名古屋のマーブリングとアートのスタジオ</h1>
     <div class="stage">
       <div class="side side-l">
         <p class="big-en" aria-label="Float your colors"><span>Float</span><span>your</span><span>colors.</span></p>
         <p class="tiny-en">MARBLING · ART — NAGOYA</p>
       </div>
-      <canvas class="arch" id="arch" aria-label="えらんだ色でできるマーブリング模様"></canvas>
+      <div class="arch-w"><canvas class="arch" id="arch" aria-label="えらんだ色でできるマーブリング模様"></canvas></div>
       <div class="side side-r">
         <p class="side-jp">しあわせのかたちは、<br>人それぞれ。</p>
         <p class="side-sub">水に浮かべた色が、<br>ひとつだけの模様になるように。<br>マーブリングで、あなたの「好き」が<br>かたちになる時間をつくっています。</p>
@@ -281,13 +292,11 @@ a{color:inherit}
     </div>
     <p class="pattern" aria-live="polite"><b id="pno">No.1</b><span id="pname">矢羽根</span></p>
     <div class="pick">
-      <p class="pick-q" id="q">好きな色を3つまで　<span id="now"></span></p>
-      <div class="chips" id="chips" role="group" aria-labelledby="q"></div>
+      <p class="pick-q" id="q">色にふれると、模様が変わります<span id="now"></span></p>
+      <div class="chips hinting" id="chips" role="group" aria-labelledby="q"></div>
       <button class="btn" id="again">ほかの模様をつくる</button>
       <button class="save" id="save" disabled>この模様を画像で保存</button>
     </div>
-    <h1 class="copy">あなたの色で、あなたの模様を。</h1>
-    <p class="lead">色をえらぶと、水の上に模様が生まれます</p>
   </section>
 
   <section class="statement pad" data-rv>
@@ -304,7 +313,7 @@ a{color:inherit}
         <p>そのとき、みんなが「これ見て！」と自分の模様を見せ合っていた顔が、いまもwaiの真ん中にあります。</p>
         <a class="more" href="#story" data-go="story">ストーリーを読む</a>
       </div>
-      <canvas class="tile tall" data-tile="0" data-cols="1,6,0" aria-hidden="true"></canvas>
+      <img class="tile tall photo" src="img/story-arm-700.jpg" srcset="img/story-arm-700.jpg 700w, img/story-arm-1200.jpg 1200w" sizes="(min-width:760px) 380px, 88vw" alt="水槽の模様に腕を入れて、模様を写しとっているところ" loading="lazy" decoding="async">
     </div>
   </section>
 
@@ -328,10 +337,12 @@ a{color:inherit}
       <span class="eyebrow">AT THE BOOTH</span>
       <h2>水面に、色が咲く。</h2>
       <div class="gallery">
-        <figure><canvas class="tile" aria-hidden="true" data-tile="4" data-cols="9,1,3"></canvas></figure>
-        <figure><canvas class="tile" aria-hidden="true" data-tile="2" data-cols="6,7,0"></canvas></figure>
-        <figure><canvas class="tile" aria-hidden="true" data-tile="1" data-cols="3,8,2"></canvas></figure>
-        <figure><canvas class="tile" aria-hidden="true" data-tile="0" data-cols="5,4,1"></canvas></figure>
+        <figure><img class="tile photo" src="img/g-arms-600.jpg" srcset="img/g-arms-600.jpg 600w, img/g-arms-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="模様が写った腕を見せ合うお客さん" loading="lazy" decoding="async"></figure>
+        <figure><img class="tile photo" src="img/g-drip-600.jpg" srcset="img/g-drip-600.jpg 600w, img/g-drip-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="水面に絵の具を落としているところ" loading="lazy" decoding="async"></figure>
+        <figure><img class="tile photo" src="img/g-three-600.jpg" srcset="img/g-three-600.jpg 600w, img/g-three-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="三人で腕の模様を見せてくれたお客さん" loading="lazy" decoding="async"></figure>
+        <figure><img class="tile photo" src="img/g-drop-600.jpg" srcset="img/g-drop-600.jpg 600w, img/g-drop-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="水面に広がる色" loading="lazy" decoding="async"></figure>
+        <figure><img class="tile photo" src="img/g-friends-600.jpg" srcset="img/g-friends-600.jpg 600w, img/g-friends-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="友だちどうしで体験してくれたお客さん" loading="lazy" decoding="async"></figure>
+        <figure><img class="tile photo" src="img/g-pose-600.jpg" srcset="img/g-pose-600.jpg 600w, img/g-pose-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="完成した腕の模様" loading="lazy" decoding="async"></figure>
       </div>
     </div>
   </section>
@@ -384,7 +395,7 @@ a{color:inherit}
 <!-- ===== STORY ===== -->
 <div class="page" data-page="story" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="1" data-cols="0,1,3" aria-hidden="true"></canvas>
+    <img class="band photo" src="img/band-story-960.jpg" srcset="img/band-story-960.jpg 960w, img/band-story-1920.jpg 1920w" sizes="(min-width:1000px) 960px, 100vw" alt="夜のフェス会場に灯るwaiのブース" loading="lazy" decoding="async">
     <span class="eyebrow">STORY</span>
     <h1 class="ph">waiのはじまり</h1>
   </section>
@@ -397,7 +408,7 @@ a{color:inherit}
     <p>きっかけは、TikTokで見た海外のフェスの動画でした。腕に、水面の模様がそのまま写しとられていく。ワクワクが止まらなくて、2〜3日後には100円ショップで道具をそろえ、名古屋・大須の古民家シーシャバーの一角で、初めてのマーブリングをしていました。</p>
     <p>知り合いも、初めて会った人も、みんな本当に楽しそうな顔で「これ見て！」と模様を見せ合っていました。誰もが、同じように自分を表現できる場所になる。そう確信した日です。</p>
 
-    <figure class="wide"><canvas class="tile wide-t" data-tile="2" data-cols="6,1,3" aria-hidden="true"></canvas></figure>
+    <figure class="wide"><img class="tile wide-t photo" src="img/wide-night-800.jpg" srcset="img/wide-night-800.jpg 800w, img/wide-night-1400.jpg 1400w" sizes="(min-width:700px) 640px, 90vw" alt="花火の上がる夜のフェス会場" loading="lazy" decoding="async"></figure>
 
     <h2>流体を研究していた人の、流体のアート</h2>
     <p>大学院では物理学で、流体力学を研究していました。いま、水の上に浮かべた絵の具で模様をつくっています。マーブリングは、まさに流体のアートです。</p>
@@ -415,7 +426,7 @@ a{color:inherit}
 <!-- ===== EXPERIENCE ===== -->
 <div class="page" data-page="experience" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="4" data-cols="9,1,3" aria-hidden="true"></canvas>
+    <img class="band photo" src="img/band-exp-960.jpg" srcset="img/band-exp-960.jpg 960w, img/band-exp-1920.jpg 1920w" sizes="(min-width:1000px) 960px, 100vw" alt="水槽の水面に描いたマーブリング模様" loading="lazy" decoding="async">
     <span class="eyebrow">EXPERIENCE</span>
     <h1 class="ph">体験とワークショップ</h1>
   </section>
@@ -455,7 +466,7 @@ a{color:inherit}
 <!-- ===== GOODS ===== -->
 <div class="page" data-page="goods" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="0" data-cols="3,6,9" aria-hidden="true"></canvas>
+    <img class="band photo" src="img/band-goods-960.jpg" srcset="img/band-goods-960.jpg 960w, img/band-goods-1920.jpg 1920w" sizes="(min-width:1000px) 960px, 100vw" alt="マーブリング模様の丸いグッズ" loading="lazy" decoding="async">
     <span class="eyebrow">GOODS</span>
     <h1 class="ph">オリジナルグッズ</h1>
   </section>
@@ -472,7 +483,7 @@ a{color:inherit}
 <!-- ===== CONTACT ===== -->
 <div class="page" data-page="contact" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="1" data-cols="6,0,1" aria-hidden="true"></canvas>
+    <img class="band photo" src="img/band-contact-960.jpg" srcset="img/band-contact-960.jpg 960w, img/band-contact-1920.jpg 1920w" sizes="(min-width:1000px) 960px, 100vw" alt="体験してくれたお客さんたち" loading="lazy" decoding="async">
     <span class="eyebrow">CONTACT</span>
     <h1 class="ph">お問い合わせ</h1>
   </section>
@@ -550,6 +561,13 @@ a{color:inherit}
       const n=Math.max(1,Math.ceil((p-prev)*120));for(let j=1;j<=n;j++){const a=prev+(p-prev)*(j-1)/n,b=prev+(p-prev)*j/n,A=path(a),B=path(b),dx=B[0]-A[0],dy=B[1]-A[1];
         for(const k of this.inks){k.subdivide(2.5);const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const ex=X[i]-B[0],ey=Y[i]-B[1],w=Math.exp(-(ex*ex+ey*ey)/(lam*lam));if(w>.002){X[i]+=dx*w;Y[i]+=dy*w}}}}
       prev=p;this.dirty=true;if(p<1)this.anims.push(step);else res()};this.anims.push(step)})}
+    // 何本もの串を同時に動かす（花びら）
+    multi(paths,lam,p0,p1){const n=Math.max(1,Math.ceil((p1-p0)*90)),L2=lam*lam,cut=L2*6;
+      for(const k of this.inks)k.subdivide(2.5);
+      for(let j=1;j<=n;j++){const a=p0+(p1-p0)*(j-1)/n,b=p0+(p1-p0)*j/n;for(const path of paths){const A=path(a),B=path(b),dx=B[0]-A[0],dy=B[1]-A[1];
+        for(const k of this.inks){const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const ex=X[i]-B[0],ey=Y[i]-B[1],d2=ex*ex+ey*ey;if(d2<cut){const w=Math.exp(-d2/L2);X[i]+=dx*w;Y[i]+=dy*w}}}}}this.dirty=true}
+    multiRun(paths,lam,ms){return new Promise(res=>{let t0=null,prev=0;const step=t=>{if(t0===null)t0=t;const lin=Math.min(1,(t-t0)/ms),p=lin<.5?2*lin*lin:1-Math.pow(-2*lin+2,2)/2;
+      if(p>prev)this.multi(paths,lam,prev,p);prev=p;if(lin<1)this.anims.push(step);else res()};this.anims.push(step)})}
     animate(fn,ms){return new Promise(res=>{let done=0,t0=null;const step=t=>{if(t0===null)t0=t;const p=Math.min(1,(t-t0)/ms),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
       fn(e-done);done=e;if(p<1)this.anims.push(step);else res()};this.anims.push(step)})}
     frame(t){const a=this.anims;this.anims=[];for(const f of a)f(t);if(this.dirty){this.draw();this.dirty=false}}
@@ -564,13 +582,13 @@ a{color:inherit}
   const chipsEl=document.getElementById('chips'),now=document.getElementById('now'),again=document.getElementById('again');
   let picked=[0,1,3],auto;
   try{const s=JSON.parse(localStorage.getItem('wai-picked')||'null');if(Array.isArray(s)&&s.length>=2&&s.length<=3)picked=s}catch(e){}
-  COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
-    b.addEventListener('click',()=>{const at=picked.indexOf(i);if(at>=0)picked.splice(at,1);else{if(picked.length===3)picked.shift();picked.push(i)}renderChips();clearTimeout(auto);if(picked.length>=2)auto=setTimeout(()=>{bringArch();make(true)},550)});chipsEl.appendChild(b)});
+  COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.style.setProperty('--i',i);b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
+    b.addEventListener('click',()=>{chipsEl.classList.remove('hinting');const at=picked.indexOf(i);if(at>=0)picked.splice(at,1);else{if(picked.length===3)picked.shift();picked.push(i)}renderChips();clearTimeout(auto);if(picked.length>=2)auto=setTimeout(()=>{bringArch();make(true)},550)});chipsEl.appendChild(b)});
   // 窓が画面から外れているときだけ、模様が見える位置までそっと戻す
   function bringArch(){const r=canvas.getBoundingClientRect(),top=document.querySelector('.top').offsetHeight;
     if(r.top>=top-4&&r.bottom<=innerHeight+4)return;scrollTo({top:scrollY+r.top-top-16,behavior:reduce?'auto':'smooth'})}
   function renderChips(){COLORS.forEach((c,i)=>{const b=document.getElementById('chip'+i),at=picked.indexOf(i);b.setAttribute('aria-pressed',at>=0);b.querySelector('.n').textContent=at>=0?at+1:''});
-    now.textContent=picked.length>=2?picked.map(i=>COLORS[i][0]).join(' × '):'あと'+(2-picked.length)+'色';
+    now.textContent=picked.length>=2?'':'（あと'+(2-picked.length)+'色）';
     try{localStorage.setItem('wai-picked',JSON.stringify(picked))}catch(e){}}
   renderChips();
 
@@ -578,20 +596,24 @@ a{color:inherit}
   // drops: 滴を落とす場所 / moves: そのあとの串や動き（[種類, ...値, 時間]）
   // どの模様も「くし」か「串」で水面をなぞってつくる
   const getgel=(W,H,sp,ms)=>[['tine',0,0,1,0,W*.45,W*.07,sp,ms],['tine',0,sp/2,-1,0,W*.45,W*.07,sp,ms]];
+  // 花びら：中心にむかって（または外へ）串を何本も通す
+  const petals=(cx,cy,n,r0,r1,rot=0)=>{const o=[];for(let k=0;k<n;k++){const a=k/n*Math.PI*2-Math.PI/2+rot;o.push(t=>{const r=r0+(r1-r0)*t;return[cx+Math.cos(a)*r,cy+Math.sin(a)*r]})}return o};
+  const rows=(W,H,nr,nc)=>{const o=[];for(let j=0;j<nr;j++)for(let i=0;i<nc;i++)o.push([W*(i+.5+(j%2)*.5)/nc,H*(j+.5)/nr]);return o};
+  const FL=[[.3,.25,0],[.72,.5,.3],[.3,.77,.6]];
   const PATTERNS=[
     {name:'矢羽根',drops:(W,H,r)=>[[.5,.34],[.24,.6],[.76,.62],[.5,.86],[.2,.22],[.8,.24],[.5,.1]].map(([x,y])=>[W*(x+(r()-.5)*.1),H*(y+(r()-.5)*.06)]),rings:7,moves:(W,H)=>{const sv=W*.16;return[
       ['tine',0,H*.30,1,0,W*.45,W*.08,H*.2,700],['tine',0,H*.40,-1,0,W*.45,W*.08,H*.2,700],
       ['tine',W*.5,0,0,1,H*.16,W*.04,sv,700],['tine',W*.5+sv/2,0,0,-1,H*.16,W*.04,sv,700]]}},
-    {name:'ゆきき',drops:(W,H,r)=>scatter(W,H,r,20),rings:4,moves:(W,H)=>[
-      ...getgel(W,H,H*.09,600),['tine',0,H*.045,1,0,W*.3,W*.03,H*.09,600]]},
+    {name:'ゆきき',drops:(W,H)=>rows(W,H,6,3),rings:5,moves:(W,H)=>{const s=H/6;return[
+      ['tine',0,0,1,0,W*.5,W*.05,s,800],['tine',0,s/2,-1,0,W*.5,W*.05,s,800]]}},
     {name:'なみ',drops:(W,H,r)=>scatter(W,H,r,20),rings:4,moves:(W,H)=>[
       ...getgel(W,H,H*.1,600),['curve',W*.06,W*.09,H*.22,H*.2,W*.035,W*.125,1100]]},
-    {name:'うず',drops:(W,H,r)=>scatter(W,H,r,20),rings:4,moves:(W,H)=>[
-      ...getgel(W,H,H*.14,550),['stylus',t=>{const a=t*Math.PI*5.5,rr=W*.46*(1-t*.92);return[W*.5+Math.cos(a)*rr,H*.55+Math.sin(a)*rr*1.15]},W*.09,1600]]},
+    {name:'花',drops:(W,H)=>FL.map(([x,y])=>[W*x,H*y]),rings:7,rscale:.8,moves:(W,H)=>{const p=[];
+      FL.forEach(([x,y,a])=>p.push(...petals(W*x,H*y,6,W*.36,W*.02,a)));return[['multi',p,W*.04,1400]]}},
     {name:'ハート',drops:(W,H,r)=>grid(W,H,3,4),rings:6,moves:(W,H)=>[
       ['tine',W/6,0,0,1,H*.09,W*.035,W/3,900]]},
-    {name:'くじゃく',drops:(W,H,r)=>scatter(W,H,r,20),rings:4,moves:(W,H)=>[
-      ...getgel(W,H,H*.08,550),['curve',0,W*.05,H*.16,H*.12,W*.03,W*.1,900],['tine',W*.025,0,0,-1,H*.1,W*.018,W*.05,800]]}
+    {name:'大輪',drops:(W,H)=>[[W*.5,H*.56]],rings:11,moves:(W,H)=>{const cx=W*.5,cy=H*.56;return[
+      ['multi',petals(cx,cy,8,W*.75,W*.04),W*.05,1300],['multi',petals(cx,cy,8,W*.75,W*.26,Math.PI/8),W*.035,900]]}}
   ];
   function scatter(W,H,rnd,n){const out=[];const cols=Math.ceil(Math.sqrt(n*W/H)),rows=Math.ceil(n/cols);
     for(let i=0;i<n;i++){const c=i%cols,r=Math.floor(i/cols);out.push([W*(c+.5+(rnd()-.5)*.7)/cols,H*(r+.5+(rnd()-.5)*.6)/rows])}return out}
@@ -609,11 +631,12 @@ a{color:inherit}
     const cols=picked.map(i=>COLORS[i][1]);
     tank=new Tank(canvas);tank.water=cols[0];      // 最初の色が水面いっぱいに広がる（地の色）
     const W=tank.w,H=tank.h,alive=()=>my===run,order=cols.slice(1).concat(cols[0]);
-    const sites=P.drops(W,H,rnd),area=W*H,R=Math.sqrt(area*.95/(Math.PI*sites.length*P.rings))*1.15;
+    const sites=P.drops(W,H,rnd),area=W*H,R=Math.sqrt(area*.95/(Math.PI*sites.length*P.rings))*1.15*(P.rscale||1);
     const dropSite=async([x,y],si)=>{await sleep(si*Math.min(110,900/sites.length));for(let r=0;r<P.rings;r++){if(!alive())return;const rr=R*(.6+rnd()*.55);
       if(reduce)tank.dropNow(x,y,rr,order[r%order.length]);else await tank.growDrop(x,y,rr,order[r%order.length],120)}};
     await Promise.all(sites.map(dropSite));if(!alive())return;
     for(const m of P.moves(W,H)){const [kind,...v]=m,ms=v.pop();
+      if(kind==='multi'){if(reduce)tank.multi(v[0],v[1],0,1);else await tank.multiRun(v[0],v[1],ms);if(!alive())return;continue}
       if(kind==='stylus'){if(reduce){await tank.stylus(v[0],v[1],1)}else{await tank.stylus(v[0],v[1],ms)}if(!alive())return;continue}
       const apply=kind==='tine'?f=>tank.tine(v[0],v[1],v[2],v[3],v[4]*f,v[5],v[6]):f=>tank.curveTine(v[0],v[1],v[2],v[3]*f,v[4],v[5]);
       if(reduce)apply(1);else{await tank.animate(apply,ms);if(!alive())return}}
@@ -624,21 +647,23 @@ a{color:inherit}
   again.addEventListener('click',()=>make(false));
   let rt,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rt);rt=setTimeout(()=>make(true),300)});
   // 読みこみ直後の混雑が落ちついてから、窓が開くのに合わせて模様づくりを始める
-  const startFirst=()=>setTimeout(()=>make(),reduce?0:380);
-  if(document.readyState==='complete')startFirst();else addEventListener('load',startFirst,{once:true});
+  // 文字の読みこみを待ってから一度に開く（途中で文字がずれて、かくっと見えないように）
+  canvas.style.background=COLORS[picked[0]][1];
+  const fontsReady=Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(r=>setTimeout(r,900))]);
+  fontsReady.then(()=>requestAnimationFrame(()=>{document.documentElement.classList.add('ready');setTimeout(()=>make(),reduce?0:850)}));
 
   // ---- 写真の代わりのマーブリング（あとで写真に差しかえ）----
   // 見えたときに、その場で模様ができていく（動きをへらす設定なら完成形だけ）
   function paintTile(cv){const idx=+cv.dataset.tile,cols=(cv.dataset.cols||'0,1,3').split(',').map(n=>COLORS[+n][1]);
     const t=new Tank(cv);t.water=cols[0];const W=t.w,H=t.h,P=PATTERNS[idx];let s=(idx+1)*7919+cols.join('').length*31;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
-    const sites=P.drops(W,H,rnd),R=Math.sqrt(W*H*.95/(Math.PI*sites.length*P.rings))*1.15,order=cols.slice(1).concat(cols[0]);
+    const sites=P.drops(W,H,rnd),R=Math.sqrt(W*H*.95/(Math.PI*sites.length*P.rings))*1.15*(P.rscale||1),order=cols.slice(1).concat(cols[0]);
     sites.forEach(([x,y])=>{for(let r=0;r<P.rings;r++)t.dropNow(x,y,R*(.6+rnd()*.55),order[r%order.length])});
     const moves=P.moves(W,H).filter(m=>m[0]!=='stylus');
-    const applyStep=(m,f)=>{const [kind,...v]=m;if(kind==='tine')t.tine(v[0],v[1],v[2],v[3],v[4]*f,v[5],v[6]);else t.curveTine(v[0],v[1],v[2],v[3]*f,v[4],v[5])};
-    if(reduce){for(const m of moves)for(let k=0;k<24;k++)applyStep(m,1/24);t.prune();t.draw();return}
+    const applyStep=(m,f,a)=>{const [kind,...v]=m;if(kind==='multi')t.multi(v[0],v[1],a,a+f);else if(kind==='tine')t.tine(v[0],v[1],v[2],v[3],v[4]*f,v[5],v[6]);else t.curveTine(v[0],v[1],v[2],v[3]*f,v[4],v[5])};
+    if(reduce){for(const m of moves)if(m[0]==='multi')applyStep(m,1,0);else for(let k=0;k<24;k++)applyStep(m,1/24);t.prune();t.draw();return}
     t.draw();let i=0;const next=()=>{if(i>=moves.length){t.prune();t.dirty=true;t.finished=true;return}const m=moves[i++];
       // 小さく分けて動かすと、なめらかでギザギザしない
-      let done=0;t.animate(e=>{const target=done+e;let steps=Math.max(1,Math.round(e*24));for(let k=0;k<steps;k++)applyStep(m,e/steps);done=target},900).then(next)};
+      let done=0;t.animate(e=>{const target=done+e;if(m[0]==='multi')applyStep(m,e,done);else{let steps=Math.max(1,Math.round(e*24));for(let k=0;k<steps;k++)applyStep(m,e/steps)}done=target},900).then(next)};
     tileTanks.add(t);next()}
   const painted=new WeakSet();
   const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!painted.has(e.target)){painted.add(e.target);paintTile(e.target)}}),{rootMargin:'200px'}):null;
@@ -653,8 +678,9 @@ a{color:inherit}
   // ---- ページの切りかえ（戻るボタンにも対応）----
   const pages=[...document.querySelectorAll('.page')];
   const TITLES={top:'',story:'STORY',experience:'体験とワークショップ',goods:'GOODS',contact:'お問い合わせ'};
+  let booting=true;
   function show(name,push){if(!pages.some(p=>p.dataset.page===name))name='top';
-    pages.forEach(p=>{p.hidden=p.dataset.page!==name});
+    pages.forEach(p=>{p.hidden=p.dataset.page!==name;p.classList.toggle('pin',!booting&&!p.hidden)});
     document.querySelectorAll('.nav [data-go]').forEach(a=>{if(a.dataset.go===name&&name!=='top')a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
     scrollTo({top:0,behavior:'auto'});const pg=document.querySelector('.page[data-page="'+name+'"]');watchTiles(pg);watchReveal(pg);
     document.title=(TITLES[name]?TITLES[name]+'｜':'')+'wai marbling studio';
@@ -695,7 +721,7 @@ a{color:inherit}
     }catch(e){console.error(e)}
     saveBtn.textContent=label;saveBtn.disabled=false});
 
-  show((location.hash||'#top').slice(1),false);
+  show((location.hash||'#top').slice(1),false);booting=false;
   const cm=document.getElementById('copyMail');cm.addEventListener('click',()=>{const t=document.getElementById('mail').textContent;
     const done=()=>{cm.textContent='コピーしました';setTimeout(()=>cm.textContent='アドレスをコピー',1800)};
     const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('mail'));const s=getSelection();s.removeAllRanges();s.addRange(r);cm.textContent='選択しました。コピーしてください'};
