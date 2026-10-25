@@ -28,7 +28,7 @@
 :root{
   --bg:#FFFFFF;
   --fg:#111213;
-  --muted:#8B8F92;
+  --muted:#6C7175;
   --line:#E6E7E8;
   --accent:#1B998B;
   --font-jp:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
@@ -112,7 +112,7 @@ h1.copy{margin:clamp(64px,10vh,112px) 0 0;font-weight:300;font-size:clamp(19px,4
 a{color:inherit}
 .page.pin{animation:pagein .6s ease both}
 @keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.sec{border-top:1px solid var(--line);padding-block:clamp(72px,12vh,140px)}
+.sec{position:relative;border-top:1px solid var(--line);padding-block:clamp(72px,12vh,140px)}
 .sec-in{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
 .sec h2,.read h2{font-weight:300;font-size:clamp(21px,5.2vw,28px);line-height:1.8;letter-spacing:.12em;margin:0;text-wrap:balance}
 .sec h3{font-weight:400;font-size:16px;letter-spacing:.14em;margin:6px 0 8px}
@@ -200,7 +200,7 @@ img.band{height:auto;object-fit:cover}
 .mail{font-family:var(--font-en);font-size:17px;letter-spacing:.06em;user-select:all;word-break:break-all;margin:0}
 .btn.ghost-b{background:transparent;color:var(--fg);margin-top:0}
 .btn.link{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;align-self:flex-start;margin-top:4px}
-.foot{border-top:1px solid var(--line);padding-block:56px calc(40px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:11px;color:var(--muted);letter-spacing:.1em}
+.foot{position:relative;border-top:1px solid var(--line);padding-block:56px calc(40px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:11px;color:var(--muted);letter-spacing:.1em}
 .foot p{margin:0}.lg-s{width:56px;color:var(--fg)}
 .copy-s{font-family:var(--font-en)}
 .foot-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin:14px 0 18px;font-family:var(--font-en);font-size:11px;letter-spacing:.22em}
@@ -223,6 +223,20 @@ img.band{height:auto;object-fit:cover}
 .js.ready .hero .pattern{animation-delay:.7s}.js.ready .hero .pick{animation-delay:.82s}
 @keyframes upin{to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.page.pin{animation:none}.js [data-rv]{opacity:1;transform:none;transition:none}.js .hero .arch-w{opacity:1;transform:none}.js .hero *{animation:none!important;opacity:1!important;transform:none!important}.ink{animation:none}}
+
+/* ---- 仕掛け：流れるリボン・ロゴ・写真 ---- */
+.rb{position:absolute;left:0;right:0;top:-1px;height:4px;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+.rb.on{opacity:1}
+.rb b{display:block;height:100%;width:calc(100% + 1200px);background:var(--ribbon) 0 0/100% 100% no-repeat;will-change:transform}
+@media (max-width:640px){.rb{height:3px}}
+.js .nav .lg svg{-webkit-mask-image:linear-gradient(100deg,#000 42%,transparent 58%);mask-image:linear-gradient(100deg,#000 42%,transparent 58%);-webkit-mask-size:260% 100%;mask-size:260% 100%;-webkit-mask-position:100% 0;mask-position:100% 0;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.js.ready .nav .lg svg{animation:write 1.9s cubic-bezier(.45,.05,.35,1) .15s forwards}
+@keyframes write{to{-webkit-mask-position:0 0;mask-position:0 0}}
+.js .nav .brand-t{opacity:0}.js.ready .nav .brand-t{animation:upin 1s ease 1.2s forwards}
+.pfx img.photo{opacity:0;transform:scale(1.07);filter:blur(12px);-webkit-mask-image:linear-gradient(to top,#000 42%,transparent 58%);mask-image:linear-gradient(to top,#000 42%,transparent 58%);-webkit-mask-size:100% 260%;mask-size:100% 260%;-webkit-mask-position:0 0;mask-position:0 0;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.pfx img.photo.pv{animation:rise 1.7s cubic-bezier(.2,.7,.2,1) var(--pd,0s) forwards}
+@keyframes rise{45%{opacity:1}to{opacity:1;transform:none;filter:none;-webkit-mask-position:0 100%;mask-position:0 100%}}
+@media (prefers-reduced-motion:reduce){.mq-track{animation:none}.js .nav .lg svg{-webkit-mask-image:none;mask-image:none}.js .nav .brand-t{opacity:1}}
 
 /* ---- 模様を保存 ---- */
 .save{font:inherit;font-size:12px;letter-spacing:.18em;color:var(--fg);background:none;border:0;border-bottom:1px solid currentColor;padding:6px 0 4px;margin-top:6px;cursor:pointer;transition:opacity .3s}
@@ -247,13 +261,38 @@ img.band{height:auto;object-fit:cover}
 @media (prefers-reduced-motion:reduce){.drawer,.drawer a{transition:none}}
 
 /* ---- ひとことの帯 ---- */
-.statement{padding-block:clamp(96px,18vh,200px);text-align:center;border-top:1px solid var(--line)}
-.statement p{margin:0 auto;max-width:20em;font-family:var(--font-en);font-weight:300;font-size:clamp(28px,6vw,64px);line-height:1.25;letter-spacing:.02em}
-.statement p em{font-style:normal;color:var(--accent)}
-.statement span{display:block;margin-top:28px;font-size:13px;letter-spacing:.2em;color:var(--muted)}
+.statement{padding-block:clamp(56px,10vh,120px) clamp(72px,12vh,140px);text-align:center}
+.mq-band{position:relative;height:clamp(150px,19vw,260px);overflow:hidden;background:#26315A}
+.mq-bg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mq{position:absolute;inset:0;display:flex;align-items:center;pointer-events:none}
+.mq-track{display:flex;align-items:center;width:max-content;white-space:nowrap;animation:mq 46s linear infinite;will-change:transform}
+.mq-t{font-family:var(--font-en);font-weight:300;font-size:clamp(40px,7vw,96px);letter-spacing:.01em;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.28);padding:0 .45em}
+.mq-t em{font-style:italic}
+.mq-d{width:12px;height:12px;border-radius:50%;background:#fff;opacity:.9;flex:none}
+@keyframes mq{to{transform:translateX(-50%)}}
+.statement>span{display:block;margin-top:28px;font-size:13px;letter-spacing:.2em;color:var(--muted)}
 .foot-sns{display:flex;gap:22px;font-family:var(--font-en);font-size:11px;letter-spacing:.2em}
 .foot-sns a{color:var(--fg);text-decoration:none;display:flex;padding:6px;transition:opacity .2s}.foot-sns a:hover{opacity:.6}
-.ws{border-top:1px solid var(--line);padding-top:8px}
+.xp{display:grid;grid-template-columns:1fr;gap:40px}
+@media (min-width:860px){.xp{grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:72px;align-items:start}}
+.xp-h{display:flex;flex-direction:column;gap:22px}
+.xp-h p{color:var(--fg)}
+.xp-b{display:flex;flex-direction:column;gap:24px;min-width:0}
+.xp-cards{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:600px){.xp-cards{grid-template-columns:1fr 1fr}}
+.xp-card{background:color-mix(in srgb,var(--accent) 7%,var(--bg));border-radius:20px;padding:26px 24px 28px;display:flex;flex-direction:column;gap:8px}
+.xp-no{font-family:var(--font-en);font-size:12px;letter-spacing:.2em;color:var(--accent)}
+.xp-name{margin:0;font-size:18px;font-weight:400;letter-spacing:.12em}
+.xp-desc{margin:0;font-size:13.5px;line-height:1.95;color:var(--fg);opacity:.82}
+.xp-facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--line)}
+.xp-facts li{display:flex;flex-direction:column;align-items:center;gap:2px;padding:18px 6px;text-align:center}
+.xp-facts li+li{border-left:1px solid var(--line)}
+.xp-facts span{font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.xp-facts b{font-weight:400;font-size:16px;letter-spacing:.1em}
+.xp-facts small{font-size:12px;margin-left:2px}
+.xp-note{margin:0;font-size:12.5px;color:var(--muted);letter-spacing:.08em}
+.xp-ws{border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.xp-ws p{margin:0;font-size:13.5px}
 @media (prefers-reduced-motion:reduce){.chip::before,.btn{transition:none}}
 </style>
 </head>
@@ -311,9 +350,13 @@ img.band{height:auto;object-fit:cover}
     </div>
   </section>
 
-  <section class="statement pad" data-rv>
-    <p>No two patterns are <em>ever</em> the same.</p>
-    <span>水の上の模様は、二度と同じにならない。</span>
+  <section class="statement" data-rv>
+    <div class="mq-band">
+      <canvas class="mq-bg" data-tile="2" data-cols="6,0,9" aria-hidden="true"></canvas>
+      <div class="mq" aria-hidden="true"><div class="mq-track"><span class="mq-t">No two patterns are <em>ever</em> the same.</span><i class="mq-d"></i><span class="mq-t">No two patterns are <em>ever</em> the same.</span><i class="mq-d"></i><span class="mq-t">No two patterns are <em>ever</em> the same.</span><i class="mq-d"></i><span class="mq-t">No two patterns are <em>ever</em> the same.</span><i class="mq-d"></i></div></div>
+    </div>
+    <p class="sr">No two patterns are ever the same.</p>
+    <span class="pad">水の上の模様は、二度と同じにならない。</span>
   </section>
 
   <section class="sec pad">
@@ -330,17 +373,26 @@ img.band{height:auto;object-fit:cover}
   </section>
 
   <section class="sec pad">
-    <div class="sec-in">
-      <span class="eyebrow">EXPERIENCE</span>
-      <h2>5分で、腕にあなたの模様を。</h2>
-      <p>フェスやイベントのブースで、水面に描いた模様を腕に写しとります。</p>
-      <div class="menu">
-        <div class="menu-item"><p class="m-name">おまかせ 2色</p><p class="m-desc">好きな色を1色えらんで、もう1色はその色に合う色をおまかせで。</p></div>
-        <div class="menu-item"><p class="m-name">フルオーダー</p><p class="m-desc">何色でも、ぜんぶ好きな色をえらべます。</p></div>
+    <div class="sec-in xp">
+      <div class="xp-h">
+        <span class="eyebrow">EXPERIENCE</span>
+        <h2>5分で、腕に<br>あなたの模様を。</h2>
+        <p>フェスやイベントのブースで、水面に描いた模様を腕に写しとります。</p>
+        <a class="more" href="#experience" data-go="experience">体験の流れを見る</a>
       </div>
-      <p class="small">片腕のみ・所要時間 5〜10分・お風呂で洗えば落ちます。料金は出店するイベントによってちがいます。</p>
-      <p class="ws small">マーブリングやアートのワークショップも行っています。ご相談はお問い合わせから。</p>
-      <a class="more" href="#experience" data-go="experience">体験の流れを見る</a>
+      <div class="xp-b">
+        <div class="xp-cards">
+          <div class="xp-card"><span class="xp-no">01</span><p class="xp-name">おまかせ 2色</p><p class="xp-desc">好きな色を1色えらんで、もう1色はその色に合う色をおまかせで。</p></div>
+          <div class="xp-card"><span class="xp-no">02</span><p class="xp-name">フルオーダー</p><p class="xp-desc">何色でも、ぜんぶ好きな色をえらべます。</p></div>
+        </div>
+        <ul class="xp-facts">
+          <li><span>写す場所</span><b>片腕</b></li>
+          <li><span>時間</span><b>5〜10<small>分</small></b></li>
+          <li><span>落とし方</span><b>お風呂で</b></li>
+        </ul>
+        <p class="xp-note">料金は、出店するイベントによってちがいます。</p>
+        <div class="xp-ws"><span class="eyebrow">WORKSHOP</span><p>紙や布に写すマーブリングや、アートのワークショップも行っています。</p><a class="more" href="#contact" data-go="contact">開催を相談する</a></div>
+      </div>
     </div>
   </section>
 
@@ -666,7 +718,7 @@ img.band{height:auto;object-fit:cover}
   // 文字の読みこみを待ってから一度に開く（途中で文字がずれて、かくっと見えないように）
   canvas.style.background=COLORS[picked[0]][1];
   const fontsReady=Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(r=>setTimeout(r,900))]);
-  fontsReady.then(()=>requestAnimationFrame(()=>{document.documentElement.classList.add('ready');setTimeout(()=>make(),reduce?0:850)}));
+  fontsReady.then(()=>requestAnimationFrame(()=>{document.documentElement.classList.add('ready');setTimeout(()=>make(),reduce?0:850);setTimeout(()=>{(window.requestIdleCallback||(f=>setTimeout(f,0)))(makeRibbon)},reduce?0:3800)}));
 
   // ---- 写真の代わりのマーブリング（あとで写真に差しかえ）----
   // 見えたときに、その場で模様ができていく（動きをへらす設定なら完成形だけ）
@@ -692,6 +744,26 @@ img.band{height:auto;object-fit:cover}
     const items=box.classList.contains('statement')?[box]:[...box.children];
     items.forEach((el,i)=>{if(el.dataset.rv==='done')return;if(!rvIO){return}el.setAttribute('data-rv','');el.style.setProperty('--d',Math.min(i,5)*.08+'s');rvIO.observe(el)})})}
 
+  // ---- 写真：水面から浮かぶように ----
+  const pIO='IntersectionObserver' in window&&!reduce?new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const im=e.target;pIO.unobserve(im);
+    const go=()=>im.classList.add('pv');if(im.complete&&im.naturalWidth)go();else{im.addEventListener('load',go,{once:true});im.addEventListener('error',go,{once:true})}}),{rootMargin:'0px 0px -6% 0px'}):null;
+  if(pIO)document.documentElement.classList.add('pfx');
+  function watchPhotos(root){if(!pIO)return;root.querySelectorAll('img.photo').forEach(im=>{if(im.classList.contains('pv'))return;const g=im.closest('.gallery');
+    if(g)im.style.setProperty('--pd',([...g.children].indexOf(im.parentElement)%3)*.14+'s');pIO.observe(im)})}
+
+  // ---- 区切りのリボン：自分の色で一度だけ模様をつくり、スクロールで横に流す ----
+  const ribbons=[...document.querySelectorAll('.sec,.foot')].map(el=>{const r=document.createElement('i');r.className='rb';r.setAttribute('aria-hidden','true');r.appendChild(document.createElement('b'));el.prepend(r);return r.firstChild});
+  function makeRibbon(){const c=document.createElement('canvas');c.style.cssText='position:fixed;left:-99999px;top:0;width:1600px;height:240px';document.body.appendChild(c);
+    const t=new Tank(c);const cols=picked.map(i=>COLORS[i][1]),W=t.w,H=t.h,P=PATTERNS[2];let sd=4242;const rnd=()=>(sd=(sd*16807)%2147483647)/2147483647;
+    t.water=cols[0];const sites=P.drops(W,H,rnd),R=Math.sqrt(W*H*.95/(Math.PI*sites.length*P.rings))*1.15,order=cols.slice(1).concat(cols[0]);
+    for(let r=0;r<P.rings;r++)sites.forEach(([x,y])=>t.dropNow(x,y,R*(.6+rnd()*.55),order[r%order.length]));
+    t.tine(0,0,1,0,W*.08,W*.03,H*.1);t.tine(0,H*.05,-1,0,W*.08,W*.03,H*.1);t.curveTine(W*.03,W*.05,H*.5,H*.25,W*.02,W*.06);t.draw();
+    const o=document.createElement('canvas');o.width=1600;o.height=24;o.getContext('2d').drawImage(c,0,0,c.width,c.height,0,0,1600,24);c.remove();
+    document.documentElement.style.setProperty('--ribbon','url('+o.toDataURL('image/png')+')');ribbons.forEach(b=>b.parentElement.classList.add('on'));moveRibbons()}
+  let rbTick=false;
+  function moveRibbons(){rbTick=false;const x=(scrollY*.35)%2400,tri=x<1200?x:2400-x;const v='translate3d('+(-tri)+'px,0,0)';for(const b of ribbons)b.style.transform=v}
+  addEventListener('scroll',()=>{if(!rbTick&&!reduce){rbTick=true;requestAnimationFrame(moveRibbons)}},{passive:true});
+
   // ---- ページの切りかえ（戻るボタンにも対応）----
   const pages=[...document.querySelectorAll('.page')];
   const TITLES={top:'',story:'STORY',experience:'体験とワークショップ',goods:'GOODS',contact:'お問い合わせ'};
@@ -699,7 +771,7 @@ img.band{height:auto;object-fit:cover}
   function show(name,push){if(!pages.some(p=>p.dataset.page===name))name='top';
     pages.forEach(p=>{p.hidden=p.dataset.page!==name;p.classList.toggle('pin',!booting&&!p.hidden)});
     document.querySelectorAll('.nav [data-go]').forEach(a=>{if(a.dataset.go===name&&name!=='top')a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
-    scrollTo({top:0,behavior:'auto'});const pg=document.querySelector('.page[data-page="'+name+'"]');watchTiles(pg);watchReveal(pg);
+    scrollTo({top:0,behavior:'auto'});const pg=document.querySelector('.page[data-page="'+name+'"]');watchTiles(pg);watchReveal(pg);watchPhotos(pg);
     document.title=(TITLES[name]?TITLES[name]+'｜':'')+'wai marbling studio';
     if(push){try{history.pushState({p:name},'','#'+name)}catch(e){}}}
   document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();closeMenu();const cur=(location.hash||'#top').slice(1);show(a.dataset.go,a.dataset.go!==cur)});
