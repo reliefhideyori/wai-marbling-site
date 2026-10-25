@@ -274,28 +274,26 @@ img.band{height:auto;object-fit:cover}
 .statement>span{display:block;margin-top:20px;font-size:13px;letter-spacing:.2em;color:var(--muted)}
 .foot-sns{display:flex;gap:22px;font-family:var(--font-en);font-size:11px;letter-spacing:.2em}
 .foot-sns a{color:var(--fg);text-decoration:none;display:flex;padding:6px;transition:opacity .2s}.foot-sns a:hover{opacity:.6}
-.xp{display:grid;grid-template-columns:1fr;gap:40px}
-@media (min-width:860px){.xp{grid-template-columns:minmax(0,.78fr) minmax(0,1.4fr);gap:64px;align-items:start}}
+.xp{display:flex;flex-direction:column;gap:40px}
 .xp-h{display:flex;flex-direction:column;gap:22px}
 .xp-h p{color:var(--fg)}
-.xp-b{display:flex;flex-direction:column;gap:24px;min-width:0}
-.xp-cards{display:grid;grid-template-columns:1fr;gap:14px}
-
-.xp-card{background:color-mix(in srgb,var(--accent) 7%,var(--bg));border-radius:20px;padding:24px 26px 26px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:baseline}
-.xp-card .xp-desc{grid-column:1/-1}
-@media (min-width:600px){.xp-card{grid-template-columns:28px 150px 1fr;padding:26px 30px}.xp-card .xp-desc{grid-column:auto}}
+.xp-b{display:grid;grid-template-columns:1fr;gap:14px;min-width:0}
+.xp-cards{display:contents}
+@media (min-width:760px){.xp-b{grid-template-columns:1fr 1fr;gap:16px}}
+.xp-card{position:relative;background:color-mix(in srgb,var(--accent) 7%,var(--bg));border-radius:20px;padding:26px 26px 28px;display:flex;flex-direction:column;gap:8px}
+@media (min-width:760px){.xp-card{min-height:170px}}
+.xp-ic{position:absolute;top:22px;right:22px;width:52px;height:52px}
 .xp-no{font-family:var(--font-en);font-size:12px;letter-spacing:.2em;color:var(--accent)}
-.xp-name{margin:0;font-size:18px;font-weight:400;letter-spacing:.12em}
+.xp-name{margin:0 0 4px;font-size:19px;font-weight:400;letter-spacing:.12em}
 .xp-desc span{display:inline-block}
 .xp-desc{margin:0;font-size:13.5px;line-height:1.95;color:var(--fg);opacity:.82}
-.xp-facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);border-block:1px solid var(--line)}
-.xp-facts li{display:flex;flex-direction:column;align-items:center;gap:2px;padding:18px 6px;text-align:center}
+.xp-facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--line);border-radius:20px}
+.xp-facts li{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:22px 6px;text-align:center}
 .xp-facts li+li{border-left:1px solid var(--line)}
 .xp-facts span{font-size:11px;letter-spacing:.14em;color:var(--muted)}
-.xp-facts b{font-weight:400;font-size:16px;letter-spacing:.1em}
+.xp-facts b{font-weight:400;font-size:18px;letter-spacing:.1em}
 .xp-facts small{font-size:12px;margin-left:2px}
-.xp-note{margin:0;font-size:12.5px;color:var(--muted);letter-spacing:.08em}
-.xp-ws{border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.xp-ws{border:1px solid var(--line);border-radius:20px;padding:24px 26px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .xp-ws p{margin:0;font-size:13.5px}.xp-ws p span{display:inline-block}
 @media (prefers-reduced-motion:reduce){.chip::before,.btn{transition:none}}
 </style>
@@ -378,8 +376,8 @@ img.band{height:auto;object-fit:cover}
       </div>
       <div class="xp-b">
         <div class="xp-cards">
-          <div class="xp-card"><span class="xp-no">01</span><p class="xp-name">おまかせ 2色</p><p class="xp-desc"><span>好きな色を1色えらんで、</span><span>もう1色は、その色に合う色をおまかせで。</span></p></div>
-          <div class="xp-card"><span class="xp-no">02</span><p class="xp-name">フルオーダー</p><p class="xp-desc"><span>何色でも、ぜんぶ好きな色を</span><span>えらべます。</span></p></div>
+          <div class="xp-card"><canvas class="tile round xp-ic" data-tile="4" data-cols="0,1" aria-hidden="true"></canvas><span class="xp-no">01</span><p class="xp-name">おまかせ 2色</p><p class="xp-desc"><span>好きな色を1色えらんで、</span><span>もう1色は、その色に合う色をおまかせで。</span></p></div>
+          <div class="xp-card"><canvas class="tile round xp-ic" data-tile="0" data-cols="6,9,3" aria-hidden="true"></canvas><span class="xp-no">02</span><p class="xp-name">フルオーダー</p><p class="xp-desc"><span>何色でも、ぜんぶ好きな色を</span><span>えらべます。</span></p></div>
         </div>
         <ul class="xp-facts">
           <li><span>時間</span><b>5〜10<small>分</small></b></li>
