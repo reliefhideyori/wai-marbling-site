@@ -60,6 +60,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 .hero{display:flex;flex-direction:column;align-items:center;padding-block:clamp(56px,11vh,128px) clamp(72px,14vh,160px)}
 @media (max-width:640px){.hero{padding-top:clamp(12px,2.6vh,48px)}.big-en{margin-bottom:12px}.pattern{margin-top:14px}.pick{gap:12px;margin-top:16px}.pick .btn{margin-top:10px}}
+@media (max-width:899px){.hero .stage{display:contents}.hero .arch-w{order:1}.hero .pattern{order:2}.hero .side-l{order:3}.hero .pick{order:4}.hero .big-en{margin:0;font-size:clamp(34px,10vw,46px);gap:.24em}}
+@media (max-width:640px){.hero .arch{width:max(180px,min(64vw,300px,calc((100svh - 364px)*.714)))}.hero .pattern{margin-top:12px}.hero .side-l{margin-top:2px}.hero .pick{margin-top:12px}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .arch-w{max-width:100%}
 .arch{display:block;width:max(180px,min(58vw,300px,calc((100svh - 386px)*.714)));aspect-ratio:3/4.2;max-width:100%;border-radius:999px 999px 0 0;background:var(--line)}
