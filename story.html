@@ -311,6 +311,25 @@ img.band{height:auto;object-fit:cover}
 .xp-ws{border:1px solid var(--line);border-radius:20px;padding:24px 26px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .xp-ws p{margin:0;font-size:13.5px}.xp-ws p span{display:inline-block}
 @media (prefers-reduced-motion:reduce){.chip::before,.btn{transition:none}}
+.sheet{position:fixed;inset:0;z-index:60;background:rgba(17,18,19,0);display:flex;align-items:flex-end;justify-content:center;transition:background .25s}
+.sheet[hidden]{display:none}
+.sheet.open{background:rgba(17,18,19,.38)}
+.sheet-in{width:100%;max-width:440px;max-height:94svh;overflow:auto;background:var(--bg);border-radius:22px 22px 0 0;padding:22px max(20px,env(safe-area-inset-left,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;align-items:center;gap:12px;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.sheet.open .sheet-in{transform:none}
+@media (min-width:700px){.sheet{align-items:center}.sheet-in{border-radius:22px}}
+.sheet-t{margin:0 0 2px;font-size:14px;letter-spacing:.2em}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button,.tog button{font:inherit;font-size:12px;letter-spacing:.1em;border:0;background:none;color:var(--muted);padding:8px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.tog{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.tog button{border:1px solid var(--line)}
+.tog button[aria-pressed="true"]{border-color:var(--fg);color:var(--fg)}
+.tog button[aria-pressed="true"]::before{content:"✓ ";color:var(--accent)}
+.sheet:not([data-kind="wall"]) .wall-only,.sheet:not([data-cal="1"]) .cal-only{display:none}
+.prev-w{height:min(34svh,340px);display:flex;justify-content:center;margin-top:4px}
+.prev{height:100%;border-radius:10px;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+.sheet-note{margin:0;font-size:11px;color:var(--muted);letter-spacing:.06em;text-align:center}
+.sheet .btn{margin-top:4px}
 </style>
 </head>
 <body>
@@ -651,6 +670,19 @@ img.band{height:auto;object-fit:cover}
   <p class="copy-s">© 2026 wai marbling studio</p>
 </footer>
 
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetT">
+  <div class="sheet-in">
+    <p class="sheet-t" id="sheetT">画像で保存</p>
+    <div class="seg" role="group" aria-label="画像のかたち"><button data-k="kind" data-v="card">カード</button><button data-k="kind" data-v="wall">iPhoneの壁紙</button></div>
+    <div class="seg wall-only" role="group" aria-label="壁紙の背景"><button data-k="bg" data-v="full">全面に模様</button><button data-k="bg" data-v="arch">アーチ</button></div>
+    <div class="tog" role="group" aria-label="入れるもの"><button data-k="name">模様の名前</button><button data-k="colors">色の名前</button><button data-k="logo">ロゴ</button><button class="wall-only" data-k="cal">カレンダー</button></div>
+    <div class="seg cal-only" role="group" aria-label="カレンダーの月"><button data-k="month" data-v="0">今月</button><button data-k="month" data-v="1">来月</button></div>
+    <div class="prev-w"><canvas class="prev" id="prev" aria-label="保存する画像のプレビュー"></canvas></div>
+    <p class="sheet-note wall-only">保存したら、写真アプリの共有ボタンから「壁紙に使用」で設定できます。</p>
+    <button class="btn" id="doSave">保存する</button>
+    <button class="save" id="sheetClose">とじる</button>
+  </div>
+</div>
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -674,8 +706,8 @@ img.band{height:auto;object-fit:cover}
       this.x=X;this.y=Y}
   }
   class Tank{
-    constructor(c){this.c=c;this.g=c.getContext('2d');this.inks=[];this.anims=[];this.dirty=true;this.resize()}
-    resize(){const r=this.c.getBoundingClientRect();this.w=r.width;this.h=r.height;const d=Math.min(2,devicePixelRatio||1);
+    constructor(c,fw,fh){this.c=c;this.g=c.getContext('2d');this.inks=[];this.anims=[];this.dirty=true;this.fw=fw;this.fh=fh;this.resize()}
+    resize(){if(this.fw){this.w=this.fw;this.h=this.fh;return}const r=this.c.getBoundingClientRect();this.w=r.width;this.h=r.height;const d=Math.min(2,devicePixelRatio||1);
       this.c.width=Math.round(this.w*d);this.c.height=Math.round(this.h*d);this.g.setTransform(d,0,0,d,0,0);this.dirty=true}
     pushOut(cx,cy,r2,skip){for(const k of this.inks){if(k===skip)continue;k.subdivide(4);const X=k.x,Y=k.y;
       for(let i=0;i<X.length;i++){const dx=X[i]-cx,dy=Y[i]-cy,d2=dx*dx+dy*dy;if(d2<1e-9)continue;const s=Math.sqrt(1+r2/d2);X[i]=cx+dx*s;Y[i]=cy+dy*s}}this.dirty=true}
@@ -860,29 +892,84 @@ img.band{height:auto;object-fit:cover}
 
   // ---- 模様を画像で保存（iPhone は共有シートから「画像を保存」）----
   const LOGO_SVG=document.querySelector('.lg svg').outerHTML.replace('currentColor','#111213').replace('<svg ','<svg width="2083" height="1385" ');
-  saveBtn.addEventListener('click',async()=>{if(saveBtn.disabled)return;const label=saveBtn.textContent;saveBtn.disabled=true;saveBtn.textContent='画像をつくっています…';
-    try{
-      const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
-      g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);
-      const aw=600,ah=aw*canvas.height/canvas.width,ax=(W-aw)/2,ay=150;
-      g.save();g.beginPath();g.moveTo(ax,ay+aw/2);g.arc(ax+aw/2,ay+aw/2,aw/2,Math.PI,0);g.lineTo(ax+aw,ay+ah);g.lineTo(ax,ay+ah);g.closePath();g.clip();
-      g.drawImage(canvas,ax,ay,aw,ah);g.restore();
-      const JP='"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif',EN='"Jost","Helvetica Neue",Arial,sans-serif';
-      const names=picked.map(i=>COLORS[i][0]).join(' × '),pat=pno.textContent+'  '+pname.textContent;
-      try{await Promise.all([document.fonts.load('300 34px "Zen Kaku Gothic New"',names+pname.textContent+'の模様'),document.fonts.load('400 22px "Jost"','No.0123456789 wai marbling studio')])}catch(e){}
-      let y=ay+ah+86;g.textAlign='center';g.fillStyle='#111213';
-      g.font='500 22px '+EN;if('letterSpacing' in g)g.letterSpacing='6px';g.fillText(pno.textContent,W/2,y);
-      g.font='300 34px '+JP;if('letterSpacing' in g)g.letterSpacing='8px';g.fillText(pname.textContent,W/2,y+58);
-      g.font='400 22px '+JP;g.fillStyle='#8B8F92';if('letterSpacing' in g)g.letterSpacing='5px';g.fillText(names,W/2,y+112);
-      const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_SVG);await img.decode();
-      const lw=120,lh=lw*1385/2083;g.drawImage(img,W/2-lw/2-58,H-150,lw,lh);
-      g.textAlign='left';g.fillStyle='#111213';g.font='500 15px '+EN;if('letterSpacing' in g)g.letterSpacing='4px';g.fillText('MARBLING',W/2+14,H-112);g.fillText('STUDIO',W/2+14,H-90);
-      const blob=await new Promise(r=>c.toBlob(r,'image/png'));const fname='wai-'+pname.textContent+'.png';
+  // ---- 模様を画像で保存：カード / iPhoneの壁紙（iPhone は共有シートから「画像を保存」）----
+  const sheet=document.getElementById('sheet'),prev=document.getElementById('prev'),doSave=document.getElementById('doSave');
+  const JP='"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif',EN='"Jost","Helvetica Neue",Arial,sans-serif';
+  const opt={kind:'card',card:{name:true,colors:true,logo:true},wall:{bg:'full',name:false,colors:false,logo:true,cal:false,month:0}};
+  let logoImg=null,wallCache={key:'',t:null};
+  const ls=(g,v)=>{if('letterSpacing' in g)g.letterSpacing=v+'px'};
+  async function prepare(){if(!logoImg){logoImg=new Image();logoImg.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_SVG);await logoImg.decode()}
+    try{await Promise.all([document.fonts.load('300 34px "Zen Kaku Gothic New"','花矢羽根ゆききなみハート大輪×年月'+COLORS.map(c=>c[0]).join('')),document.fonts.load('400 22px "Jost"','No.0123456789 MARBLING STUDIO JANUARY'),document.fonts.load('500 22px "Jost"','No.0123456789')])}catch(e){}}
+  // 壁紙の縦長の形に合わせて、同じ模様・同じ色で描きなおす（ひらくたびに変わらないよう、1回ぶんを覚えておく）
+  function wallTank(W,H){const key=pIndex+'|'+seed+'|'+picked.join(',')+'|'+W+'x'+H;if(wallCache.key===key)return wallCache.t;
+    const P=PATTERNS[pIndex],cols=picked.map(i=>COLORS[i][1]),t=new Tank(document.createElement('canvas'),W,H);t.water=cols[0];
+    let s=seed||1;const rnd=()=>(s=(s*16807)%2147483647)/2147483647,order=cols.slice(1).concat(cols[0]);
+    const sites=P.drops(W,H,rnd),R=Math.sqrt(W*H*.95/(Math.PI*sites.length*P.rings))*1.15*(typeof P.rscale==='function'?P.rscale(W,H):P.rscale||1);
+    for(let r=0;r<P.rings;r++)sites.forEach(([x,y])=>t.dropNow(x,y,R*(.6+rnd()*.55),order[r%order.length]));
+    for(const m of P.moves(W,H)){const [kind,...v]=m;if(kind==='multi')t.multi(v[0],v[1],0,1);else if(kind==='tine'){for(let k=0;k<24;k++)t.tine(v[0],v[1],v[2],v[3],v[4]/24,v[5],v[6])}else if(kind==='curve'){for(let k=0;k<24;k++)t.curveTine(v[0],v[1],v[2],v[3]/24,v[4],v[5])}}
+    t.prune();wallCache={key,t};return t}
+  function drawInks(g,t,x,y,sc){g.save();g.translate(x,y);g.scale(sc,sc);g.fillStyle=t.water;g.fillRect(0,0,t.w,t.h);
+    for(const k of t.inks){const X=k.x,Y=k.y,n=X.length;g.beginPath();g.moveTo(X[0],Y[0]);for(let i=1;i<n;i++)g.lineTo(X[i],Y[i]);g.closePath();g.fillStyle=k.color;g.fill();g.lineWidth=.6;g.strokeStyle=rim(k.color);g.stroke()}g.restore()}
+  function archPath(g,x,y,w,h){g.beginPath();g.moveTo(x,y+w/2);g.arc(x+w/2,y+w/2,w/2,Math.PI,0);g.lineTo(x+w,y+h);g.lineTo(x,y+h);g.closePath()}
+  function drawLogo(g,cx,y,lw){const lh=lw*1385/2083,fs=lw*.125;g.drawImage(logoImg,cx-lw/2-lw*.48,y,lw,lh);
+    g.textAlign='left';g.fillStyle='#111213';g.font='500 '+fs+'px '+EN;ls(g,fs*.27);g.fillText('MARBLING',cx+lw*.12,y+lh*.62);g.fillText('STUDIO',cx+lw*.12,y+lh*.62+fs*1.45);g.textAlign='center'}
+  const MONTHS=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  function calRows(off){const d=new Date(),y=d.getFullYear(),m=d.getMonth()+off,first=new Date(y,m,1),days=new Date(y,m+1,0).getDate();return Math.ceil((first.getDay()+days)/7)}
+  function drawCal(g,cx,y,w,off){const d=new Date(),base=new Date(d.getFullYear(),d.getMonth()+off,1),Y=base.getFullYear(),M=base.getMonth(),days=new Date(Y,M+1,0).getDate(),st=base.getDay(),cw=w/7;
+    g.textAlign='center';g.fillStyle='#111213';g.font='300 22px '+EN;ls(g,1);g.fillText(String(M+1),cx-26,y+22);
+    g.font='500 9px '+EN;ls(g,2.6);g.textAlign='left';g.fillText(MONTHS[M],cx-10,y+12);g.fillStyle='#8B8F92';g.fillText(String(Y),cx-10,y+24);g.textAlign='center';
+    let yy=y+52;g.font='500 8.5px '+EN;ls(g,1.5);['S','M','T','W','T','F','S'].forEach((t,i)=>{g.fillStyle=i===0||i===6?'#A3A8AB':'#4A4F52';g.fillText(t,cx-w/2+cw*(i+.5),yy)});
+    yy+=24;g.font='400 12px '+EN;ls(g,.5);for(let n=1;n<=days;n++){const p=st+n-1,c=p%7,r=Math.floor(p/7);g.fillStyle=c===0||c===6?'#A3A8AB':'#111213';g.fillText(String(n),cx-w/2+cw*(c+.5),yy+r*22)}}
+  function calH(off){return 52+24+ (calRows(off)-1)*22+6}
+  // カード（インスタ用 1080×1350）
+  function renderCard(){const o=opt.card,W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+    g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);const aw=600,ah=aw*tank.h/tank.w,ax=(W-aw)/2;
+    const txtH=(o.name?92:0)+(o.colors?54:0),logoH=o.logo?110:0,total=ah+(txtH?60+txtH:0),ay=Math.max(110,(H-logoH-total)/2-10);
+    g.save();archPath(g,ax,ay,aw,ah);g.clip();drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
+    let y=ay+ah+86;g.textAlign='center';
+    if(o.name){g.fillStyle='#111213';g.font='500 22px '+EN;ls(g,6);g.fillText(pno.textContent,W/2,y);g.font='300 34px '+JP;ls(g,8);g.fillText(pname.textContent,W/2,y+58);y+=112}
+    if(o.colors){g.font='400 22px '+JP;g.fillStyle='#8B8F92';ls(g,5);g.fillText(picked.map(i=>COLORS[i][0]).join(' × '),W/2,o.name?y:y-20)}
+    if(o.logo)drawLogo(g,W/2,H-150,120);return c}
+  // iPhoneの壁紙（1290×2796：いまのiPhoneの縦横比。上の時計と下のボタンにかからない位置に置く）
+  function renderWall(){const o=opt.wall,S=3,W=430,H=932,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
+    const TOP=350,BOT=826,items=[];
+    if(o.name)items.push(['name',52]);if(o.colors)items.push(['colors',18]);if(o.cal)items.push(['cal',calH(o.month)]);if(o.logo)items.push(['logo',44]);
+    const GAP=22,stackH=items.reduce((a,b)=>a+b[1],0)+GAP*Math.max(0,items.length-1);
+    let y;
+    if(o.bg==='full'){const t=wallTank(W,H);drawInks(g,t,0,0,1);
+      if(items.length){const pw=o.cal?286:(o.name||o.colors)?236:168,pad=26,ph=stackH+pad*2,px=(W-pw)/2,py=BOT-ph;g.save();g.shadowColor='rgba(0,0,0,.10)';g.shadowBlur=24;g.shadowOffsetY=6;
+        g.fillStyle='rgba(255,255,255,.9)';g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,22):g.rect(px,py,pw,ph);g.fill();g.restore();y=py+pad}}
+    else{g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);
+      // 文字は時計より下にまとめ、アーチはその上の空いたところにできるだけ大きく（時計と重なってもよい）
+      const itTop=items.length?BOT-stackH:BOT,A0=items.length?170:TOP-40,room=itTop-(items.length?36:0)-A0,aw=Math.min(300,room*tank.w/tank.h),ah=aw*tank.h/tank.w,ax=(W-aw)/2,ay=A0+(room-ah)/2;
+      g.save();archPath(g,ax,ay,aw,ah);g.clip();drawInks(g,tank,ax,ay,aw/tank.w);g.restore();y=itTop}
+    g.textAlign='center';
+    for(const [k,h] of items){
+      if(k==='name'){g.fillStyle='#111213';g.font='500 10px '+EN;ls(g,3);g.fillText(pno.textContent,W/2,y+12);g.font='300 18px '+JP;ls(g,4.5);g.fillText(pname.textContent,W/2,y+44)}
+      else if(k==='colors'){g.fillStyle='#8B8F92';g.font='400 11px '+JP;ls(g,2.6);g.fillText(picked.map(i=>COLORS[i][0]).join(' × '),W/2,y+13)}
+      else if(k==='cal')drawCal(g,W/2,y,224,o.month);
+      else if(k==='logo')drawLogo(g,W/2,y,58);
+      y+=h+GAP}
+    return c}
+  const render=()=>opt.kind==='wall'?renderWall():renderCard();
+  function syncUI(){sheet.dataset.kind=opt.kind;const o=opt[opt.kind];sheet.dataset.cal=opt.kind==='wall'&&o.cal?'1':'';
+    sheet.querySelectorAll('[data-k]').forEach(b=>{const k=b.dataset.k,v=b.dataset.v;let on;if(k==='kind')on=opt.kind===v;else if(v!==undefined)on=String(o[k])===v;else on=!!o[k];b.setAttribute('aria-pressed',on)});
+    const c=render(),r=prev.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1),ph=Math.min(r.height||300,360);
+    const pw=ph*c.width/c.height;prev.style.width=pw+'px';prev.width=Math.round(pw*d);prev.height=Math.round(ph*d);const pg=prev.getContext('2d');pg.imageSmoothingQuality='high';pg.drawImage(c,0,0,prev.width,prev.height)}
+  sheet.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b){if(e.target===sheet)closeSheet();return}const k=b.dataset.k,v=b.dataset.v;
+    if(k==='kind')opt.kind=v;else{const o=opt[opt.kind];if(v!==undefined)o[k]=isNaN(+v)?v:+v;else o[k]=!o[k]}syncUI()});
+  let lastFocus=null;
+  async function openSheet(){if(saveBtn.disabled)return;lastFocus=document.activeElement;await prepare();sheet.hidden=false;document.body.style.overflow='hidden';requestAnimationFrame(()=>{sheet.classList.add('open');syncUI();doSave.focus()})}
+  function closeSheet(){sheet.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{sheet.hidden=true},250);if(lastFocus)lastFocus.focus()}
+  saveBtn.addEventListener('click',openSheet);document.getElementById('sheetClose').addEventListener('click',closeSheet);
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.hidden)closeSheet()});
+  doSave.addEventListener('click',async()=>{const label=doSave.textContent;doSave.disabled=true;doSave.textContent='画像をつくっています…';
+    try{const c=render(),blob=await new Promise(r=>c.toBlob(r,'image/png'));const fname='wai-'+pname.textContent+(opt.kind==='wall'?'-壁紙':'')+'.png';
       const file=new File([blob],fname,{type:'image/png'});
       if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch(e){}}
       else{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
     }catch(e){console.error(e)}
-    saveBtn.textContent=label;saveBtn.disabled=false});
+    doSave.textContent=label;doSave.disabled=false});
 
   {const first=current();show(first,false);booting=false;
     // むかしの #story 形式で来たら、/story の形に書きかえる（http のときだけ）
