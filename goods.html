@@ -896,9 +896,9 @@ img.band{height:auto;object-fit:cover}
   const sheet=document.getElementById('sheet'),prev=document.getElementById('prev'),doSave=document.getElementById('doSave');
   const JP='"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif',EN='"Jost","Helvetica Neue",Arial,sans-serif';
   const opt={kind:'card',card:{name:true,colors:true,logo:true},wall:{bg:'full',name:false,colors:false,logo:true,cal:false,month:0}};
-  let logoImg=null,wallCache={key:'',t:null};
+  let logoImg=null,logoW=null,wallCache={key:'',t:null};
   const ls=(g,v)=>{if('letterSpacing' in g)g.letterSpacing=v+'px'};
-  async function prepare(){if(!logoImg){logoImg=new Image();logoImg.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_SVG);await logoImg.decode()}
+  async function prepare(){if(!logoImg){logoImg=new Image();logoImg.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_SVG);logoW=new Image();logoW.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_SVG.replace('#111213','#FFFFFF'));await Promise.all([logoImg.decode(),logoW.decode()])}
     try{await Promise.all([document.fonts.load('300 34px "Zen Kaku Gothic New"','花矢羽根ゆききなみハート大輪×年月'+COLORS.map(c=>c[0]).join('')),document.fonts.load('400 22px "Jost"','No.0123456789 MARBLING STUDIO JANUARY'),document.fonts.load('500 22px "Jost"','No.0123456789')])}catch(e){}}
   // 壁紙の縦長の形に合わせて、同じ模様・同じ色で描きなおす（ひらくたびに変わらないよう、1回ぶんを覚えておく）
   function wallTank(W,H){const key=pIndex+'|'+seed+'|'+picked.join(',')+'|'+W+'x'+H;if(wallCache.key===key)return wallCache.t;
@@ -911,8 +911,8 @@ img.band{height:auto;object-fit:cover}
   function drawInks(g,t,x,y,sc){g.save();g.translate(x,y);g.scale(sc,sc);g.fillStyle=t.water;g.fillRect(0,0,t.w,t.h);
     for(const k of t.inks){const X=k.x,Y=k.y,n=X.length;g.beginPath();g.moveTo(X[0],Y[0]);for(let i=1;i<n;i++)g.lineTo(X[i],Y[i]);g.closePath();g.fillStyle=k.color;g.fill();g.lineWidth=.6;g.strokeStyle=rim(k.color);g.stroke()}g.restore()}
   function archPath(g,x,y,w,h){g.beginPath();g.moveTo(x,y+w/2);g.arc(x+w/2,y+w/2,w/2,Math.PI,0);g.lineTo(x+w,y+h);g.lineTo(x,y+h);g.closePath()}
-  function drawLogo(g,cx,y,lw){const lh=lw*1385/2083,fs=lw*.125;g.drawImage(logoImg,cx-lw/2-lw*.48,y,lw,lh);
-    g.textAlign='left';g.fillStyle='#111213';g.font='500 '+fs+'px '+EN;ls(g,fs*.27);g.fillText('MARBLING',cx+lw*.12,y+lh*.62);g.fillText('STUDIO',cx+lw*.12,y+lh*.62+fs*1.45);g.textAlign='center'}
+  function drawLogo(g,cx,y,lw,white){const lh=lw*1385/2083,fs=lw*.125;g.drawImage(white?logoW:logoImg,cx-lw/2-lw*.48,y,lw,lh);
+    g.textAlign='left';g.fillStyle=white?'#FFFFFF':'#111213';g.font='500 '+fs+'px '+EN;ls(g,fs*.27);g.fillText('MARBLING',cx+lw*.12,y+lh*.62);g.fillText('STUDIO',cx+lw*.12,y+lh*.62+fs*1.45);g.textAlign='center'}
   const MONTHS=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
   function calRows(off){const d=new Date(),y=d.getFullYear(),m=d.getMonth()+off,first=new Date(y,m,1),days=new Date(y,m+1,0).getDate();return Math.ceil((first.getDay()+days)/7)}
   function drawCal(g,cx,y,w,off){const d=new Date(),base=new Date(d.getFullYear(),d.getMonth()+off,1),Y=base.getFullYear(),M=base.getMonth(),days=new Date(Y,M+1,0).getDate(),st=base.getDay(),cw=w/7;
@@ -932,24 +932,31 @@ img.band{height:auto;object-fit:cover}
     if(o.logo)drawLogo(g,W/2,H-150,120);return c}
   // iPhoneの壁紙（1290×2796：いまのiPhoneの縦横比。上の時計と下のボタンにかからない位置に置く）
   function renderWall(){const o=opt.wall,S=3,W=430,H=932,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
-    const TOP=350,BOT=826,items=[];
-    if(o.name)items.push(['name',52]);if(o.colors)items.push(['colors',18]);if(o.cal)items.push(['cal',calH(o.month)]);if(o.logo)items.push(['logo',44]);
-    const GAP=22,stackH=items.reduce((a,b)=>a+b[1],0)+GAP*Math.max(0,items.length-1);
-    let y;
+    // 上の時計（〜350）と、下のライト・カメラ（826〜）にはかけない
+    const TOP=350,BOT=826,GAP=18,LOGO=42;
+    const foot=[];if(o.name)foot.push(['name',50]);if(o.colors)foot.push(['colors',16]);if(o.logo)foot.push(['logo',LOGO*1385/2083]);
+    const footH=foot.reduce((a,b)=>a+b[1],0)+GAP*Math.max(0,foot.length-1);
+    const drawFoot=(y,white)=>{g.textAlign='center';for(const [k,h] of foot){
+      if(k==='name'){g.fillStyle=white?'#FFFFFF':'#111213';g.font='500 9.5px '+EN;ls(g,3);g.fillText(pno.textContent,W/2,y+11);g.font='300 17px '+JP;ls(g,4.5);g.fillText(pname.textContent,W/2,y+42)}
+      else if(k==='colors'){g.fillStyle=white?'rgba(255,255,255,.92)':'#8B8F92';g.font='400 10.5px '+JP;ls(g,2.6);g.fillText(picked.map(i=>COLORS[i][0]).join(' × '),W/2,y+12)}
+      else drawLogo(g,W/2,y,LOGO,white);
+      y+=h+GAP}};
+    const cw=210,ch=o.cal?calH(o.month):0;
     if(o.bg==='full'){const t=wallTank(W,H);drawInks(g,t,0,0,1);
-      if(items.length){const pw=o.cal?286:(o.name||o.colors)?236:168,pad=26,ph=stackH+pad*2,px=(W-pw)/2,py=BOT-ph;g.save();g.shadowColor='rgba(0,0,0,.10)';g.shadowBlur=24;g.shadowOffsetY=6;
-        g.fillStyle='rgba(255,255,255,.9)';g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,22):g.rect(px,py,pw,ph);g.fill();g.restore();y=py+pad}}
+      // 名前とロゴは、模様の上に白で直接（四角で囲まない）
+      const fy=BOT-footH;if(foot.length){const gr=g.createLinearGradient(0,fy-150,0,H);gr.addColorStop(0,'rgba(17,18,19,0)');gr.addColorStop(.55,'rgba(17,18,19,.16)');gr.addColorStop(1,'rgba(17,18,19,.28)');g.fillStyle=gr;g.fillRect(0,fy-150,W,H-fy+150);g.save();g.shadowColor='rgba(0,0,0,.28)';g.shadowBlur=10;g.shadowOffsetY=1;drawFoot(fy,true);g.restore()}
+      if(o.cal){// カレンダーは画面のまんなかに、すりガラスのように
+        const pw=cw+52,ph=ch+44,px=(W-pw)/2,lim=foot.length?fy-28:BOT,py=Math.max(TOP,(TOP+lim)/2-ph/2+10);
+        g.save();g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,26):g.rect(px,py,pw,ph);g.clip();
+        g.filter='blur(14px)';const blur=g.filter&&g.filter!=='none';if(blur){drawInks(g,t,0,0,1);g.filter='none'}
+        g.fillStyle=blur?'rgba(255,255,255,.62)':'rgba(255,255,255,.84)';g.fillRect(px,py,pw,ph);g.restore();
+        g.save();g.beginPath();g.roundRect?g.roundRect(px+.5,py+.5,pw-1,ph-1,26):g.rect(px,py,pw,ph);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1;g.stroke();g.restore();
+        drawCal(g,W/2,py+24,cw,o.month)}}
     else{g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);
-      // 文字は時計より下にまとめ、アーチはその上の空いたところにできるだけ大きく（時計と重なってもよい）
-      const itTop=items.length?BOT-stackH:BOT,A0=items.length?170:TOP-40,room=itTop-(items.length?36:0)-A0,aw=Math.min(300,room*tank.w/tank.h),ah=aw*tank.h/tank.w,ax=(W-aw)/2,ay=A0+(room-ah)/2;
-      g.save();archPath(g,ax,ay,aw,ah);g.clip();drawInks(g,tank,ax,ay,aw/tank.w);g.restore();y=itTop}
-    g.textAlign='center';
-    for(const [k,h] of items){
-      if(k==='name'){g.fillStyle='#111213';g.font='500 10px '+EN;ls(g,3);g.fillText(pno.textContent,W/2,y+12);g.font='300 18px '+JP;ls(g,4.5);g.fillText(pname.textContent,W/2,y+44)}
-      else if(k==='colors'){g.fillStyle='#8B8F92';g.font='400 11px '+JP;ls(g,2.6);g.fillText(picked.map(i=>COLORS[i][0]).join(' × '),W/2,y+13)}
-      else if(k==='cal')drawCal(g,W/2,y,224,o.month);
-      else if(k==='logo')drawLogo(g,W/2,y,58);
-      y+=h+GAP}
+      // アーチは時計の下からのびて、文字はその下に（アーチは時計と重なってもよい）
+      const below=(o.cal?ch+30:0)+(foot.length?footH+28:0),A0=foot.length||o.cal?170:TOP-40,room=BOT-below-A0,aw=Math.min(290,room*tank.w/tank.h),ah=aw*tank.h/tank.w,ax=(W-aw)/2,ay=A0+(room-ah)/2;
+      g.save();archPath(g,ax,ay,aw,ah);g.clip();drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
+      let y=ay+ah+(o.cal||foot.length?30:0);if(o.cal){drawCal(g,W/2,y,cw,o.month);y+=ch+28}drawFoot(BOT-footH,false)}
     return c}
   const render=()=>opt.kind==='wall'?renderWall():renderCard();
   function syncUI(){sheet.dataset.kind=opt.kind;const o=opt[opt.kind];sheet.dataset.cal=opt.kind==='wall'&&o.cal?'1':'';
