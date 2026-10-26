@@ -297,7 +297,7 @@ img.band{height:auto;object-fit:cover}
 @media (min-width:760px){.xp-b{grid-template-columns:1fr 1fr;gap:16px}}
 .xp-card{position:relative;background:color-mix(in srgb,var(--accent) 7%,var(--bg));border-radius:20px;padding:26px 26px 28px;display:flex;flex-direction:column;gap:8px}
 @media (min-width:760px){.xp-card{min-height:170px}}
-.xp-ic{position:absolute;top:22px;right:22px;width:52px;height:52px}
+.xp-ic{position:absolute;top:22px;right:22px;width:52px;height:52px;border-radius:50%;display:block}
 .xp-no{font-family:var(--font-en);font-size:12px;letter-spacing:.2em;color:var(--accent)}
 .xp-name{margin:0 0 4px;font-size:19px;font-weight:400;letter-spacing:.12em}
 .xp-desc span{display:inline-block}
@@ -393,8 +393,8 @@ img.band{height:auto;object-fit:cover}
       </div>
       <div class="xp-b">
         <div class="xp-cards">
-          <div class="xp-card"><canvas class="tile round xp-ic" data-tile="4" data-cols="0,1" aria-hidden="true"></canvas><span class="xp-no">01</span><p class="xp-name">おまかせ 2色</p><p class="xp-desc"><span>好きな色を1色えらんで、</span><span>もう1色は、その色に合う色をおまかせで。</span></p></div>
-          <div class="xp-card"><canvas class="tile round xp-ic" data-tile="0" data-cols="6,9,3" aria-hidden="true"></canvas><span class="xp-no">02</span><p class="xp-name">フルオーダー</p><p class="xp-desc"><span>何色でも、ぜんぶ好きな色を</span><span>えらべます。</span></p></div>
+          <div class="xp-card"><svg class="xp-ic" viewBox="0 0 52 52" aria-hidden="true"><g transform="rotate(-20 26 26)"><circle cx="26" cy="26" r="26" fill="#1B998B"/><path d="M0 26 C 9 18, 17 18, 26 26 S 43 34, 52 26 V 52 H 0 Z" fill="#F2A7A0"/></g></svg><span class="xp-no">01</span><p class="xp-name">おまかせ 2色</p><p class="xp-desc"><span>好きな色を1色えらんで、</span><span>もう1色は、その色に合う色をおまかせで。</span></p></div>
+          <div class="xp-card"><svg class="xp-ic" viewBox="0 0 52 52" aria-hidden="true"><g transform="rotate(25 26 26)"><circle cx="26" cy="26" r="26" fill="#26315A"/><path d="M0 26 C 9 18, 17 18, 26 26 S 43 34, 52 26 V 52 H 0 Z" fill="#F5D27A"/></g></svg><span class="xp-no">02</span><p class="xp-name">フルオーダー</p><p class="xp-desc"><span>何色でも、ぜんぶ好きな色を</span><span>えらべます。</span></p></div>
         </div>
         <ul class="xp-facts">
           <li><span>時間</span><b>5〜10<small>分</small></b></li>
@@ -459,7 +459,7 @@ img.band{height:auto;object-fit:cover}
         <h2>オリジナルグッズ</h2>
       </div>
       <div class="gd">
-        <canvas class="tile round gd-t" data-tile="4" data-cols="0,9,3" aria-hidden="true"></canvas>
+        <canvas class="tile round gd-t" data-tile="4" data-cols="6,8,10" aria-hidden="true"></canvas>
         <div class="col-txt">
           <p class="gd-date"><span>STICKER</span>第1弾を準備中です</p>
           <a class="more" href="/goods" data-go="goods">グッズを見る</a>
