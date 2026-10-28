@@ -675,7 +675,7 @@ img.band{height:auto;object-fit:cover}
     <p class="sheet-t" id="sheetT">画像で保存</p>
     <div class="seg" role="group" aria-label="画像のかたち"><button data-k="kind" data-v="card">カード</button><button data-k="kind" data-v="wall">iPhoneの壁紙</button></div>
     <div class="seg wall-only" role="group" aria-label="壁紙の背景"><button data-k="bg" data-v="full">全面に模様</button><button data-k="bg" data-v="arch">アーチ</button></div>
-    <div class="tog" role="group" aria-label="入れるもの"><button data-k="colors">色の名前</button><button data-k="logo">ロゴ</button><button class="wall-only" data-k="cal">カレンダー</button></div>
+    <div class="tog" role="group" aria-label="入れるもの"><button data-k="logo">ロゴ</button><button class="wall-only" data-k="cal">カレンダー</button></div>
     <div class="seg cal-only" role="group" aria-label="カレンダーの月"><button data-k="month" data-v="0">今月</button><button data-k="month" data-v="1">来月</button></div>
     <div class="prev-w"><canvas class="prev" id="prev" aria-label="保存する画像のプレビュー"></canvas></div>
     <p class="sheet-note wall-only">保存したら、写真アプリの共有ボタンから「壁紙に使用」で設定できます。</p>
@@ -895,7 +895,7 @@ img.band{height:auto;object-fit:cover}
   // ---- 模様を画像で保存：カード / iPhoneの壁紙（iPhone は共有シートから「画像を保存」）----
   const sheet=document.getElementById('sheet'),prev=document.getElementById('prev'),doSave=document.getElementById('doSave');
   const JP='"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif',EN='"Jost","Helvetica Neue",Arial,sans-serif';
-  const opt={kind:'card',card:{colors:true,logo:true},wall:{bg:'full',colors:false,logo:true,cal:false,month:0}};
+  const opt={kind:'card',card:{logo:true},wall:{bg:'full',logo:true,cal:false,month:0}};
   let logoImg=null,logoW=null,wallCache={key:'',t:null};
   const ls=(g,v)=>{if('letterSpacing' in g)g.letterSpacing=v+'px'};
   async function prepare(){if(!logoImg){logoImg=new Image();logoImg.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_SVG);logoW=new Image();logoW.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(LOGO_SVG.replace('#111213','#FFFFFF'));await Promise.all([logoImg.decode(),logoW.decode()])}
@@ -924,20 +924,17 @@ img.band{height:auto;object-fit:cover}
   // カード（インスタ用 1080×1350）
   function renderCard(){const o=opt.card,W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
     g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);const aw=600,ah=aw*tank.h/tank.w,ax=(W-aw)/2;
-    const txtH=o.colors?54:0,logoH=o.logo?110:0,total=ah+(txtH?60+txtH:0),ay=Math.max(110,(H-logoH-total)/2-10);
+    const logoH=o.logo?110:0,ay=Math.max(110,(H-logoH-ah)/2-10);
     g.save();archPath(g,ax,ay,aw,ah);g.clip();drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
-    let y=ay+ah+86;g.textAlign='center';
-    if(o.colors){g.font='400 22px '+JP;g.fillStyle='#8B8F92';ls(g,5);g.fillText(picked.map(i=>COLORS[i][0]).join(' × '),W/2,y-20)}
     if(o.logo)drawLogo(g,W/2,H-150,120);return c}
   // iPhoneの壁紙（1290×2796：いまのiPhoneの縦横比。上の時計と下のボタンにかからない位置に置く）
   function renderWall(){const o=opt.wall,S=3,W=430,H=932,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
     // 上の時計（〜350）と、下のライト・カメラ（826〜）にはかけない
-    const TOP=350,BOT=826,GAP=18,LOGO=!o.colors&&!o.cal?84:42;
-    const foot=[];if(o.colors)foot.push(['colors',16]);if(o.logo)foot.push(['logo',LOGO*1385/2083]);
+    const TOP=350,BOT=826,GAP=18,LOGO=o.cal?42:84;
+    const foot=[];if(o.logo)foot.push(['logo',LOGO*1385/2083]);
     const footH=foot.reduce((a,b)=>a+b[1],0)+GAP*Math.max(0,foot.length-1);
     const drawFoot=(y,white)=>{g.textAlign='center';for(const [k,h] of foot){
-      if(k==='colors'){g.fillStyle=white?'rgba(255,255,255,.92)':'#8B8F92';g.font='400 10.5px '+JP;ls(g,2.6);g.fillText(picked.map(i=>COLORS[i][0]).join(' × '),W/2,y+12)}
-      else drawLogo(g,W/2,y,LOGO,white);
+      drawLogo(g,W/2,y,LOGO,white);
       y+=h+GAP}};
     const cw=210,ch=o.cal?calH(o.month):0;
     if(o.bg==='full'){const t=wallTank(W,H);drawInks(g,t,0,0,1);
