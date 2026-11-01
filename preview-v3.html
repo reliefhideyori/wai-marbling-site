@@ -206,6 +206,7 @@ img.band{height:auto;object-fit:cover}
 .list.dots li{justify-content:flex-start}
 .todo{color:var(--muted)}
 .page-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding-block:clamp(40px,8vh,96px) clamp(48px,9vh,100px)}
+img.band,img.tile{height:auto;object-fit:cover;max-width:100%}
 .band{display:block;width:min(100%,960px);aspect-ratio:16/6;background:var(--line);margin-bottom:clamp(32px,6vh,64px);border-radius:2px}
 .ph{font-weight:300;font-size:clamp(24px,6vw,36px);letter-spacing:.16em;margin:0}
 .read{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:22px;padding-block:0 clamp(96px,16vh,180px)}
@@ -518,7 +519,7 @@ a.inl{color:inherit;text-underline-offset:3px}
         <h2>マーブリングのはなし</h2>
       </div>
       <div class="gd">
-        <canvas class="tile round gd-t" data-tile="sumi" data-cols="#F4EFE6,#2B2B30" aria-hidden="true"></canvas>
+        <img class="tile round gd-t" src="/img/pat/round-sumi-yuragi.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy">
         <div class="col-txt">
           <p>900年ほど前の日本の「墨流し」、トルコの「エブル」。水に色を浮かべる技法が、国から国へ受けつがれてきたおはなしです。</p>
           <a class="more" href="/history" data-go="history">はなしを読む</a>
@@ -534,7 +535,7 @@ a.inl{color:inherit;text-underline-offset:3px}
         <h2>オリジナルグッズ</h2>
       </div>
       <div class="gd">
-        <canvas class="tile round gd-t" data-tile="4" data-cols="6,8,10" aria-hidden="true"></canvas>
+        <img class="tile round gd-t" src="/img/pat/round-heart-navy.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy">
         <div class="col-txt">
           <p class="gd-date"><span>STICKER</span>第1弾を準備中です</p>
           <a class="more" href="/goods" data-go="goods">グッズを見る</a>
@@ -631,7 +632,7 @@ a.inl{color:inherit;text-underline-offset:3px}
 <!-- ===== HISTORY ===== -->
 <div class="page" data-page="history" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="sumi" data-cols="#F4EFE6,#2B2B30" aria-hidden="true"></canvas>
+    <img class="band" src="/img/pat/band-history-960.webp" srcset="/img/pat/band-history-960.webp 960w, /img/pat/band-history.webp 1920w" sizes="(min-width:1000px) 960px, 100vw" width="960" height="360" alt="" aria-hidden="true">
     <span class="eyebrow">HISTORY</span>
     <h1 class="ph">マーブリングのはなし</h1>
   </section>
@@ -639,7 +640,7 @@ a.inl{color:inherit;text-underline-offset:3px}
     <p class="intro">水の上に色を浮かべて、その模様を紙や布に写しとる。マーブリングは、何百年も前から、遠くはなれた国々で、それぞれに受けつがれてきた技法です。</p>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="sumi" data-cols="#F4EFE6,#2B2B30" aria-hidden="true"></canvas>
+      <img class="tile round era-t" src="/img/pat/round-sumi.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy">
       <div class="era-b">
         <span class="era-y">JAPAN ・ 12世紀ごろ〜</span>
         <h2>日本の「墨流し」</h2>
@@ -649,7 +650,7 @@ a.inl{color:inherit;text-underline-offset:3px}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="3" data-cols="6,9,4" aria-hidden="true"></canvas>
+      <img class="tile round era-t" src="/img/pat/round-hana.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy">
       <div class="era-b">
         <span class="era-y">TURKEY ・ 16世紀ごろ〜</span>
         <h2>トルコの「エブル」</h2>
@@ -659,7 +660,7 @@ a.inl{color:inherit;text-underline-offset:3px}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="0" data-cols="4,6,1" aria-hidden="true"></canvas>
+      <img class="tile round era-t" src="/img/pat/round-yabane.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy">
       <div class="era-b">
         <span class="era-y">EUROPE ・ 17世紀〜</span>
         <h2>ヨーロッパの「トルコの紙」</h2>
@@ -669,7 +670,7 @@ a.inl{color:inherit;text-underline-offset:3px}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="4" data-cols="3,0,4" aria-hidden="true"></canvas>
+      <img class="tile round era-t" src="/img/pat/round-heart-teal.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy">
       <div class="era-b">
         <span class="era-y">NOW ・ wai</span>
         <h2>そして、いま</h2>
@@ -685,15 +686,15 @@ a.inl{color:inherit;text-underline-offset:3px}
 <!-- ===== GOODS ===== -->
 <div class="page" data-page="goods" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="0" data-cols="9,0,4" aria-hidden="true"></canvas>
+    <img class="band" src="/img/pat/band-goods-960.webp" srcset="/img/pat/band-goods-960.webp 960w, /img/pat/band-goods.webp 1920w" sizes="(min-width:1000px) 960px, 100vw" width="960" height="360" alt="" aria-hidden="true">
     <span class="eyebrow">GOODS</span>
     <h1 class="ph">オリジナルグッズ</h1>
   </section>
   <section class="read pad">
     <p class="intro">ブースに来られない日も、waiの模様をそばに。マーブリングの模様をそのまま閉じこめたグッズを準備しています。</p>
     <div class="goods">
-      <figure><canvas class="tile round" data-tile="4" data-cols="3,4,0" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
-      <figure><canvas class="tile round" data-tile="2" data-cols="6,0,7" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
+      <figure><img class="tile round" src="/img/pat/round-heart-sticker.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy"><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
+      <figure><img class="tile round" src="/img/pat/round-nami.webp" width="480" height="480" alt="" aria-hidden="true" loading="lazy"><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
     </div>
     <p class="small">オンラインショップ（BASE）は準備中です。</p>
   </section>
@@ -702,7 +703,7 @@ a.inl{color:inherit;text-underline-offset:3px}
 <!-- ===== SCIENCE（なぜ色は混ざらないのか） ===== -->
 <div class="page" data-page="science" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="1" data-cols="3,0,2" aria-hidden="true"></canvas>
+    <img class="band" src="/img/pat/band-science-960.webp" srcset="/img/pat/band-science-960.webp 960w, /img/pat/band-science.webp 1920w" sizes="(min-width:1000px) 960px, 100vw" width="960" height="360" alt="" aria-hidden="true">
     <span class="eyebrow">SCIENCE</span>
     <h1 class="ph"><span class="nw">なぜ、色は</span><span class="nw">混ざらないのか</span></h1>
   </section>
@@ -775,7 +776,7 @@ a.inl{color:inherit;text-underline-offset:3px}
 <!-- ===== BUSINESS（主催者・企業・学校の方へ） ===== -->
 <div class="page" data-page="business" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="0" data-cols="3,0,2" aria-hidden="true"></canvas>
+    <img class="band" src="/img/pat/band-business-960.webp" srcset="/img/pat/band-business-960.webp 960w, /img/pat/band-business.webp 1920w" sizes="(min-width:1000px) 960px, 100vw" width="960" height="360" alt="" aria-hidden="true">
     <span class="eyebrow">FOR ORGANIZERS</span>
     <h1 class="ph"><span class="nw">主催者・企業・</span><span class="nw">学校の方へ</span></h1>
   </section>
@@ -835,7 +836,7 @@ a.inl{color:inherit;text-underline-offset:3px}
 
 <div class="page" data-page="contact" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="4" data-cols="3,6,0" aria-hidden="true"></canvas>
+    <img class="band" src="/img/pat/band-contact-960.webp" srcset="/img/pat/band-contact-960.webp 960w, /img/pat/band-contact.webp 1920w" sizes="(min-width:1000px) 960px, 100vw" width="960" height="360" alt="" aria-hidden="true">
     <span class="eyebrow">CONTACT</span>
     <h1 class="ph">お問い合わせ</h1>
   </section>
