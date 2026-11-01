@@ -604,7 +604,7 @@ img.band{height:auto;object-fit:cover}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="3" data-cols="6,9,3" aria-hidden="true"></canvas>
+      <canvas class="tile round era-t" data-tile="3" data-cols="6,9,4" aria-hidden="true"></canvas>
       <div class="era-b">
         <span class="era-y">TURKEY ・ 16世紀ごろ〜</span>
         <h2>トルコの「エブル」</h2>
@@ -614,7 +614,7 @@ img.band{height:auto;object-fit:cover}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="0" data-cols="3,6,2" aria-hidden="true"></canvas>
+      <canvas class="tile round era-t" data-tile="0" data-cols="4,6,1" aria-hidden="true"></canvas>
       <div class="era-b">
         <span class="era-y">EUROPE ・ 17世紀〜</span>
         <h2>ヨーロッパの「トルコの紙」</h2>
@@ -624,7 +624,7 @@ img.band{height:auto;object-fit:cover}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="4" data-cols="0,1,3" aria-hidden="true"></canvas>
+      <canvas class="tile round era-t" data-tile="4" data-cols="3,0,4" aria-hidden="true"></canvas>
       <div class="era-b">
         <span class="era-y">NOW ・ wai</span>
         <h2>そして、いま</h2>
@@ -639,15 +639,15 @@ img.band{height:auto;object-fit:cover}
 <!-- ===== GOODS ===== -->
 <div class="page" data-page="goods" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="0" data-cols="9,1,3" aria-hidden="true"></canvas>
+    <canvas class="band" data-tile="0" data-cols="9,0,4" aria-hidden="true"></canvas>
     <span class="eyebrow">GOODS</span>
     <h1 class="ph">オリジナルグッズ</h1>
   </section>
   <section class="read pad">
     <p class="intro">ブースに来られない日も、waiの模様をそばに。マーブリングの模様をそのまま閉じこめたグッズを準備しています。</p>
     <div class="goods">
-      <figure><canvas class="tile round" data-tile="4" data-cols="0,3,1" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
-      <figure><canvas class="tile round" data-tile="2" data-cols="6,1,7" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
+      <figure><canvas class="tile round" data-tile="4" data-cols="3,4,0" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
+      <figure><canvas class="tile round" data-tile="2" data-cols="6,0,7" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
     </div>
     <p class="small">オンラインショップ（BASE）は準備中です。</p>
   </section>
@@ -656,7 +656,7 @@ img.band{height:auto;object-fit:cover}
 <!-- ===== CONTACT ===== -->
 <div class="page" data-page="contact" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="4" data-cols="0,6,1" aria-hidden="true"></canvas>
+    <canvas class="band" data-tile="4" data-cols="3,6,0" aria-hidden="true"></canvas>
     <span class="eyebrow">CONTACT</span>
     <h1 class="ph">お問い合わせ</h1>
   </section>
@@ -1100,7 +1100,7 @@ window.GLM=GLM;window.glBake=bake;
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const COLORS = [
-    ['ティール','#1B998B'],['さくら','#F2A7A0'],['コーラル','#F0544F'],['レモン','#F5D27A'],['ミント','#9CCFC2'],['ラベンダー','#B9A7E0'],
+    ['さくら','#F2A7A0'],['コーラル','#F0544F'],['ミント','#9CCFC2'],['ティール','#1B998B'],['レモン','#F5D27A'],['ラベンダー','#B9A7E0'],
     ['ネイビー','#26315A'],['そら','#7EC8E3'],['みかん','#F39A4B'],['ローズ','#D94F8A'],['わかば','#6BBF59'],['すみ','#3A3A40']
   ];
 
@@ -1181,8 +1181,8 @@ window.GLM=GLM;window.glBake=bake;
 
   // ---- 色えらび ----
   const chipsEl=document.getElementById('chips'),now=document.getElementById('now'),again=document.getElementById('again');
-  // はじめの色：レモン（水面）・ミント・さくら
-  let picked=[3,4,1],auto;
+  // はじめの色：さくら（水面）・コーラル・ミント
+  let picked=[0,1,2],auto;
   COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.style.setProperty('--i',i);b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
     b.addEventListener('click',()=>{chipsEl.classList.remove('hinting');const at=picked.indexOf(i);if(at>=0)picked.splice(at,1);else{if(picked.length===3)picked.shift();picked.push(i)}renderChips();clearTimeout(auto);if(picked.length>=2)auto=setTimeout(()=>{bringArch();make(true)},550)});chipsEl.appendChild(b)});
   // 窓が画面から外れているときだけ、模様が見える位置までそっと戻す
@@ -1236,6 +1236,8 @@ window.GLM=GLM;window.glBake=bake;
   const HP=[{"n":"矢羽根","r":"tr_y0"},{"n":"なみ","r":"old2"},{"n":"花","r":"old3"},{"n":"ハート","r":"old4"},{"n":"大輪","r":"old5"},{"n":"つぼみ","r":"tr_y5"},{"n":"さざなみ","r":"tr_y8"},{"n":"鳥の巣","r":"tr_y10"},{"n":"ながれ","r":"tr_y11"},{"n":"うずしお","r":"v3_a1"},{"n":"波紋","r":"v3_a2"},{"n":"よこなみ","r":"v3_a3"},{"n":"かぜ","r":"v3_a4"},{"n":"あやおり","r":"v3_a5"},{"n":"こなみ","r":"v3_a6"},{"n":"羽根","r":"v3_a7"},{"n":"はごろも","r":"v3_a8"},{"n":"つむじ","r":"v3_a10"},{"n":"すだれ","r":"ins_i6"},{"n":"ななめ矢羽根","r":"ins_i9"},{"n":"ゆらぎ","r":"ins_i18"},{"n":"ひとかき","r":"ins_i20"},{"n":"カール","r":"hm_D","pp":{"rmin":7,"rmax":16}},{"n":"ブーケ","r":"hw_K","pp":{"nf":1,"rmin":7,"rmax":16}},{"n":"噴水","r":"hm_J","pp":{"dir":-1,"rmin":8,"rmax":18,"lam":0.07}},{"n":"パーム","r":"hm_I","pp":{"rmin":8,"rmax":18,"lam":0.1,"vz":0}},{"n":"孔雀","r":"hw_C","pp":{"back":0,"dir":"down","c":4.5,"rmin":9,"rmax":20}},{"n":"さかさ孔雀","r":"hw_C","pp":{"back":0,"dir":"down","rmin":9,"rmax":20},"fy":1},{"n":"くみひも","r":"hm_A","pp":{"rmin":7,"rmax":16}},{"n":"波の葉","r":"hm_H","pp":{"rmin":10,"rmax":24}}];
   // 窓（アーチ）と同じ縦横比 3:4.2 で模様をつくる（ずれると、動きと仕上げで模様が上下にのびちぢみして見える）
   const HW=320,HH=448;
+  // はじめに見せる模様（No.21 ゆらぎ・きれいに出る並びの滴）
+  const FIRST={pi:20,seed:404};
   // 1色目は最初から水面いっぱいの地の色。ほかの色の滴を、地が少しのぞくくらいの数だけ落とす
   window.COV=1.4;window.BG0=1;
   // ?perf をつけると、描く速さを画面の下に出す（確認用）
@@ -1281,7 +1283,7 @@ window.GLM=GLM;window.glBake=bake;
     glQ=pr.catch(()=>null);pr.then(c=>{if(!c)patCache.delete(key)},()=>patCache.delete(key));
     patCache.set(key,pr);if(patCache.size>6)patCache.delete(patCache.keys().next().value);return pr}
   let tank=null,run=0,seed=Date.now()%100000+1,pIndex=-1,firstRun=true,cur=null;const hist=[];
-  let bag=GL?HP.map((_,i)=>i).slice(1).sort(()=>Math.random()-.5):[2,3,4,5].sort(()=>Math.random()-.5);
+  let bag=GL?HP.map((_,i)=>i).filter(i=>i!==FIRST.pi).sort(()=>Math.random()-.5):[2,3,4,5].sort(()=>Math.random()-.5);
   const backBtn=document.getElementById('back'),syncBack=()=>{backBtn.hidden=!hist.length};
   const refill=()=>{bag=(GL?HP.map((_,i)=>i):PATTERNS.map((_,i)=>i).filter(i=>i!==1)).sort(()=>Math.random()-.5);if(bag[0]===pIndex)bag.push(bag.shift())};
   // keep: true=同じ模様で色だけ / 'resize'=画面の大きさが変わった / restore: もどるときの1回ぶん
@@ -1291,7 +1293,7 @@ window.GLM=GLM;window.glBake=bake;
     else{if(cur&&keep!=='resize'){hist.push(cur);if(hist.length>40)hist.shift()}
       if(!(GL&&keep==='resize'&&cur))seed=((seed*16807+11)%2147483647)||1;
       // はじめは No.1、そのあとは前回とちがう模様をランダムに
-      if(firstRun){pIndex=0;firstRun=false}else if(keep!==true&&keep!=='resize'){if(!bag.length)refill();pIndex=bag.shift()}}
+      if(firstRun){pIndex=GL?FIRST.pi:0;if(GL)seed=FIRST.seed;firstRun=false}else if(keep!==true&&keep!=='resize'){if(!bag.length)refill();pIndex=bag.shift()}}
     cur={pi:pIndex,seed,picked:picked.slice()};syncBack();
     if(GL){pno.textContent='No.'+(pIndex+1);pname.textContent=HP[pIndex].n;
       const ok=await heroGL(my,cur,!restore&&keep!=='resize');if(ok&&my===run)saveBtn.disabled=false;return}
@@ -1331,7 +1333,7 @@ window.GLM=GLM;window.glBake=bake;
     if(order.length>2&&r<P.rings-1&&rnd()<.35)t.dropNow(x,y,R*(.16+rnd()*.1),order[(r+2)%order.length])})}
   // ---- 写真の代わりのマーブリング（あとで写真に差しかえ）----
   // 見えたときに、その場で模様ができていく（動きをへらす設定なら完成形だけ）
-  function paintTile(cv){const idx=+cv.dataset.tile,cols=(cv.dataset.cols||'0,1,3').split(',').map(n=>n[0]==='#'?n:COLORS[+n][1]);
+  function paintTile(cv){const idx=+cv.dataset.tile,cols=(cv.dataset.cols||'3,0,4').split(',').map(n=>n[0]==='#'?n:COLORS[+n][1]);
     const t=new Tank(cv);t.water=cols[0];const W=t.w,H=t.h,P=PATTERNS[idx]||EXTRA[cv.dataset.tile];let s=((idx||7)+1)*7919+cols.join('').length*31;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
     const sites=P.drops(W,H,rnd),R=Math.sqrt(W*H*.95/(Math.PI*sites.length*P.rings))*1.15*(typeof P.rscale==='function'?P.rscale(W,H):P.rscale||1),order=cols.slice(1).concat(cols[0]);
     // 一つの場所に全部落とすと、あとの滴に押されてかたよるので、輪を一周ずつ順番に落とす
