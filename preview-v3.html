@@ -726,7 +726,7 @@ window.R={rec,trace,paint,D};
 
 (function(){const D=Math.PI/180,PI=Math.PI;
 // 石だまり：小さな滴をたくさん、色をかえながら落とす
-function stone(R,W,H,rnd,nc,n,rmin,rmax,thin){let last=-1;for(let i=0;i<n;i++){const x=W*(-.08+rnd()*1.16),y=H*(-.08+rnd()*1.16);let ci;do{ci=Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;
+function stone(R,W,H,rnd,nc,n,rmin,rmax,thin){let last=-1;for(let i=0;i<n;i++){const x=W*(-.08+rnd()*1.16),y=H*(-.08+rnd()*1.16);let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;
   const r=rmin+(rmax-rmin)*Math.pow(rnd(),1.6);R.drop(x,y,r,ci);if(thin&&rnd()<thin)R.drop(x,y,r*.35,(ci+1+Math.floor(rnd()*(nc-1)))%nc)}}
 function ringsAt(R,sites,rn,Rr,rnd,nc,thin){sites.forEach(([x,y])=>{let ci=1;for(let r=0;r<rn;r++){R.drop(x,y,Rr*(.6+rnd()*.55),ci%nc);ci++;if(thin&&r<rn-1&&rnd()<thin)R.drop(x,y,Rr*(.16+rnd()*.1),(ci+1)%nc)}})}
 const gel=(R,a,g,W)=>{R.comb(a+PI/2,g,W*.35,W*.05,0);R.comb(a-PI/2,g,W*.35,W*.05,g/2)};
@@ -780,7 +780,7 @@ const S=(R,f,lam,K=48)=>{let L=0,pv=f(0);for(let i=1;i<=200;i++){const q=f(i/200
 const DROPS={
   bull:(R,W,H,rnd,nc,p)=>{const sites=[[.5,.5]].map(([x,y])=>[W*x,H*y]),rn=p.rn||14,Rr=Math.sqrt(W*H*1.2/(PI*rn));let ci=1;for(let r=0;r<rn;r++){R.drop(sites[0][0],sites[0][1],Rr*(.85+rnd()*.3),ci%nc);ci++}},
   few:(R,W,H,rnd,nc,p)=>{const pts=[[.3,.28],[.72,.36],[.4,.66],[.78,.78],[.15,.85]],rn=p.rn||6,Rr=Math.sqrt(W*H*1.0/(PI*pts.length*rn));pts.forEach(([x,y])=>{let ci=1;for(let r=0;r<rn;r++){R.drop(W*x,H*y,Rr*(.7+rnd()*.5),ci%nc);ci++}})},
-  stone:(R,W,H,rnd,nc,p)=>{const a0=p.rmin||14,b0=p.rmax||40,n=Math.min(3000,Math.max(p.n||70,Math.ceil((window.COV||3)*W*1.1*H*1.1/(Math.PI*(a0*a0+a0*b0+b0*b0)/3))));let last=-1;for(let i=0;i<n;i++){let ci;do{ci=Math.floor(rnd()*nc)}while(ci===last);last=ci;R.drop(W*(-.05+rnd()*1.1),H*(-.05+rnd()*1.1),(p.rmin||14)+((p.rmax||40)-(p.rmin||14))*rnd(),ci)}},
+  stone:(R,W,H,rnd,nc,p)=>{const a0=p.rmin||14,b0=p.rmax||40,n=Math.min(3000,Math.max(p.n||70,Math.ceil((window.COV||3)*W*1.1*H*1.1/(Math.PI*(a0*a0+a0*b0+b0*b0)/3))));let last=-1;for(let i=0;i<n;i++){let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last);last=ci;R.drop(W*(-.05+rnd()*1.1),H*(-.05+rnd()*1.1),(p.rmin||14)+((p.rmax||40)-(p.rmin||14))*rnd(),ci)}},
   rows:(R,W,H,rnd,nc,p)=>{const nr=p.nr||7,per=p.per||5;let ci=1;for(let j=0;j<nr;j++){const y=H*(j+.5)/nr;for(let i=0;i<per;i++){R.drop(W*(i+.5+(j%2)*.5)/per,y,Math.min(W/per,H/nr)*.55*(.8+rnd()*.4),ci%nc)}ci++}},
   bands:(R,W,H,rnd,nc,p)=>{const rn=p.rn||22,Rr=Math.sqrt(W*H*2.2/(PI*rn));let ci=1;for(let r=0;r<rn;r++){R.drop(W*.5,-H*.15,Rr*(.85+rnd()*.3),ci%nc);ci++}}
 };
@@ -922,7 +922,7 @@ const SpN=(R,fs,lam,K=48)=>{let L=0;for(const f of fs){let pv=f(0),l=0;for(let i
 const P=(p,d)=>Object.assign({},d,p||{});
 // 石だまり（細かい滴）
 const st=(R,W,H,rnd,nc,p)=>{const mx=p.mx??.08,my=p.my??.08,a=p.rmin,b=p.rmax,area=W*(1+2*mx)*H*(1+2*my),n=Math.min(3000,Math.ceil((p.cov||window.COV||3)*area/(PI*(a*a+a*b+b*b)/3)));let last=-1;
-  for(let i=0;i<n;i++){let ci;do{ci=Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;R.drop(W*(-mx+rnd()*(1+2*mx)),H*(-my+rnd()*(1+2*my)),a+(b-a)*rnd(),ci)}};
+  for(let i=0;i<n;i++){let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;R.drop(W*(-mx+rnd()*(1+2*mx)),H*(-my+rnd()*(1+2*my)),a+(b-a)*rnd(),ci)}};
 // 行き来（ゲルギット）：横に往復 → 横じまになる / 縦に往復 → 縦じま
 const gelH=(R,W,H,sp,z)=>{R.comb(0,sp,z,W*.04,0);R.comb(PI,sp,z,W*.04,sp/2)};
 const gelV=(R,W,H,sp,z)=>{R.comb(PI/2,sp,z,W*.04,0);R.comb(-PI/2,sp,z,W*.04,sp/2)};
@@ -979,7 +979,7 @@ const wt=(R,W,H,o)=>{const vert=o.dir==='up'||o.dir==='down',Lx=vert?W:H,Ly=vert
   SpN(R,fs,o.lam)};
 window.WT=wt;
 const st=(R,W,H,rnd,nc,p)=>{const mx=p.mx??.08,my=p.my??.08,a=p.rmin,b=p.rmax,area=W*(1+2*mx)*H*(1+2*my),n=Math.min(3000,Math.ceil((window.COV||3)*area/(PI*(a*a+a*b+b*b)/3)));let last=-1;
-  for(let i=0;i<n;i++){let ci;do{ci=Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;R.drop(W*(-mx+rnd()*(1+2*mx)),H*(-my+rnd()*(1+2*my)),a+(b-a)*rnd(),ci)}};
+  for(let i=0;i<n;i++){let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;R.drop(W*(-mx+rnd()*(1+2*mx)),H*(-my+rnd()*(1+2*my)),a+(b-a)*rnd(),ci)}};
 const gelH=(R,W,H,sp,z)=>{R.comb(0,sp,z,W*.04,0);R.comb(PI,sp,z,W*.04,sp/2)};
 const gelV=(R,W,H,sp,z)=>{R.comb(PI/2,sp,z,W*.04,0);R.comb(-PI/2,sp,z,W*.04,sp/2)};
 const P=(p,d)=>Object.assign({},d,p||{});
@@ -1235,6 +1235,8 @@ window.GLM=GLM;window.glBake=bake;
   // r: 手順の名前 / pp: 手順の細かな値 / fy: 上下さかさまに
   const HP=[{"n":"矢羽根","r":"tr_y0"},{"n":"なみ","r":"old2"},{"n":"花","r":"old3"},{"n":"ハート","r":"old4"},{"n":"大輪","r":"old5"},{"n":"つぼみ","r":"tr_y5"},{"n":"さざなみ","r":"tr_y8"},{"n":"鳥の巣","r":"tr_y10"},{"n":"ながれ","r":"tr_y11"},{"n":"うずしお","r":"v3_a1"},{"n":"波紋","r":"v3_a2"},{"n":"よこなみ","r":"v3_a3"},{"n":"かぜ","r":"v3_a4"},{"n":"あやおり","r":"v3_a5"},{"n":"こなみ","r":"v3_a6"},{"n":"羽根","r":"v3_a7"},{"n":"はごろも","r":"v3_a8"},{"n":"つむじ","r":"v3_a10"},{"n":"すだれ","r":"ins_i6"},{"n":"ななめ矢羽根","r":"ins_i9"},{"n":"ゆらぎ","r":"ins_i18"},{"n":"ひとかき","r":"ins_i20"},{"n":"カール","r":"hm_D","pp":{"rmin":7,"rmax":16}},{"n":"ブーケ","r":"hw_K","pp":{"nf":1,"rmin":7,"rmax":16}},{"n":"噴水","r":"hm_J","pp":{"dir":-1,"rmin":8,"rmax":18,"lam":0.07}},{"n":"パーム","r":"hm_I","pp":{"rmin":8,"rmax":18,"lam":0.1,"vz":0}},{"n":"孔雀","r":"hw_C","pp":{"back":0,"dir":"down","c":4.5,"rmin":9,"rmax":20}},{"n":"さかさ孔雀","r":"hw_C","pp":{"back":0,"dir":"down","rmin":9,"rmax":20},"fy":1},{"n":"くみひも","r":"hm_A","pp":{"rmin":7,"rmax":16}},{"n":"波の葉","r":"hm_H","pp":{"rmin":10,"rmax":24}}];
   const HW=320,HH=420;
+  // 1色目は最初から水面いっぱいの地の色。ほかの色の滴を、地が少しのぞくくらいの数だけ落とす
+  window.COV=1.4;window.BG0=1;
   // ?perf をつけると、描く速さを画面の下に出す（確認用）
   const PERF=/[?&]perf/.test(location.search)?document.body.appendChild(Object.assign(document.createElement('div'),{style:'position:fixed;left:8px;right:8px;bottom:8px;z-index:99;font:11px/1.5 sans-serif;background:rgba(0,0,0,.75);color:#fff;padding:6px 10px;border-radius:8px'})):null;
   const glc=document.createElement('canvas');let GL=null;try{GL=new GLM(glc)}catch(e){GL=null}
@@ -1254,18 +1256,19 @@ window.GLM=GLM;window.glBake=bake;
   async function heroGL(my,st,anim){const alive=()=>my===run&&!!GL,cols=stCols(st),P=HP[st.pi],flip=P.fy?HH:0,g=canvas.getContext('2d');
     const ops=buildOps(st,HW,HH);GL.setOps(ops);const d=fitCanvas(),W=canvas.width,H=canvas.height,base=W/HW/d;g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';
     const pf={n:P.n,frames:0,slow:0,as:0};const T0=performance.now();
-    if(anim&&!reduce){const tl=timeline(ops),fr=new Float32Array(ops.length),amin=base*.45,amax=base*Math.min(d,1.5);let as=base*Math.min(d,1.25)*.85,t0=null;
+    if(anim&&!reduce){const tl=timeline(ops),fr=new Float32Array(ops.length),amin=base*Math.min(d,1)*.6;let as=base*d,t0=null,slow=0;
       while(true){const t=await raf();if(!alive())return false;if(t0===null)t0=t;const tt=t-t0;
         for(let i=0;i<ops.length;i++){const p=(tt-tl.st[i])/tl.du[i];fr[i]=p<=0?0:p>=1?1:tl.drop[i]?1-Math.pow(1-p,2.4):p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2}
         GL.size(Math.max(1,Math.round(HW*as)),Math.max(1,Math.round(HH*as)));const a0=performance.now();GL.render(fr,{scale:as,ss:1,cols,flip});GL.sync();const rt=performance.now()-a0;pf.frames++;if(rt>33)pf.slow++;pf.as=as/base;
         g.drawImage(glc,0,0,W,H);
         // 端末が重そうなら、動いているあいだの細かさを下げる
-        if(rt>26&&as>amin)as=Math.max(amin,as*Math.sqrt(20/rt));else if(rt<7&&as<amax)as=Math.min(amax,as*1.08);
+        // 動きも仕上がりと同じ細かさで描く。端末がどうしても重いときだけ、少しずつ下げる
+        if(rt>30&&as>amin){if(++slow>=2){as=Math.max(amin,as*Math.max(.8,Math.sqrt(24/rt)));slow=0}}else slow=0;
         if(tt>=tl.total)break}}
     const lo=document.createElement('canvas');lo.width=W;lo.height=H;lo.getContext('2d').drawImage(canvas,0,0);
     pf.anim=Math.round(performance.now()-T0);const T1=performance.now();GL.size(W,H);if(!await GL.renderTiled({scale:W/HW,ss:d>=2?2:3,cols,flip},alive))return false;pf.fin=Math.round(performance.now()-T1);
     if(PERF)PERF.textContent=pf.n+'｜動き '+pf.anim+'ms・'+pf.frames+'コマ（重いコマ '+pf.slow+'）・細かさ '+pf.as.toFixed(2)+'｜仕上げ '+pf.fin+'ms';
-    const ms=reduce?0:anim?260:420;let t0=null;
+    const ms=reduce?0:anim?180:420;let t0=null;
     while(true){const t=ms?await raf():0;if(!alive())return false;if(t0===null)t0=t;const p=ms?Math.min(1,(t-t0)/ms):1;g.globalAlpha=1;g.drawImage(lo,0,0);g.globalAlpha=p;g.drawImage(glc,0,0,W,H);g.globalAlpha=1;if(p>=1)break}
     return true}
   // 保存用：同じ模様を、ほしい大きさ・形で描きなおす（つくった絵は少しのあいだ覚えておく）
