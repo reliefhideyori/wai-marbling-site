@@ -13,6 +13,17 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "wai-marbling-site.vercel.app"
+        }
+      ],
+      "destination": "https://www.wai-marbling.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
