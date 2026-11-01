@@ -455,7 +455,7 @@ a.inl{color:inherit;text-underline-offset:3px}
         <p>そのとき、みんなが「これ見て！」と自分の模様を見せ合っていた顔が、いまもwaiの真ん中にあります。</p>
         <a class="more" href="/story" data-go="story">ストーリーを読む</a>
       </div>
-      <img class="tile tall photo" src="img/story-arm-700.jpg" srcset="img/story-arm-700.jpg 700w, img/story-arm-1200.jpg 1200w" sizes="(min-width:760px) 420px, 88vw" alt="水槽の模様に腕を入れて、模様を写しとっているところ" loading="lazy" decoding="async">
+      <img class="tile tall photo" src="img/story-arm-700.jpg" srcset="img/story-arm-700.jpg 700w, img/story-arm-1200.jpg 1200w" sizes="(min-width:760px) 420px, 88vw" alt="ボディマーブリング。水面の模様に腕を入れて、写しとっているところ" loading="lazy" decoding="async">
     </div>
   </section>
 
@@ -491,7 +491,7 @@ a.inl{color:inherit;text-underline-offset:3px}
         <figure><img class="tile photo" src="img/g-three-600.jpg" srcset="img/g-three-600.jpg 600w, img/g-three-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="三人で腕の模様を見せてくれたお客さん" loading="lazy" decoding="async"></figure>
         <figure><img class="tile photo" src="img/g-dance-600.jpg" srcset="img/g-dance-600.jpg 600w, img/g-dance-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="マーブリング模様の腕をのばすお客さん" loading="lazy" decoding="async"></figure>
         <figure><img class="tile photo" src="img/g-girls-600.jpg" srcset="img/g-girls-600.jpg 600w, img/g-girls-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="腕の模様を見せてくれた女の子たち" loading="lazy" decoding="async"></figure>
-        <figure><img class="tile photo" src="img/g-pose-600.jpg" srcset="img/g-pose-600.jpg 600w, img/g-pose-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="完成した腕の模様" loading="lazy" decoding="async"></figure>
+        <figure><img class="tile photo" src="img/g-pose-600.jpg" srcset="img/g-pose-600.jpg 600w, img/g-pose-1000.jpg 1000w" sizes="(min-width:760px) 300px, 46vw" alt="ボディマーブリングで腕に写した、完成したマーブリング模様" loading="lazy" decoding="async"></figure>
       </div>
     </div>
   </section>
@@ -592,7 +592,7 @@ a.inl{color:inherit;text-underline-offset:3px}
 <!-- ===== EXPERIENCE ===== -->
 <div class="page" data-page="experience" hidden>
   <section class="page-head pad">
-    <img class="band photo" src="img/band-exp-960.jpg" srcset="img/band-exp-960.jpg 960w, img/band-exp-1920.jpg 1920w" sizes="(min-width:1000px) 960px, 100vw" alt="水槽の水面に描いたマーブリング模様" loading="lazy" decoding="async">
+    <img class="band photo" src="img/band-exp-960.jpg" srcset="img/band-exp-960.jpg 960w, img/band-exp-1920.jpg 1920w" sizes="(min-width:1000px) 960px, 100vw" alt="水面に描いたマーブリング模様（名古屋 wai marbling studio）" loading="lazy" decoding="async">
     <span class="eyebrow">EXPERIENCE</span>
     <h1 class="ph">体験とワークショップ</h1>
   </section>
@@ -1558,7 +1558,9 @@ window.GLM=GLM;window.glBake=bake;
     if(push){try{history.pushState({p:name},'',name==='top'?'/':'/'+name)}catch(e){}}}
   // パス（/story）でも、むかしのリンク（#story）でも開けるように
   function current(){const p=location.pathname.replace(/^\/+|\/+$/g,'').replace(/\.html$/,'').replace(/^index$/,'');const h=location.hash.slice(1);const ok=n=>n&&n.indexOf('/')<0&&!!document.querySelector('.page[data-page="'+n+'"]');return (ok(p)?p:'')||(ok(h)?h:'')||'top'}
-  document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();closeMenu();show(a.dataset.go,a.dataset.go!==current())});
+  document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;
+    // このファイルにないページは、ふつうのリンクとして開く（ページごとに別のHTML）
+    const tg=pages.find(p=>p.dataset.page===a.dataset.go);if(!tg||tg.dataset.partial)return;e.preventDefault();closeMenu();show(a.dataset.go,a.dataset.go!==current())});
   addEventListener('popstate',()=>show(current(),false));
 
   // ---- スマホのメニュー ----
@@ -1663,10 +1665,11 @@ window.GLM=GLM;window.glBake=bake;
     }catch(e){console.error(e)}
     doSave.textContent=label;doSave.disabled=false});
 
-  {const first=current();show(first,false);booting=false;
+  {const hh=location.hash.slice(1);if(hh&&hh!=='top'&&/^[a-z]+$/.test(hh)&&!pages.some(p=>p.dataset.page===hh)&&location.protocol.startsWith('http')){location.replace('/'+hh);return}
+   const first=current();show(first,false);booting=false;
     // むかしの #story 形式で来たら、/story の形に書きかえる（http のときだけ）
     if(location.hash&&location.protocol.startsWith('http')&&!location.pathname.replace(/\//g,'')){try{history.replaceState({p:first},'',first==='top'?'/':'/'+first)}catch(e){}}}
-  const cm=document.getElementById('copyMail');cm.addEventListener('click',()=>{const t=document.getElementById('mail').textContent;
+  const cm=document.getElementById('copyMail');if(cm)cm.addEventListener('click',()=>{const t=document.getElementById('mail').textContent;
     const done=()=>{cm.textContent='コピーしました';setTimeout(()=>cm.textContent='アドレスをコピー',1800)};
     const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('mail'));const s=getSelection();s.removeAllRanges();s.addRange(r);cm.textContent='選択しました。コピーしてください'};
     try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}});
