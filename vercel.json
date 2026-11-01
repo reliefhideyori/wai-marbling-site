@@ -1,6 +1,27 @@
 {
   "cleanUrls": true,
   "headers": [
-    { "source": "/img/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000" }] }
+    {
+      "source": "/img/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wai-marbling-site.vercel.app"
+        }
+      ],
+      "destination": "https://www.wai-marbling.com/:path*",
+      "permanent": true
+    }
   ]
 }
