@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="google-site-verification" content="40oQvI67poMxD1WlT57Lth2__QjvOXS84tQT__CiKBg">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>お問い合わせ｜wai marbling studio</title>
 <meta name="description" content="出店のご依頼、ワークショップ、コラボレーション、取材のご相談は、InstagramのDMかメールでお気軽にどうぞ。">
@@ -63,7 +64,16 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (max-width:899px){.hero .stage{display:contents}.hero .arch-w{order:1}.hero .pattern{order:2}.hero .side-l{order:3}.hero .pick{order:4}.hero .big-en{margin:0;font-size:clamp(34px,10vw,46px);gap:.24em}}
 @media (max-width:640px){.hero .arch{width:max(180px,min(64vw,300px,calc((100svh - 364px)*.714)))}.hero .pattern{margin-top:12px}.hero .side-l{margin-top:2px}.hero .pick{margin-top:12px}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.arch-w{max-width:100%}
+.arch-w{max-width:100%;position:relative}
+.tip{position:absolute;left:50%;bottom:18px;margin:0;padding:10px 18px;border-radius:16px;background:var(--fg);color:var(--bg);font-size:11px;line-height:1.75;letter-spacing:.14em;text-align:center;white-space:nowrap;opacity:0;transform:translate(-50%,6px);pointer-events:none;transition:opacity .35s ease,transform .35s ease;box-shadow:0 6px 24px rgba(0,0,0,.14)}
+.tip::after{content:"";position:absolute;left:50%;top:100%;width:12px;height:7px;transform:translateX(-50%);background:var(--fg);clip-path:polygon(0 0,100% 0,50% 100%)}
+.tip.on{opacity:.92;transform:translate(-50%,0)}
+.chips.nudge .chip::before{animation:nudge .8s ease-in-out 1;animation-delay:calc(var(--i)*.045s)}
+@keyframes nudge{0%,100%{transform:none}45%{transform:scale(1.24)}}
+.subs{display:flex;justify-content:center;align-items:baseline;gap:26px}
+.back{display:inline-flex;align-items:center;gap:6px}.back svg{width:11px;height:11px;flex:none;transform:translateY(-.5px)}
+.back[hidden]{display:none}
+#prev{transition:opacity .2s ease}#prev.busy{opacity:.35}
 .arch{display:block;width:max(180px,min(58vw,300px,calc((100svh - 386px)*.714)));aspect-ratio:3/4.2;max-width:100%;border-radius:999px 999px 0 0;background:var(--line)}
 .stage{display:flex;flex-direction:column;align-items:center;width:100%;max-width:1080px}
 .side-r{display:none}
@@ -102,7 +112,7 @@ h1.copy{margin:clamp(64px,10vh,112px) 0 0;font-weight:300;font-size:clamp(19px,4
 .pick-q #now:not(:empty)::before{content:"　"}
 .chips.hinting .chip::before{animation:breathe 2.8s ease-in-out infinite;animation-delay:calc(var(--i)*.12s + 2.4s)}
 @keyframes breathe{0%,70%,100%{transform:none}35%{transform:scale(1.16)}}
-@media (prefers-reduced-motion:reduce){.chips.hinting .chip::before{animation:none}}
+@media (prefers-reduced-motion:reduce){.chips.hinting .chip::before,.chips.nudge .chip::before{animation:none}.tip{transition:none}}
 .chips{display:flex;justify-content:space-between;width:100%}
 .chip{position:relative;width:28px;height:28px;flex:0 1 28px;touch-action:manipulation;border:0;padding:0;background:transparent;cursor:pointer}
 .chip::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .25s ease}
@@ -371,7 +381,7 @@ img.band{height:auto;object-fit:cover}
         <p class="big-en" id="bigEn" aria-label="Float your colors."><span class="w"><span>Float</span></span><span class="w"><span>your</span></span><span class="w"><span><i class="ink">colors.</i></span></span></p>
         <p class="tiny-en">MARBLING · ART — NAGOYA</p>
       </div>
-      <div class="arch-w"><canvas class="arch" id="arch" aria-label="えらんだ色でできるマーブリング模様"></canvas></div>
+      <div class="arch-w"><canvas class="arch" id="arch" aria-label="えらんだ色でできるマーブリング模様"></canvas><p class="tip" id="tip" role="status">下の色をえらぶと、<br>模様が変わります</p></div>
       <div class="side side-r">
         <p class="side-jp">しあわせのかたちは、<br>人それぞれ。</p>
         <p class="side-sub">水に浮かべた色が、<br>ひとつだけの模様になるように。<br>マーブリングで、あなたの「好き」が<br>かたちになる時間をつくっています。</p>
@@ -384,7 +394,7 @@ img.band{height:auto;object-fit:cover}
       <p class="pick-q" id="q">色にふれると、模様が変わります<span id="now"></span></p>
       <div class="chips hinting" id="chips" role="group" aria-labelledby="q"></div>
       <button class="btn" id="again">ほかの模様をつくる</button>
-      <button class="save" id="save" disabled>この模様を画像で保存</button>
+      <div class="subs"><button class="save back" id="back" hidden aria-label="ひとつ前の模様にもどる"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2 3.5 6l4 4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>ひとつ前にもどる</button><button class="save" id="save" disabled>この模様を画像で保存</button></div>
     </div>
   </section>
 
@@ -593,7 +603,7 @@ img.band{height:auto;object-fit:cover}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="3" data-cols="6,9,3" aria-hidden="true"></canvas>
+      <canvas class="tile round era-t" data-tile="3" data-cols="6,9,4" aria-hidden="true"></canvas>
       <div class="era-b">
         <span class="era-y">TURKEY ・ 16世紀ごろ〜</span>
         <h2>トルコの「エブル」</h2>
@@ -603,7 +613,7 @@ img.band{height:auto;object-fit:cover}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="0" data-cols="3,6,2" aria-hidden="true"></canvas>
+      <canvas class="tile round era-t" data-tile="0" data-cols="4,6,1" aria-hidden="true"></canvas>
       <div class="era-b">
         <span class="era-y">EUROPE ・ 17世紀〜</span>
         <h2>ヨーロッパの「トルコの紙」</h2>
@@ -613,7 +623,7 @@ img.band{height:auto;object-fit:cover}
     </section>
 
     <section class="era">
-      <canvas class="tile round era-t" data-tile="4" data-cols="0,1,3" aria-hidden="true"></canvas>
+      <canvas class="tile round era-t" data-tile="4" data-cols="3,0,4" aria-hidden="true"></canvas>
       <div class="era-b">
         <span class="era-y">NOW ・ wai</span>
         <h2>そして、いま</h2>
@@ -628,15 +638,15 @@ img.band{height:auto;object-fit:cover}
 <!-- ===== GOODS ===== -->
 <div class="page" data-page="goods" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="0" data-cols="9,1,3" aria-hidden="true"></canvas>
+    <canvas class="band" data-tile="0" data-cols="9,0,4" aria-hidden="true"></canvas>
     <span class="eyebrow">GOODS</span>
     <h1 class="ph">オリジナルグッズ</h1>
   </section>
   <section class="read pad">
     <p class="intro">ブースに来られない日も、waiの模様をそばに。マーブリングの模様をそのまま閉じこめたグッズを準備しています。</p>
     <div class="goods">
-      <figure><canvas class="tile round" data-tile="4" data-cols="0,3,1" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
-      <figure><canvas class="tile round" data-tile="2" data-cols="6,1,7" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
+      <figure><canvas class="tile round" data-tile="4" data-cols="3,4,0" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
+      <figure><canvas class="tile round" data-tile="2" data-cols="6,0,7" aria-hidden="true"></canvas><figcaption><b>ステッカー</b><span>準備中</span></figcaption></figure>
     </div>
     <p class="small">オンラインショップ（BASE）は準備中です。</p>
   </section>
@@ -645,7 +655,7 @@ img.band{height:auto;object-fit:cover}
 <!-- ===== CONTACT ===== -->
 <div class="page" data-page="contact" hidden>
   <section class="page-head pad">
-    <canvas class="band" data-tile="4" data-cols="0,6,1" aria-hidden="true"></canvas>
+    <canvas class="band" data-tile="4" data-cols="3,6,0" aria-hidden="true"></canvas>
     <span class="eyebrow">CONTACT</span>
     <h1 class="ph">お問い合わせ</h1>
   </section>
@@ -684,10 +694,412 @@ img.band{height:auto;object-fit:cover}
   </div>
 </div>
 <script>
+// 逆向きに追いかける描き方：画面の点ごとに「この点の絵の具はどこから来たか」を工程を逆にたどって求める
+// 輪郭の点を持たないので、どれだけ細い線でも形がくずれない
+(function(){
+const D=Math.PI/180;
+// ops: ['drop',x,y,r,colorIndex] / ['comb',th,sp,z,lam,off,A,P] / ['multi',paths,lam,n]
+function rec(){const ops=[];return{ops,
+  drop:(x,y,r,ci)=>ops.push(['drop',x,y,r,ci]),
+  comb:(th,sp,z,lam,off=0,A=0,P=1)=>ops.push(['comb',th,sp,z,lam,off,A,P]),
+  multi:(paths,lam,n=120)=>ops.push(['multi',paths,lam,n])}}
+// 1つの点を逆にたどる
+function trace(ops,x,y){for(let o=ops.length-1;o>=0;o--){const op=ops[o];
+  if(op[0]==='drop'){const dx=x-op[1],dy=y-op[2],d2=dx*dx+dy*dy,r2=op[3]*op[3];if(d2<r2)return op[4];const s=Math.sqrt(1-r2/d2);x=op[1]+dx*s;y=op[2]+dy*s}
+  else if(op[0]==='comb'){const [,th,sp,z,lam,off,A,P]=op,c=Math.cos(th),s=Math.sin(th);
+    if(!A){const v=-x*s+y*c;let d=v-off;if(sp){const m=((d%sp)+sp)%sp;d=Math.min(m,sp-m)}else d=Math.abs(d);const m=z*lam/(d+lam);x-=m*c;y-=m*s}
+    else{const N=16;for(let j=0;j<N;j++){let qx=x,qy=y;for(let it=0;it<2;it++){const u=qx*c+qy*s,v=-qx*s+qy*c,ph=2*Math.PI*u/P,w=A*Math.sin(ph);let tv=A*2*Math.PI/P*Math.cos(ph);const L=Math.hypot(1,tv),tu=1/L;tv/=L;
+        let d=v-off-w;if(sp){const mm=((d%sp)+sp)%sp;d=Math.min(mm,sp-mm)}else d=Math.abs(d);const m=z/N*lam/(d+lam),du=tu*m,dv=tv*m;qx=x-(du*c-dv*s);qy=y-(du*s+dv*c)}x=qx;y=qy}}}
+  else if(op[0]==='multi'){const [,paths,lam,n]=op,L2=lam*lam,cut=L2*6;for(let j=n;j>=1;j--){const a=(j-1)/n,b=j/n;for(let pi=paths.length-1;pi>=0;pi--){const A=paths[pi](a),B=paths[pi](b),dx=B[0]-A[0],dy=B[1]-A[1];
+      let qx=x,qy=y;for(let it=0;it<3;it++){const ex=qx-B[0],ey=qy-B[1],d2=ex*ex+ey*ey;const w=d2<cut?Math.exp(-d2/L2):0;qx=x-dx*w;qy=y-dy*w}x=qx;y=qy}}}}
+  return -1}
+// 絵の具のこまかな粒：色ごとに少しだけ明るさがゆらぐ
+function hash(x,y){let h=(x*374761393+y*668265263)|0;h=(h^(h>>>13))*1274126177|0;return((h^(h>>>16))>>>0)/4294967296}
+function paint(cv,W,H,S,ops,cols,opt){opt=Object.assign({ss:2,grain:.06},opt||{});const w=Math.round(W*S),h=Math.round(H*S);cv.width=w;cv.height=h;cv.style.width=w+'px';
+  const g=cv.getContext('2d'),img=g.createImageData(w,h),d=img.data,ss=opt.ss,rgb=cols.map(c=>{const n=parseInt(c.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255]});
+  for(let py=0;py<h;py++)for(let px=0;px<w;px++){let r=0,gg=0,b=0;for(let sy=0;sy<ss;sy++)for(let sx=0;sx<ss;sx++){const ci=trace(ops,(px+(sx+.5)/ss)/S,(py+(sy+.5)/ss)/S),c=rgb[ci<0?0:ci];r+=c[0];gg+=c[1];b+=c[2]}
+    const k=ss*ss,n=1+(hash(px,py)-.5)*2*opt.grain,i=(py*w+px)*4;d[i]=r/k*n;d[i+1]=gg/k*n;d[i+2]=b/k*n;d[i+3]=255}
+  g.putImageData(img,0,0)}
+window.R={rec,trace,paint,D};
+})();
+
+(function(){const D=Math.PI/180,PI=Math.PI;
+// 石だまり：小さな滴をたくさん、色をかえながら落とす
+function stone(R,W,H,rnd,nc,n,rmin,rmax,thin){let last=-1;for(let i=0;i<n;i++){const x=W*(-.08+rnd()*1.16),y=H*(-.08+rnd()*1.16);let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;
+  const r=rmin+(rmax-rmin)*Math.pow(rnd(),1.6);R.drop(x,y,r,ci);if(thin&&rnd()<thin)R.drop(x,y,r*.35,(ci+1+Math.floor(rnd()*(nc-1)))%nc)}}
+function ringsAt(R,sites,rn,Rr,rnd,nc,thin){sites.forEach(([x,y])=>{let ci=1;for(let r=0;r<rn;r++){R.drop(x,y,Rr*(.6+rnd()*.55),ci%nc);ci++;if(thin&&r<rn-1&&rnd()<thin)R.drop(x,y,Rr*(.16+rnd()*.1),(ci+1)%nc)}})}
+const gel=(R,a,g,W)=>{R.comb(a+PI/2,g,W*.35,W*.05,0);R.comb(a-PI/2,g,W*.35,W*.05,g/2)};
+const REC={
+  // 長い羽根
+  wing:(R,W,H,rnd,nc,p)=>{p=Object.assign({n:220,rmin:8,rmax:24,thin:.2,g:.1,f:.035,fz:.35,v:.16,vz:.10,ang:45,wa:0,wp:.6,lam:.012},p);const a=p.ang*D;
+    stone(R,W,H,rnd,nc,p.n,p.rmin,p.rmax,p.thin);gel(R,a,W*p.g,W);R.comb(a,W*p.f,H*p.fz,W*p.lam,0);
+    R.comb(a+PI/2,W*p.v,H*p.vz,W*.02,0,W*p.wa,H*p.wp);R.comb(a-PI/2,W*p.v,H*p.vz,W*.02,W*p.v/2,W*p.wa,H*p.wp)},
+  // こまかい羽根（細櫛のあと短く行き来）
+  feather:(R,W,H,rnd,nc,p)=>{p=Object.assign({n:260,rmin:7,rmax:20,thin:.15,g:.09,f:.035,fz:.05,ang:0},p);const a=p.ang*D;
+    stone(R,W,H,rnd,nc,p.n,p.rmin,p.rmax,p.thin);gel(R,a+PI/2,W*p.g,W);R.comb(a+PI/2,W*p.f,H*p.fz,W*.012,0)},
+  // ブーケ
+  bouquet:(R,W,H,rnd,nc,p)=>{p=Object.assign({n:240,rmin:7,rmax:22,thin:.15,g:.08,ws:.16,wa:.13,wp:.4,wz:.16,f:.03,fz:.02,ang:90},p);const a=p.ang*D;
+    stone(R,W,H,rnd,nc,p.n,p.rmin,p.rmax,p.thin);gel(R,a,W*p.g,W);R.comb(a,W*p.ws,H*p.wz,W*.03,0,W*p.wa,H*p.wp);R.comb(a+PI,W*p.f,H*p.fz,W*.01,0)},
+  // 伝統の櫛：石だまり → 行き来 → 細櫛 → 逆向きに粗い櫛で行き来
+  chevron:(R,W,H,rnd,nc,p)=>{p=Object.assign({n:260,rmin:7,rmax:20,thin:.15,g:.08,f:.03,fz:.035,v:.14,vz:.12,ang:0},p);const a=p.ang*D;
+    stone(R,W,H,rnd,nc,p.n,p.rmin,p.rmax,p.thin);gel(R,a+PI/2,W*p.g,W);R.comb(a+PI/2,W*p.f,H*p.fz,W*.01,0);R.comb(a,W*p.v,W*p.vz,W*.02,0);R.comb(a+PI,W*p.v,W*p.vz,W*.02,W*p.v/2)},
+  // 流れ
+  flow:(R,W,H,rnd,nc,p)=>{p=Object.assign({n:120,rmin:10,rmax:34,thin:.2,ang:60,ws:.12,wa:.08,wp:.5,z1:.3,z2:.12},p);const a=p.ang*D;
+    stone(R,W,H,rnd,nc,p.n,p.rmin,p.rmax,p.thin);R.comb(a,W*p.ws,H*p.z1,W*.035,0,W*p.wa,H*p.wp);R.comb(a+PI,W*p.ws,H*p.z2,W*.02,W*p.ws/2,W*p.wa,H*p.wp)},
+  // 矢羽根（いまのサイトと同じ手順）
+  yabane:(R,W,H,rnd,nc,p)=>{p=Object.assign({rn:7,thin:.35},p);const pts=[[.5,.34],[.24,.6],[.76,.62],[.5,.86],[.2,.22],[.8,.24],[.5,.1]].map(([x,y])=>[W*(x+(rnd()-.5)*.1),H*(y+(rnd()-.5)*.06)]);
+    const Rr=Math.sqrt(W*H*.95/(PI*pts.length*p.rn))*1.15;ringsAt(R,pts,p.rn,Rr,rnd,nc,p.thin);const sv=W*.16;
+    R.comb(0,H*.2,W*.45,W*.08,H*.30);R.comb(PI,H*.2,W*.45,W*.08,-H*.40);R.comb(PI/2,sv,H*.16,W*.04,-W*.5);R.comb(-PI/2,sv,H*.16,W*.04,W*.5+sv/2)}
+};
+// ---- いまのサイトの6つの模様（同じ手順） ----
+const rows=(W,H,nr,nc)=>{const o=[];for(let j=0;j<nr;j++)for(let i=0;i<nc;i++)o.push([W*(i+.5+(j%2)*.5)/nc,H*(j+.5)/nr]);return o};
+function scatter(W,H,rnd,n){const out=[];const cols=Math.ceil(Math.sqrt(n*W/H)),rows=Math.ceil(n/cols);for(let i=0;i<n;i++){const c=i%cols,r=Math.floor(i/cols);out.push([W*(c+.5+(rnd()-.5)*.7)/cols,H*(r+.5+(rnd()-.5)*.6)/rows])}return out}
+function hgrid(W,H){const cell=Math.sqrt(W*H/12);return[Math.max(1,Math.round(W/cell)),Math.max(1,Math.round(H/cell))]}
+function grid(W,H,c,r){const out=[];for(let j=0;j<r;j++)for(let i=0;i<c;i++)out.push([W*(i+.5)/c,H*(j+.55)/r]);return out}
+const petals=(cx,cy,n,r0,r1,rot=0)=>{const o=[];for(let k=0;k<n;k++){const a=k/n*PI*2-PI/2+rot;o.push(t=>{const r=r0+(r1-r0)*t;return[cx+Math.cos(a)*r,cy+Math.sin(a)*r]})}return o};
+let MN=window.MN||24;const FL=[[.3,.25,0],[.72,.5,.3],[.3,.77,.6]];
+const tine=(R,bx,by,mx,my,z,lam,sp)=>{const th=Math.atan2(my,mx),c=Math.cos(th),s=Math.sin(th);R.comb(th,sp,z,lam,-bx*s+by*c)};
+const curve=(R,x0,A,P,z,lam,sp)=>R.comb(PI/2,sp,z,lam,-x0,-A,P);
+const getgel=(R,W,H,sp)=>{tine(R,0,0,1,0,W*.45,W*.07,sp);tine(R,0,sp/2,-1,0,W*.45,W*.07,sp)};
+const OLD=[
+  {drops:(W,H,r)=>[[.5,.34],[.24,.6],[.76,.62],[.5,.86],[.2,.22],[.8,.24],[.5,.1]].map(([x,y])=>[W*(x+(r()-.5)*.1),H*(y+(r()-.5)*.06)]),rings:7,moves:(R,W,H)=>{const sv=W*.16;
+    tine(R,0,H*.30,1,0,W*.45,W*.08,H*.2);tine(R,0,H*.40,-1,0,W*.45,W*.08,H*.2);tine(R,W*.5,0,0,1,H*.16,W*.04,sv);tine(R,W*.5+sv/2,0,0,-1,H*.16,W*.04,sv)}},
+  {drops:(W,H)=>rows(W,H,6,3),rings:5,moves:(R,W,H)=>{const s=H/6;tine(R,0,0,1,0,W*.5,W*.05,s);tine(R,0,s/2,-1,0,W*.5,W*.05,s)}},
+  {drops:(W,H,r)=>scatter(W,H,r,20),rings:4,moves:(R,W,H)=>{getgel(R,W,H,H*.1);curve(R,W*.06,W*.09,H*.22,H*.2,W*.035,W*.125)}},
+  {drops:(W,H)=>FL.map(([x,y])=>[W*x,H*y]),rings:7,rscale:.8,moves:(R,W,H)=>{const p=[];FL.forEach(([x,y,a])=>p.push(...petals(W*x,H*y,6,W*.36,W*.02,a)));R.multi(p,W*.04,MN)}},
+  {drops:(W,H)=>{const [c,rw]=hgrid(W,H);return grid(W,H,c,rw)},rings:6,moves:(R,W,H)=>{const [c,rw]=hgrid(W,H),cw=W/c,ch=H/rw;tine(R,cw/2,0,0,1,ch*.36,cw*.105,cw)}},
+  {drops:(W,H)=>[[W*.5,H*.56]],rings:11,moves:(R,W,H)=>{const cx=W*.5,cy=H*.56;R.multi(petals(cx,cy,8,W*.75,W*.04),W*.05,MN);R.multi(petals(cx,cy,8,W*.75,W*.26,PI/8),W*.035,MN)}}];
+OLD.forEach((P,i)=>{REC['old'+i]=(R,W,H,rnd,nc,p)=>{p=Object.assign({thin:.35,rs:1},p);const sites=P.drops(W,H,rnd),Rr=Math.sqrt(W*H*.95/(PI*sites.length*P.rings))*1.15*(P.rscale||1)*p.rs;
+  ringsAt(R,sites,P.rings,Rr,rnd,nc,nc>2?p.thin:0);P.moves(R,W,H)}});
+window.REC=REC;})();
+// ===== 研究用：滴の落とし方 × 串の入れ方 =====
+(function(){const REC=window.REC,PI=Math.PI;
+// 串の道すじ（t:0→1）を折れ線にして渡す
+const S=(R,f,lam,K=48)=>{let L=0,pv=f(0);for(let i=1;i<=200;i++){const q=f(i/200);L+=Math.hypot(q[0]-pv[0],q[1]-pv[1]);pv=q}R.multi([f],lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/6))};
+const DROPS={
+  bull:(R,W,H,rnd,nc,p)=>{const sites=[[.5,.5]].map(([x,y])=>[W*x,H*y]),rn=p.rn||14,Rr=Math.sqrt(W*H*1.2/(PI*rn));let ci=1;for(let r=0;r<rn;r++){R.drop(sites[0][0],sites[0][1],Rr*(.85+rnd()*.3),ci%nc);ci++}},
+  few:(R,W,H,rnd,nc,p)=>{const pts=[[.3,.28],[.72,.36],[.4,.66],[.78,.78],[.15,.85]],rn=p.rn||6,Rr=Math.sqrt(W*H*1.0/(PI*pts.length*rn));pts.forEach(([x,y])=>{let ci=1;for(let r=0;r<rn;r++){R.drop(W*x,H*y,Rr*(.7+rnd()*.5),ci%nc);ci++}})},
+  stone:(R,W,H,rnd,nc,p)=>{const a0=p.rmin||14,b0=p.rmax||40,n=Math.min(3000,Math.max(p.n||70,Math.ceil((window.COV||3)*W*1.1*H*1.1/(Math.PI*(a0*a0+a0*b0+b0*b0)/3))));let last=-1;for(let i=0;i<n;i++){let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last);last=ci;R.drop(W*(-.05+rnd()*1.1),H*(-.05+rnd()*1.1),(p.rmin||14)+((p.rmax||40)-(p.rmin||14))*rnd(),ci)}},
+  rows:(R,W,H,rnd,nc,p)=>{const nr=p.nr||7,per=p.per||5;let ci=1;for(let j=0;j<nr;j++){const y=H*(j+.5)/nr;for(let i=0;i<per;i++){R.drop(W*(i+.5+(j%2)*.5)/per,y,Math.min(W/per,H/nr)*.55*(.8+rnd()*.4),ci%nc)}ci++}},
+  bands:(R,W,H,rnd,nc,p)=>{const rn=p.rn||22,Rr=Math.sqrt(W*H*2.2/(PI*rn));let ci=1;for(let r=0;r<rn;r++){R.drop(W*.5,-H*.15,Rr*(.85+rnd()*.3),ci%nc);ci++}}
+};
+const STROKES={
+  none:()=>{},
+  s3:(R,W,H)=>{for(const o of [-.25,0,.25])S(R,t=>[W*(.5+o)+Math.sin(t*PI*2.2)*W*.16,H*(-.05+1.1*t)],W*.035)},
+  swirl:(R,W,H)=>{S(R,t=>{const a=t*PI*5,r=Math.min(W,H)*(.46-.42*t);return[W*.5+Math.cos(a)*r,H*.5+Math.sin(a)*r]},W*.04,96)},
+  zig:(R,W,H)=>{S(R,t=>{const k=t*7,f=k-Math.floor(k),up=Math.floor(k)%2;return[W*(.06+.88*t),H*(up?(.1+.8*f):(.9-.8*f))]},W*.03,96)},
+  loops:(R,W,H)=>{S(R,t=>{const a=t*PI*2*4;return[W*(.08+.84*t)+Math.cos(a)*W*.12,H*.5+Math.sin(a)*H*.22]},W*.03,96)},
+  out:(R,W,H)=>{const o=[];for(let k=0;k<10;k++){const a=k/10*PI*2;o.push(t=>[W*.5+Math.cos(a)*W*(.02+.5*t),H*.5+Math.sin(a)*W*(.02+.5*t)])}R.multi(o,W*.04,40)},
+  in:(R,W,H)=>{const o=[];for(let k=0;k<10;k++){const a=k/10*PI*2;o.push(t=>[W*.5+Math.cos(a)*W*(.6-.56*t),H*.5+Math.sin(a)*W*(.6-.56*t)])}R.multi(o,W*.04,40)},
+  comb:(R,W,H)=>{R.comb(PI/2,W*.12,H*.22,W*.02,0)},
+  combwave:(R,W,H)=>{R.comb(PI/2,W*.14,H*.25,W*.025,0,-W*.07,H*.35)},
+  yabane:(R,W,H)=>{R.comb(0,H*.18,W*.3,W*.04,0);R.comb(PI,H*.18,W*.3,W*.04,-H*.09);R.comb(PI/2,W*.16,H*.12,W*.03,0);R.comb(-PI/2,W*.16,H*.12,W*.03,W*.08)},
+  circle:(R,W,H)=>{for(const rr of [.18,.32])S(R,t=>{const a=t*PI*2*1.15-PI/2;return[W*.5+Math.cos(a)*W*rr,H*.5+Math.sin(a)*W*rr]},W*.035,64)}
+};
+for(const d in DROPS)for(const s in STROKES)REC['t_'+d+'_'+s]=(R,W,H,rnd,nc,p)=>{DROPS[d](R,W,H,rnd,nc,p||{});STROKES[s](R,W,H)};
+window.DROPS=DROPS;window.STROKES=STROKES;})();
+(function(){const REC=window.REC,D=window.DROPS,S=window.STROKES;
+const C={ // 2段・3段の組み合わせ
+  c1:['stone',{},['comb','s3']], c2:['stone',{n:140,rmin:8,rmax:24},['s3']], c3:['few',{},['combwave','in']], c4:['rows',{},['comb','swirl']],
+  c5:['stone',{},['zig','comb']], c6:['few',{},['out','circle']], c7:['stone',{},['combwave','circle']], c8:['few',{rn:9},['comb','loops']],
+  c9:['stone',{n:110},['yabane','s3']], c10:['rows',{nr:9,per:6},['zig']], c11:['few',{},['s3','comb']], c12:['stone',{},['swirl','combwave']]};
+for(const k in C){const [d,p,ss]=C[k];REC['m_'+k]=(R,W,H,rnd,nc)=>{D[d](R,W,H,rnd,nc,p);for(const s of ss)S[s](R,W,H)}}})();
+// ===== 伝統の手順：石だまり → 矢羽根 → もう一つの動かし方 =====
+(function(){const REC=window.REC,D=window.DROPS,S=window.STROKES,PI=Math.PI;
+const Sp=(R,f,lam,K=48)=>{let L=0,pv=f(0);for(let i=1;i<=200;i++){const q=f(i/200);L+=Math.hypot(q[0]-pv[0],q[1]-pv[1]);pv=q}R.multi([f],lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/6))};
+// ジグザグ：画面の外から外まで、上下にしっかり往復しながら横切る
+S.zigE=(R,W,H)=>Sp(R,t=>{const k=t*8,f=k-Math.floor(k),up=Math.floor(k)%2;return[W*(-.06+1.12*t),H*(up?(-.06+1.12*f):(1.06-1.12*f))]},W*.03,160);
+// 大きなS字で上から下へ（一本）
+S.serp=(R,W,H)=>Sp(R,t=>[W*.5+Math.sin(t*PI*3)*W*.42,H*(-.06+1.12*t)],W*.035,96);
+// 小さな渦をあちこちに（鳥の巣）
+S.nest=(R,W,H)=>{const c=3,r=4;for(let j=0;j<r;j++)for(let i=0;i<c;i++){const cx=W*(i+.5)/c,cy=H*(j+.5)/r,rr=Math.min(W/c,H/r)*.42;Sp(R,t=>{const a=t*PI*4,q=rr*(1-.9*t);return[cx+Math.cos(a)*q,cy+Math.sin(a)*q]},W*.025,64)}};
+// 細かい櫛（羽根）
+S.fine=(R,W,H)=>R.comb(PI/2,W*.05,H*.06,W*.012,0);
+const base=(R,W,H,rnd,nc)=>D.stone(R,W,H,rnd,nc,{n:110,rmin:10,rmax:30});
+const T={y0:[],y1:['s3'],y2:['swirl'],y3:['zigE'],y4:['loops'],y5:['in'],y6:['out'],y7:['circle'],y8:['combwave'],y9:['fine'],y10:['nest'],y11:['serp']};
+for(const k in T)REC['tr_'+k]=(R,W,H,rnd,nc)=>{base(R,W,H,rnd,nc);S.yabane(R,W,H);for(const s of T[k])S[s](R,W,H)};
+REC.t_few_zigE=(R,W,H,rnd,nc)=>{D.few(R,W,H,rnd,nc,{});S.zigE(R,W,H)};})();
+// ===== 第3弾：選ばれた6つを軸に、規則的なバリエーション =====
+(function(){const REC=window.REC,D=window.DROPS,S=window.STROKES,PI=Math.PI;
+const Sp=(R,f,lam,K=48)=>{let L=0,pv=f(0);for(let i=1;i<=300;i++){const q=f(i/300);L+=Math.hypot(q[0]-pv[0],q[1]-pv[1]);pv=q}R.multi([f],lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/6))};
+const base=(R,W,H,rnd,nc)=>D.stone(R,W,H,rnd,nc,{n:110,rmin:10,rmax:30});
+const M=Math.hypot;
+const V={
+  // 渦：画面の外から中心まで（大きく）
+  swirlBig:(R,W,H)=>Sp(R,t=>{const a=t*PI*7,r=M(W,H)*.62*(1-t)+4;return[W*.5+Math.cos(a)*r,H*.5+Math.sin(a)*r]},W*.035,200),
+  // 円：中心から外の外まで何重にも
+  circlesBig:(R,W,H)=>{for(let k=1;k<=6;k++){const rr=M(W,H)*.1*k;Sp(R,t=>{const a=t*PI*2*1.1-PI/2;return[W*.5+Math.cos(a)*rr,H*.5+Math.sin(a)*rr]},W*.035,96)}},
+  // 波の櫛：縦・横・斜め・十字
+  wavV:(R,W,H)=>R.comb(PI/2,W*.14,H*.25,W*.025,0,-W*.07,H*.35),
+  wavH:(R,W,H)=>R.comb(0,H*.11,W*.25,W*.025,0,H*.06,W*.45),
+  wavD:(R,W,H)=>R.comb(PI/4,W*.13,W*.3,W*.025,0,W*.07,W*.5),
+  wavX:(R,W,H)=>{R.comb(PI/2,W*.16,H*.18,W*.025,0,-W*.06,H*.35);R.comb(0,H*.13,W*.18,W*.025,0,H*.05,W*.45)},
+  wavS:(R,W,H)=>R.comb(PI/2,W*.07,H*.2,W*.015,0,-W*.05,H*.18),
+  // 細かい櫛：縦・横
+  fineV:(R,W,H)=>R.comb(PI/2,W*.05,H*.06,W*.012,0),
+  fineH:(R,W,H)=>R.comb(0,H*.04,W*.06,W*.012,0),
+  // 小さな渦：マスの数・向きを交互に
+  nest:(R,W,H,c=3,r=4,alt=false)=>{for(let j=0;j<r;j++)for(let i=0;i<c;i++){const cx=W*(i+.5)/c,cy=H*(j+.5)/r,rr=Math.min(W/c,H/r)*.46,sg=alt&&((i+j)%2)?-1:1;Sp(R,t=>{const a=sg*t*PI*4,q=rr*(1-.9*t);return[cx+Math.cos(a)*q,cy+Math.sin(a)*q]},W*.022,64)}},
+  // S字：一本・二本・横向き
+  serp1:(R,W,H)=>Sp(R,t=>[W*.5+Math.sin(t*PI*3)*W*.42,H*(-.06+1.12*t)],W*.035,96),
+  serp2:(R,W,H)=>{for(const o of [-.25,.25])Sp(R,t=>[W*(.5+o)+Math.sin(t*PI*4)*W*.2,H*(-.06+1.12*t)],W*.03,96)},
+  serpH:(R,W,H)=>Sp(R,t=>[W*(-.06+1.12*t),H*.5+Math.sin(t*PI*2.5)*H*.4],W*.035,96),
+  // 外から中心へ：いくつかの中心に
+  inAt:(R,W,H,pts,n=8,len=.32)=>{const o=[];for(const [x,y] of pts)for(let k=0;k<n;k++){const a=k/n*PI*2;o.push(t=>[W*x+Math.cos(a)*W*(len-(len-.02)*t),H*y+Math.sin(a)*W*(len-(len-.02)*t)])}R.multi(o,W*.035,60)}
+};
+const T={
+  a1:['swirlBig'],a2:['circlesBig'],a3:['wavH'],a4:['wavD'],a5:['wavX'],a6:['wavS'],a7:['fineH'],a8:['fineV','wavH'],
+  a9:[R=>0,'nest2'],a10:['nestAlt'],a11:['serp2'],a12:['serpH'],a13:['in3'],a14:['in2x3'],a15:['swirlBig','fineV'],a16:['wavH','in3']};
+const X={nest2:(R,W,H)=>V.nest(R,W,H,2,3),nestAlt:(R,W,H)=>V.nest(R,W,H,3,4,true),in3:(R,W,H)=>V.inAt(R,W,H,[[.5,.2],[.5,.5],[.5,.8]],8,.2),in2x3:(R,W,H)=>V.inAt(R,W,H,[[.27,.18],[.73,.18],[.27,.5],[.73,.5],[.27,.82],[.73,.82]],6,.17)};
+for(const k in T)REC['v3_'+k]=(R,W,H,rnd,nc)=>{base(R,W,H,rnd,nc);S.yabane(R,W,H);for(const s of T[k]){if(typeof s==='function')continue;(V[s]||X[s])(R,W,H)}};
+})();
+// ===== 第4弾：インスピレーション（なんでもあり） =====
+(function(){const REC=window.REC,D=window.DROPS,S=window.STROKES,PI=Math.PI,M=Math.hypot;
+const Sp=(R,f,lam,K=48)=>{let L=0,pv=f(0);for(let i=1;i<=300;i++){const q=f(i/300);L+=M(q[0]-pv[0],q[1]-pv[1]);pv=q}R.multi([f],lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/6))};
+const SpN=(R,fs,lam,K=48)=>{let L=0;for(const f of fs){let pv=f(0);for(let i=1;i<=300;i++){const q=f(i/300);L=Math.max(L,0)+M(q[0]-pv[0],q[1]-pv[1])/fs.length;pv=q}}R.multi(fs,lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/6))};
+// なめらかな気まぐれの道すじ
+const wander=(rnd,W,H,turns=3)=>{const a=[],ph=[];for(let i=0;i<4;i++){a.push(.15+rnd()*.25);ph.push(rnd()*PI*2)}const x0=rnd(),y0=rnd();
+  return t=>[W*(x0*.4+.3+a[0]*Math.sin(t*PI*turns+ph[0])+a[1]*.6*Math.sin(t*PI*turns*2.3+ph[1])),H*(y0*.4+.3+a[2]*Math.sin(t*PI*turns*1.3+ph[2])+a[3]*.6*Math.sin(t*PI*turns*.7+ph[3]))]};
+const stone=(R,W,H,rnd,nc,o)=>D.stone(R,W,H,rnd,nc,Object.assign({n:110,rmin:10,rmax:30},o||{}));
+const gelV=(R,W,H,sp)=>{R.comb(PI/2,sp,H*.25,W*.04,0);R.comb(-PI/2,sp,H*.25,W*.04,sp/2)};
+const gelH=(R,W,H,sp)=>{R.comb(0,sp,W*.3,W*.04,0);R.comb(PI,sp,W*.3,W*.04,sp/2)};
+const I={
+ // 落としただけ → 気まぐれに1本
+ i1:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);Sp(R,wander(rnd,W,H,3),W*.035,160)},
+ // 落としただけ → 気まぐれに3本
+ i2:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);for(let k=0;k<3;k++)Sp(R,wander(rnd,W,H,2.5),W*.03,160)},
+ // 輪を5か所 → 気まぐれに2本
+ i3:(R,W,H,rnd,nc)=>{D.few(R,W,H,rnd,nc,{rn:8});for(let k=0;k<2;k++)Sp(R,wander(rnd,W,H,2.5),W*.035,160)},
+ // 大きな輪 → 8の字
+ i4:(R,W,H,rnd,nc)=>{D.bull(R,W,H,rnd,nc,{rn:16});Sp(R,t=>{const a=t*PI*2*2;return[W*.5+Math.sin(a)*W*.42,H*.5+Math.sin(a*2)*H*.3]},W*.035,160)},
+ // 大きな輪 → リサージュ
+ i5:(R,W,H,rnd,nc)=>{D.bull(R,W,H,rnd,nc,{rn:16});Sp(R,t=>{const a=t*PI*2;return[W*.5+Math.sin(a*3)*W*.46,H*.5+Math.sin(a*2+.6)*H*.44]},W*.03,200)},
+ // 落としただけ → 縦に上下を行き来する串（タテのくし代わり）
+ i6:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);const n=7;for(let k=0;k<n;k++){const x=W*(k+.5)/n,dn=k%2;Sp(R,t=>[x+Math.sin(t*PI*2)*W*.03,H*(dn?(-.05+1.1*t):(1.05-1.1*t))],W*.03,64)}},
+ // 落としただけ → 回る櫛（中心のまわりを何本もの串で一緒にまわす）
+ i7:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);const fs=[];for(let k=1;k<=7;k++){const r=M(W,H)*.075*k,a0=k*.7;fs.push(t=>{const a=a0+t*PI*.9;return[W*.5+Math.cos(a)*r,H*.5+Math.sin(a)*r]})}SpN(R,fs,W*.03,64)},
+ // 落としただけ → 回る櫛を交互の向きに
+ i8:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);const fs=[];for(let k=1;k<=7;k++){const r=M(W,H)*.075*k,sg=k%2?1:-1;fs.push(t=>{const a=sg*t*PI*.8;return[W*.5+Math.cos(a)*r,H*.5+Math.sin(a)*r]})}SpN(R,fs,W*.03,64)},
+ // 斜めの行き来（斜めの矢羽根）
+ i9:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);R.comb(PI/4,W*.12,W*.35,W*.04,0);R.comb(PI/4+PI,W*.12,W*.35,W*.04,W*.06);R.comb(-PI/4,W*.13,W*.12,W*.03,0)},
+ // 片方向にだけ行き来（ゲルギット）
+ i10:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);gelH(R,W,H,H*.1)},
+ // ゲルギット → 波の櫛を縦 → 外から中心へ1つ
+ i11:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);gelH(R,W,H,H*.1);R.comb(PI/2,W*.14,H*.22,W*.025,0,-W*.06,H*.35);const o=[];for(let k=0;k<10;k++){const a=k/10*PI*2;o.push(t=>[W*.5+Math.cos(a)*W*(.5-.48*t),H*.5+Math.sin(a)*W*(.5-.48*t)])}R.multi(o,W*.035,60)},
+ // ゲルギット → 孔雀（波の櫛 → 細かい櫛）
+ i12:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc,{n:150,rmin:8,rmax:22});gelH(R,W,H,H*.09);R.comb(PI/2,W*.16,H*.18,W*.025,0,-W*.07,H*.3);R.comb(-PI/2,W*.045,H*.05,W*.01,0)},
+ // 横一列の滴 → 串をまっすぐ縦に1本ずつ交互（チューリップ風）
+ i13:(R,W,H,rnd,nc)=>{D.rows(R,W,H,rnd,nc,{nr:6,per:4});for(let k=0;k<4;k++){const x=W*(k+.5)/4,dn=k%2;Sp(R,t=>[x,H*(dn?(-.05+1.1*t):(1.05-1.1*t))],W*.04,32)}},
+ // 横一列の滴 → 縦の串を往復で細かく
+ i14:(R,W,H,rnd,nc)=>{D.rows(R,W,H,rnd,nc,{nr:8,per:5});for(let k=0;k<10;k++){const x=W*(k+.5)/10,dn=k%2;Sp(R,t=>[x,H*(dn?(-.05+1.1*t):(1.05-1.1*t))],W*.025,32)}},
+ // 輪を5か所 → それぞれで小さく渦
+ i15:(R,W,H,rnd,nc)=>{D.few(R,W,H,rnd,nc,{rn:8});for(const [x,y] of [[.3,.28],[.72,.36],[.4,.66],[.78,.78],[.15,.85]])Sp(R,t=>{const a=t*PI*5,q=W*.3*(1-.95*t);return[W*x+Math.cos(a)*q,H*y+Math.sin(a)*q]},W*.03,96)},
+ // 大きな輪 → 外から中心へ5本＋中心から外へ5本を交互
+ i16:(R,W,H,rnd,nc)=>{D.bull(R,W,H,rnd,nc,{rn:16});const o=[];for(let k=0;k<12;k++){const a=k/12*PI*2,inw=k%2;o.push(t=>{const r=inw?(.62-.6*t):(.02+.6*t);return[W*.5+Math.cos(a)*W*r,H*.5+Math.sin(a)*W*r]})}R.multi(o,W*.035,60)},
+ // 大きな輪 → 渦巻き（外の外から）
+ i17:(R,W,H,rnd,nc)=>{D.bull(R,W,H,rnd,nc,{rn:18});Sp(R,t=>{const a=t*PI*6,r=M(W,H)*.6*(1-t)+3;return[W*.5+Math.cos(a)*r,H*.5+Math.sin(a)*r]},W*.035,200)},
+ // 落としただけ → 横のS字を上から下へ何段も（波線を重ねる）
+ i18:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);for(let k=0;k<5;k++){const y=H*(k+.5)/5,dir=k%2;Sp(R,t=>{const u=dir?t:1-t;return[W*(-.05+1.1*u),y+Math.sin(u*PI*4)*H*.06]},W*.03,96)}},
+ // 落としただけ → 斜めのジグザグ
+ i19:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc);Sp(R,t=>{const k=t*10,f=k-Math.floor(k),up=Math.floor(k)%2,s=up?f:1-f;const u=-.1+1.2*t,v=-.1+1.2*s;return[W*(u*.75+v*.25),H*(v*.9+u*.1)]},W*.03,200)},
+ // 落としただけ → 大きく1回だけかき回す（S字の太い串）
+ i20:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc,{n:60,rmin:18,rmax:46});Sp(R,t=>[W*(.5+Math.sin(t*PI*2)*.35),H*(-.05+1.1*t)],W*.08,64)},
+ // 帯（大きな輪を左上から） → 串を縦にS字で何本も
+ i21:(R,W,H,rnd,nc)=>{const rn=26,Rr=M(W,H)*1.15/Math.sqrt(rn)*1.0;let ci=1;for(let r=0;r<rn;r++){R.drop(-W*.1,-H*.1,Rr*Math.sqrt(r+1)*.35+Rr*.2,ci%nc);ci++}for(let k=0;k<5;k++){const x=W*(k+.5)/5;Sp(R,t=>[x+Math.sin(t*PI*3)*W*.07,H*(-.05+1.1*t)],W*.03,96)}},
+ // 落としただけ → 回る櫛 → 細かい櫛
+ i22:(R,W,H,rnd,nc)=>{I.i7(R,W,H,rnd,nc);R.comb(PI/2,W*.05,H*.05,W*.01,0)},
+ // 小さな滴をびっしり → 気まぐれに2本
+ i23:(R,W,H,rnd,nc)=>{stone(R,W,H,rnd,nc,{n:260,rmin:6,rmax:16});for(let k=0;k<2;k++)Sp(R,wander(rnd,W,H,3),W*.03,160)},
+ // 輪を5か所 → 縦にS字3本 → 横にS字3本
+ i24:(R,W,H,rnd,nc)=>{D.few(R,W,H,rnd,nc,{rn:8});S.s3(R,W,H);for(const o of [-.28,0,.28])Sp(R,t=>[W*(-.05+1.1*t),H*(.5+o)+Math.sin(t*PI*2.2)*H*.08],W*.03,96)}
+};
+for(const k in I)REC['ins_'+k]=I[k];})();
+// ===== 第5弾：見本の写真から櫛の手順を読み解いて再現 =====
+(function(){const REC=window.REC,D=window.DROPS,PI=Math.PI,M=Math.hypot;
+const Sp=(R,f,lam,K=48)=>{let L=0,pv=f(0);for(let i=1;i<=300;i++){const q=f(i/300);L+=M(q[0]-pv[0],q[1]-pv[1]);pv=q}R.multi([f],lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/6))};
+const SpN=(R,fs,lam,K=48)=>{let L=0;for(const f of fs){let pv=f(0),l=0;for(let i=1;i<=300;i++){const q=f(i/300);l+=M(q[0]-pv[0],q[1]-pv[1]);pv=q}L=Math.max(L,l)}R.multi(fs,lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/6))};
+const P=(p,d)=>Object.assign({},d,p||{});
+// 石だまり（細かい滴）
+const st=(R,W,H,rnd,nc,p)=>{const mx=p.mx??.08,my=p.my??.08,a=p.rmin,b=p.rmax,area=W*(1+2*mx)*H*(1+2*my),n=Math.min(3000,Math.ceil((p.cov||window.COV||3)*area/(PI*(a*a+a*b+b*b)/3)));let last=-1;
+  for(let i=0;i<n;i++){let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;R.drop(W*(-mx+rnd()*(1+2*mx)),H*(-my+rnd()*(1+2*my)),a+(b-a)*rnd(),ci)}};
+// 行き来（ゲルギット）：横に往復 → 横じまになる / 縦に往復 → 縦じま
+const gelH=(R,W,H,sp,z)=>{R.comb(0,sp,z,W*.04,0);R.comb(PI,sp,z,W*.04,sp/2)};
+const gelV=(R,W,H,sp,z)=>{R.comb(PI/2,sp,z,W*.04,0);R.comb(-PI/2,sp,z,W*.04,sp/2)};
+// 縦の歯で上（-PI/2）か下（PI/2）へ引く
+const up=(R,sp,z,lam,off=0,A=0,Pp=1)=>R.comb(-PI/2,sp,z,lam,off,A,Pp);
+const dn=(R,sp,z,lam,off=0,A=0,Pp=1)=>R.comb(PI/2,sp,z,lam,off,A,Pp);
+const rt=(R,sp,z,lam,off=0,A=0,Pp=1)=>R.comb(0,sp,z,lam,off,A,Pp);
+const lf=(R,sp,z,lam,off=0,A=0,Pp=1)=>R.comb(PI,sp,z,lam,off,A,Pp);
+const H={
+ // A ケーブル：横じま → 細かい櫛で上へ（ノンパレル）→ 粗い櫛で上へ、少しずらして下へ（ねじれ）
+ A:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:10,my:.3,g:.05,f:.02,fz:.025,c:4.5,cz:.35,q:.15,lam:.04});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*p.g,W*.3);
+   up(R,W*p.f,H*p.fz,W*.008);const sp=W/p.c;up(R,sp,H*p.cz,W*p.lam,0);dn(R,sp,H*p.cz,W*p.lam,sp*p.q)},
+ // B 扇の列：縦じま → 細かい櫛で横へ → 波の櫛で横へ
+ B:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:11,mx:.4,f:.022,fz:.025,r:8,rz:.35,wa:.3,wp:.22,lam:.04,pre:0});st(R,W,H,rnd,nc,p);gelV(R,W,H,W*.05,H*.25);
+   if(p.pre)up(R,W/p.pre,H*.12,W*.05,0);rt(R,H*p.f,W*p.fz,W*.008);const sp=H/p.r;rt(R,sp,W*p.rz,W*p.lam,0,sp*p.wa,W*p.wp)},
+ // C 孔雀：横じま → （細かい櫛）→ 波の櫛で上へ（ゆらしながら）
+ C:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:6,rmax:15,my:.4,f:.035,fz:.03,c:5,cz:.3,wa:.4,wp:.18,nf:0,lam:.05});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.06,W*.3);
+   if(p.nf)dn(R,W*p.f,H*p.fz,W*.01);const sp=W/p.c;up(R,sp,H*p.cz,W*p.lam,0,sp*p.wa,H*p.wp)},
+ // D 渦（フレンチカール）：横じま → 細かい櫛 → 串を何本も同時に、小さな輪を描きながら斜めに
+ D:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:10,f:.022,fz:.025,cols:5,rows:8,rr:.06,loops:2.2,dx:.14,dy:-.08,lam:.018});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.05,W*.3);up(R,W*p.f,H*p.fz,W*.008);
+   const fs=[];for(let j=-1;j<=p.rows;j++)for(let i=-1;i<=p.cols;i++){const x0=W*(i+.5+(j%2?.5:0))/p.cols,y0=H*(j+.5)/p.rows,rr=W*p.rr,ph=(i*1.3+j*.7);
+     fs.push(t=>{const a=ph+t*PI*2*p.loops;return[x0+W*p.dx*t+Math.cos(a)*rr*(.4+.6*t),y0+H*p.dy*t+Math.sin(a)*rr*(.4+.6*t)]})}SpN(R,fs,W*p.lam,96)},
+ // E 細かい矢羽根 → 波の櫛で下へ
+ E:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:6,rmax:14,my:.4,v:.06,vz:.02,c:4.5,cz:.3,wa:.4,wp:.2,lam:.06});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.06,W*.3);
+   const sv=W*p.v;dn(R,sv,H*p.vz,W*.012,0);up(R,sv,H*p.vz,W*.012,sv/2);const sp=W/p.c;dn(R,sp,H*p.cz,W*p.lam,0,sp*p.wa,H*p.wp)},
+ // F 星の花：縦じま・横じま → 格子の点に向かって外から串を止める
+ F:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:11,cols:3.5,rows:5,k:12,len:.75,lam:.025});st(R,W,H,rnd,nc,p);if(p.gv??1)gelV(R,W,H,W*(p.gvs||.06),H*.2*(p.gv??1));if(p.gh??1)gelH(R,W,H,H*(p.ghs||.05),W*.25*(p.gh??1));
+   const cw=W/p.cols,ch=H/p.rows,o=[];for(let j=-1;j<=p.rows;j++)for(let i=-1;i<=p.cols+1;i++){const cx=cw*(i+.5+(j%2?.5:0)),cy=ch*(j+.5);if(cx<-cw*.6||cx>W+cw*.6)continue;
+     for(let k=0;k<p.k;k++){const a=k/p.k*PI*2,L=Math.hypot(cw*Math.cos(a),ch*Math.sin(a))*p.len;o.push(t=>[cx+Math.cos(a)*L*(1-t*.97),cy+Math.sin(a)*L*(1-t*.97)])}}R.multi(o,W*p.lam,p.ns||16)},
+ // G 大きな扇の列：縦じま → 粗い櫛で上へ（山をつくる）→ 横の櫛で右へ大きく（山を寝かせて扇に）
+ G:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:5,rmax:13,mx:.5,my:.2,c:4.5,cz:.1,r:5.5,rz:.4,lam:.05,wa:0,wp:.3});st(R,W,H,rnd,nc,p);gelV(R,W,H,W*.05,H*.25);
+   up(R,W/p.c,H*p.cz,W*.04,0);const sp=H/p.r;rt(R,sp,W*p.rz,W*p.lam,0,sp*p.wa,W*p.wp)},
+ // H 青い波の葉：縦じま → 波の櫛で右へ → 半分ずらして左へ
+ H:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:6,rmax:16,mx:.2,r:9,rz:.18,wa:.3,wp:.35,lam:.03});st(R,W,H,rnd,nc,p);gelV(R,W,H,W*.06,H*.25);
+   const sp=H/p.r;rt(R,sp,W*p.rz,W*p.lam,0,sp*p.wa,W*p.wp);lf(R,sp,W*p.rz,W*p.lam,sp/2,sp*p.wa,W*p.wp)},
+ // I パーム：横じま → 細かい矢羽根 → 粗い櫛で長く引く
+ I:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:11,my:.5,v:.05,vz:.015,c:5,cz:.35,lam:.08,dir:-1});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.05,W*.3);
+   const sv=W*p.v;if(p.vz){dn(R,sv,H*p.vz,W*.01,0);up(R,sv,H*p.vz,W*.01,sv/2)}(p.dir<0?up:dn)(R,W/p.c,H*p.cz,W*p.lam,0)},
+ // J 噴水：横じまを細かく → 粗い櫛でうんと長く
+ J:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:3,rmax:9,my:.8,c:7,cz:.7,lam:.05,dir:1});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.04,W*.3);gelH(R,W,H,H*.025,W*.2);
+   (p.dir<0?up:dn)(R,W/p.c,H*p.cz,W*p.lam,0)},
+ // K ブーケ：横じま → 細かい櫛で下へ → 波の櫛で上へ
+ K:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:10,my:.4,f:.025,fz:.025,c:5,cz:.28,wa:.4,wp:.16,lam:.05,f2:0});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.05,W*.3);
+   dn(R,W*p.f,H*p.fz,W*.008);const sp=W/p.c;up(R,sp,H*p.cz,W*p.lam,0,sp*p.wa,H*p.wp);if(p.f2)dn(R,W*p.f2,H*.02,W*.008)}
+};
+for(const k in H)REC['hm_'+k]=(R,W,H2,rnd,nc,p)=>H[k](R,W,H2,rnd,nc,p);
+})();
+// ===== 第5弾つづき：波の櫛を「串の動き」として描く（歯の一本一本が波の道を通る） =====
+(function(){const REC=window.REC,PI=Math.PI,M=Math.hypot;
+const SpN=(R,fs,lam,K=48)=>{let L=0;for(const f of fs){let pv=f(0),l=0;for(let i=1;i<=300;i++){const q=f(i/300);l+=M(q[0]-pv[0],q[1]-pv[1]);pv=q}L=Math.max(L,l)}R.multi(fs,lam,Math.ceil(L/(lam*.45)));R.ops[R.ops.length-1].K=Math.max(K,Math.ceil(L/5))};
+// 波の櫛：dir 'up','down','right','left'。歯の間隔 sp、ゆれ幅 A、ゆれの周期 P、off ずらし
+const wt=(R,W,H,o)=>{const vert=o.dir==='up'||o.dir==='down',Lx=vert?W:H,Ly=vert?H:W,m=o.m??.1,fs=[];
+  for(let x=(o.off||0)-o.sp*2;x<Lx+o.sp*2;x+=o.sp){const x0=x;fs.push(t=>{const s=(o.dir==='up'||o.dir==='left')?1-t:t,y=Ly*(-m+(1+2*m)*s),xx=x0+o.A*Math.sin(2*PI*y/o.P+(o.ph||0));return vert?[xx,y]:[y,xx]})}
+  SpN(R,fs,o.lam)};
+window.WT=wt;
+const st=(R,W,H,rnd,nc,p)=>{const mx=p.mx??.08,my=p.my??.08,a=p.rmin,b=p.rmax,area=W*(1+2*mx)*H*(1+2*my),n=Math.min(3000,Math.ceil((window.COV||3)*area/(PI*(a*a+a*b+b*b)/3)));let last=-1;
+  for(let i=0;i<n;i++){let ci;do{ci=window.BG0&&nc>2?1+Math.floor(rnd()*(nc-1)):Math.floor(rnd()*nc)}while(ci===last&&nc>1);last=ci;R.drop(W*(-mx+rnd()*(1+2*mx)),H*(-my+rnd()*(1+2*my)),a+(b-a)*rnd(),ci)}};
+const gelH=(R,W,H,sp,z)=>{R.comb(0,sp,z,W*.04,0);R.comb(PI,sp,z,W*.04,sp/2)};
+const gelV=(R,W,H,sp,z)=>{R.comb(PI/2,sp,z,W*.04,0);R.comb(-PI/2,sp,z,W*.04,sp/2)};
+const P=(p,d)=>Object.assign({},d,p||{});
+const W2={
+ // ブーケ：横じま → 細かい櫛（縦）→ 波の櫛を上へ
+ K:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:10,f:.025,fz:.025,c:5,a:.5,pp:.16,lam:.035,nf:1});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.05,W*.3);
+   if(p.nf)R.comb(PI/2,W*p.f,H*p.fz,W*.008,0);const sp=W/p.c;wt(R,W,H,{dir:p.dir||'down',sp,A:sp*p.a,P:H*p.pp,lam:W*p.lam})},
+ // 孔雀：横じま → 波の櫛を上へ → 半分ずらして下へ
+ C:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:6,rmax:14,c:5,a:.5,pp:.2,lam:.04,back:1});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.06,W*.3);const sp=W/p.c;
+   wt(R,W,H,{dir:p.dir||'up',sp,A:sp*p.a,P:H*p.pp,lam:W*p.lam});if(p.back)wt(R,W,H,{dir:'down',sp,A:sp*p.a,P:H*p.pp,lam:W*p.lam,off:sp/2})},
+ // トレーの孔雀：細かい矢羽根 → 波の櫛を下へ
+ E:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:6,rmax:14,v:.06,vz:.02,c:4.5,a:.5,pp:.2,lam:.045});st(R,W,H,rnd,nc,p);gelH(R,W,H,H*.06,W*.3);
+   const sv=W*p.v;R.comb(PI/2,sv,H*p.vz,W*.012,0);R.comb(-PI/2,sv,H*p.vz,W*.012,sv/2);const sp=W/p.c;wt(R,W,H,{dir:'down',sp,A:sp*p.a,P:H*p.pp,lam:W*p.lam})},
+ // 扇の列：縦じま → 細かい櫛（横）→ 波の櫛を右へ
+ B:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:11,f:.022,fz:.025,r:8,a:.5,pp:.24,lam:.03});st(R,W,H,rnd,nc,p);gelV(R,W,H,W*.05,H*.25);
+   R.comb(0,H*p.f,W*p.fz,W*.008,0);const sp=H/p.r;wt(R,W,H,{dir:'right',sp,A:sp*p.a,P:W*p.pp,lam:W*p.lam})},
+ // 大きな扇の列：縦じま → 波の櫛を右へ（粗め）
+ G:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:5,rmax:13,r:5.5,a:.5,pp:.28,lam:.04,f:0});st(R,W,H,rnd,nc,p);gelV(R,W,H,W*.05,H*.25);if(p.f)R.comb(0,H*p.f,W*.025,W*.008,0);
+   const sp=H/p.r;wt(R,W,H,{dir:'right',sp,A:sp*p.a,P:W*p.pp,lam:W*p.lam})}
+,
+ // 扇の列（羽根）：縦じま → 波の櫛を縦に（扇の芽）→ まっすぐな櫛を右へ大きく
+ F2:(R,W,H,rnd,nc,p)=>{p=P(p,{rmin:4,rmax:11,c:4.5,a:.4,pp:.12,lam:.03,r:7,rz:.35,rl:.06,mx:.5});st(R,W,H,rnd,nc,p);gelV(R,W,H,W*.05,H*.25);
+   const sp=W/p.c;wt(R,W,H,{dir:'up',sp,A:sp*p.a,P:H*p.pp,lam:W*p.lam});const sr=H/p.r;R.comb(0,sr,W*p.rz,W*p.rl,0)}
+};
+for(const k in W2)REC['hw_'+k]=W2[k];
+})();
+
+// ---- GPUで描くマーブリング（トップの模様づくり用） ----
+// 画面の点ごとに工程を逆にたどって「この点の絵の具はどこから来たか」を求める。輪郭を持たないので、髪の毛より細い線もくずれない
+// 速さのくふう：滴は1マスに詰める／串の道すじは区間ごとの囲みで、遠い区間は読みとばす
+(function(){
+const VS=`#version 300 es
+in vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+const FS=`#version 300 es
+precision highp float;precision highp int;
+uniform highp sampler2D uOps;uniform highp sampler2D uFr;uniform int uN;uniform vec2 uSize;uniform float uScale;uniform int uSS;uniform vec3 uCol[8];uniform int uTexW;uniform float uKw;uniform float uFlip;uniform int uND;uniform int uDF;
+out vec4 o;
+vec4 T(int i){return texelFetch(uOps,ivec2(i%uTexW,i/uTexW),0);}
+float tri(float d,float sp){if(sp<=0.)return abs(d);float m=mod(d,sp);return min(m,sp-m);}
+float fall(float d,float sp,float lam){if(sp<=0.)return lam/(d+lam);float h=sp*.5;float g0=lam/(d+lam)+lam/(sp-d+lam),gm=2.*lam/(h+lam),gt=1.+lam/(sp+lam);float r=(g0-gm)/(gt-gm);return mix(lam/(h+lam),1.,r);}
+int trace(vec2 q){
+  for(int k=uN-1;k>=uND;k--){
+    vec4 h=texelFetch(uFr,ivec2(k%uTexW,k/uTexW),0);float f=h.x;if(f<=0.)continue;int at=int(h.y+.5),ty=int(h.z+.5);
+    if(ty==0){vec4 a=T(at);float r=a.z*f;vec2 d=q-a.xy;float d2=dot(d,d),r2=r*r;if(d2<r2)return int(a.w+.5);q=a.xy+d*sqrt(1.-r2/d2);}
+    else if(ty==1){vec4 a=T(at),b=T(at+1);float th=a.x,sp=a.y,z=a.z*f,lam=a.w,off=b.x,A=b.y,P=b.z;float c=cos(th),s=sin(th);
+      if(A==0.){float v=-q.x*s+q.y*c;float d=tri(v-off,sp);float m=z*fall(d,sp,lam);q-=m*vec2(c,s);}
+      else{for(int j=0;j<12;j++){vec2 r=q;for(int it=0;it<2;it++){float u=r.x*c+r.y*s,v=-r.x*s+r.y*c,ph=6.2831853*u/P,w=A*sin(ph);float tv=A*6.2831853/P*cos(ph);float L=sqrt(1.+tv*tv);float tu=1./L;tv/=L;
+          float d=tri(v-off-w,sp);float m=z/12.*fall(d,sp,lam);vec2 du=vec2(tu*m*c-tv*m*s,tu*m*s+tv*m*c);r=q-du;}q=r;}}}
+    else{vec4 a=T(at),b=T(at+1);int n=int(a.x+.5),np=int(a.z+.5),K=int(a.w+.5),C=int(b.x+.5),nch=int(b.y+.5);float lam=a.y,ka=lam*uKw,cr6=ka*6.,cut=cr6*cr6;
+      int jn=int(ceil(f*float(n)-1e-4));if(jn<1)continue;int pb=at+2,bb=at+2+np*K;
+      for(int c=(jn-1)/C;c>=0;c--){int act[16];int na=0;bool all=false;
+        for(int pi=np-1;pi>=0;pi--){vec4 bx=T(bb+pi*nch+c);if(q.x>bx.x&&q.y>bx.y&&q.x<bx.z&&q.y<bx.w){if(na<16){act[na]=pi;na++;}else all=true;}}
+        if(na==0)continue;int cnt=all?np:na,j0=c*C+1;
+        for(int j=min(jn,(c+1)*C);j>=j0;j--){float ta=float(j-1)/float(n),tb=min(float(j)/float(n),f);float sa=ta*float(K),sb=tb*float(K);int ia=min(int(sa),K-1),ib=min(int(sb),K-1);
+          for(int m=0;m<cnt;m++){int pi=all?np-1-m:act[m];int base=pb+pi*K;
+            vec4 sB=T(base+ib);vec2 B0=mix(sB.xy,sB.zw,sb-float(ib));vec2 e=q-B0;if(dot(e,e)<cut){vec4 sA=T(base+ia);vec2 A0=mix(sA.xy,sA.zw,sa-float(ia)),dd=B0-A0,r=q;
+              for(int it=0;it<2;it++){vec2 e2=r-B0;float dl=length(e2),fo=max(0.,1.-dl/cr6);r=q-dd*(exp(-dl/ka)*fo);}q=r;}}}}}
+  }
+  // 最初にまとめて落とした滴（工程の番号＝詰めた場所）。全部落ちきっていれば進み具合を読まない
+  for(int k=uND-1;k>=0;k--){float f=1.;if(uDF==0){f=texelFetch(uFr,ivec2(k%uTexW,k/uTexW),0).x;if(f<=0.)continue;}
+    vec4 a=T(k);float r=a.z*f;vec2 d=q-a.xy;float d2=dot(d,d),r2=r*r;if(d2<r2)return int(a.w+.5);q=a.xy+d*sqrt(1.-r2/d2);}
+  return 0;}
+void main(){vec2 px=vec2(gl_FragCoord.x,uSize.y-gl_FragCoord.y);vec3 acc=vec3(0.);
+  for(int sy=0;sy<uSS;sy++)for(int sx=0;sx<uSS;sx++){vec2 q=(px-.5+(vec2(sx,sy)+.5)/float(uSS))/uScale;if(uFlip>0.)q.y=uFlip-q.y;acc+=uCol[trace(q)];}
+  o=vec4(acc/float(uSS*uSS),1.);}`;
+const KW=1.5,CH=8,TW=1024;
+// 道すじ（関数）を、点を並べた折れ線にする
+function bake(op){if(op[0]!=='multi'||typeof op[1][0]!=='function')return op;const K=op.K||8;return['multi',op[1].map(f=>{const a=[];for(let i=0;i<=K;i++)a.push(f(i/K));return a}),op[2],op[3]]}
+class GLM{
+  constructor(cv){this.cv=cv;const gl=cv.getContext('webgl2',{antialias:false,preserveDrawingBuffer:true,premultipliedAlpha:false,alpha:false,depth:false,stencil:false,powerPreference:'high-performance'});if(!gl)throw new Error('no webgl2');this.gl=gl;
+    const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(x));return x};
+    const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(pr));this.pr=pr;gl.useProgram(pr);
+    const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+    this.U={};for(const n of ['uOps','uFr','uN','uSize','uScale','uSS','uCol','uTexW','uKw','uFlip','uND','uDF'])this.U[n]=gl.getUniformLocation(pr,n);
+    this.tOps=gl.createTexture();this.tFr=gl.createTexture();this.px=new Uint8Array(4)}
+  tex(t,unit,data,h,same){const gl=this.gl;gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);
+    if(same){gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,TW,h,gl.RGBA,gl.FLOAT,data);return}
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA32F,TW,h,0,gl.RGBA,gl.FLOAT,data)}
+  // 工程を GPU 用に詰める（滴=1マス、櫛=2マス、串=見出し2マス＋折れ線（1マスに1区間）＋区間ごとの囲み）
+  setOps(ops){const tx=[],at=[],ty=[];this.kind=[];
+    for(let op of ops){op=bake(op);at.push(tx.length/4);
+      if(op[0]==='drop'){ty.push(0);tx.push(op[1],op[2],op[3],op[4])}
+      else if(op[0]==='comb'){ty.push(1);tx.push(op[1],op[2],op[3],op[4],op[5]||0,op[6]||0,op[7]||1,0)}
+      else{ty.push(2);const [,paths,lam,n]=op,K=paths[0].length-1,np=paths.length,nch=Math.ceil(n/CH),cr6=lam*KW*6;tx.push(n,lam,np,K,CH,nch,0,0);
+        for(const pl of paths)for(let i=0;i<K;i++)tx.push(pl[i][0],pl[i][1],pl[i+1][0],pl[i+1][1]);
+        // 区間ごとの囲み：串の先がこの区間で通るところ＋引っぱりが届く距離（ほかの串に運ばれるぶんも足す）
+        const pos=(pl,s)=>{const i=Math.min(Math.floor(s),K-1),u=s-i;return[pl[i][0]+(pl[i+1][0]-pl[i][0])*u,pl[i][1]+(pl[i+1][1]-pl[i][1])*u]};
+        const boxes=[],trav=new Float64Array(nch);
+        for(const pl of paths){const bx=[];for(let c=0;c<nch;c++){const j0=c*CH,j1=Math.min(n,(c+1)*CH);let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,L=0,pv=null;
+            const add=p=>{if(p[0]<x0)x0=p[0];if(p[0]>x1)x1=p[0];if(p[1]<y0)y0=p[1];if(p[1]>y1)y1=p[1];if(pv)L+=Math.hypot(p[0]-pv[0],p[1]-pv[1]);pv=p};
+            const sA=j0/n*K,sB=j1/n*K;add(pos(pl,sA));for(let v=Math.floor(sA)+1;v<sB;v++)add(pl[v]);add(pos(pl,sB));
+            bx.push([x0,y0,x1,y1]);if(L>trav[c])trav[c]=L}boxes.push(bx)}
+        for(const bx of boxes)for(let c=0;c<nch;c++){const m=cr6+(np>1?trav[c]*1.5:0)+1,b=bx[c];tx.push(b[0]-m,b[1]-m,b[2]+m,b[3]+m)}}}
+    const h=Math.max(1,Math.ceil(tx.length/4/TW)),d=new Float32Array(TW*h*4);d.set(tx);this.tex(this.tOps,0,d,h);
+    this.n=ops.length;this.ty=ty;let nd=0;while(nd<ty.length&&ty[nd]===0)nd++;this.nd=nd;this.frH=Math.max(1,Math.ceil(this.n/TW));this.fr=new Float32Array(TW*this.frH*4);for(let i=0;i<this.n;i++){this.fr[i*4+1]=at[i];this.fr[i*4+2]=ty[i]}this.frNew=true}
+  size(w,h){if(this.cv.width!==w||this.cv.height!==h){this.cv.width=w;this.cv.height=h}}
+  // fracs: 各工程の進み具合（0〜1、なしなら全部1）。rect: [x,y,w,h] を指定すると、その部分だけ描く
+  render(fracs,o,rect){const gl=this.gl,cv=this.cv;let df=1;for(let i=0;i<this.n;i++){const f=fracs?fracs[i]:1;this.fr[i*4]=f;if(i<this.nd&&f<1)df=0}this.tex(this.tFr,1,this.fr,this.frH,!this.frNew);this.frNew=false;
+    gl.viewport(0,0,cv.width,cv.height);gl.useProgram(this.pr);gl.uniform1i(this.U.uOps,0);gl.uniform1i(this.U.uFr,1);gl.uniform1i(this.U.uN,this.n);gl.uniform1i(this.U.uTexW,TW);
+    gl.uniform2f(this.U.uSize,cv.width,cv.height);gl.uniform1f(this.U.uScale,o.scale);gl.uniform1i(this.U.uSS,o.ss||1);gl.uniform1f(this.U.uKw,KW);gl.uniform1f(this.U.uFlip,o.flip||0);gl.uniform1i(this.U.uND,this.nd);gl.uniform1i(this.U.uDF,df);
+    const c=new Float32Array(24);o.cols.forEach((h,i)=>{const n=parseInt(h.slice(1),16);c[i*3]=((n>>16)&255)/255;c[i*3+1]=((n>>8)&255)/255;c[i*3+2]=(n&255)/255});gl.uniform3fv(this.U.uCol,c);
+    if(rect){gl.enable(gl.SCISSOR_TEST);gl.scissor(rect[0],cv.height-rect[1]-rect[3],rect[2],rect[3])}else gl.disable(gl.SCISSOR_TEST);
+    gl.drawArrays(gl.TRIANGLES,0,3);gl.disable(gl.SCISSOR_TEST)}
+  // 描き終わるまで待つ（時間をはかるため）
+  sync(){const gl=this.gl;gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,this.px)}
+  // 大きな絵を、少しずつ（画面がかたまらないよう）描く。1回あたり約 ms ミリ秒に収まるよう行数を調整
+  async renderTiled(o,alive,ms=14){const cv=this.cv,H=cv.height;let y=0,rows=Math.max(8,Math.min(H,Math.round(o.rows0||48)));
+    while(y<H){if(alive&&!alive())return false;const h=Math.min(rows,H-y),t0=performance.now();this.render(null,o,[0,y,cv.width,h]);this.sync();const dt=performance.now()-t0;y+=h;
+      rows=Math.max(4,Math.min(H,Math.round(h*Math.min(4,Math.max(.25,ms/Math.max(dt,.5))))));this.lastRows=rows;
+      if(y<H)await new Promise(r=>setTimeout(r,0))}
+    return true}
+}
+window.GLM=GLM;window.glBake=bake;
+})();
+
+</script>
+<script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const COLORS = [
-    ['ティール','#1B998B'],['さくら','#F2A7A0'],['コーラル','#F0544F'],['レモン','#F5D27A'],['ミント','#9CCFC2'],['ラベンダー','#B9A7E0'],
+    ['さくら','#F2A7A0'],['コーラル','#F0544F'],['ミント','#9CCFC2'],['ティール','#1B998B'],['レモン','#F5D27A'],['ラベンダー','#B9A7E0'],
     ['ネイビー','#26315A'],['そら','#7EC8E3'],['みかん','#F39A4B'],['ローズ','#D94F8A'],['わかば','#6BBF59'],['すみ','#3A3A40']
   ];
 
@@ -698,20 +1110,26 @@ img.band{height:auto;object-fit:cover}
     constructor(cx,cy,r,color){this.color=color;this.circle(cx,cy,r)}
     circle(cx,cy,r){const n=Math.max(32,Math.min(480,Math.round(2*Math.PI*r/2.5)));this.x=new Float64Array(n);this.y=new Float64Array(n);
       for(let i=0;i<n;i++){const a=i/n*Math.PI*2;this.x[i]=cx+Math.cos(a)*r;this.y[i]=cy+Math.sin(a)*r}}
-    subdivide(maxSeg){const n=this.x.length;if(n>9000)return;const m2=maxSeg*maxSeg;let add=0;
+    subdivide(maxSeg){const n=this.x.length;if(n>60000)return;const m2=maxSeg*maxSeg;let add=0;
       for(let i=0;i<n;i++){const j=(i+1)%n,dx=this.x[j]-this.x[i],dy=this.y[j]-this.y[i];if(dx*dx+dy*dy>m2)add++}
       if(!add)return;const X=new Float64Array(n+add),Y=new Float64Array(n+add);let k=0;
       for(let i=0;i<n;i++){const j=(i+1)%n;X[k]=this.x[i];Y[k++]=this.y[i];const dx=this.x[j]-this.x[i],dy=this.y[j]-this.y[i];
         if(dx*dx+dy*dy>m2){X[k]=(this.x[i]+this.x[j])/2;Y[k++]=(this.y[i]+this.y[j])/2}}
       this.x=X;this.y=Y}
+    // 近すぎる点をまとめて、点の数をふやしすぎない（形はそのまま）
+    simplify(minSeg){const n=this.x.length;if(n<64)return;const m2=minSeg*minSeg,X=this.x,Y=this.y,KX=new Float64Array(n),KY=new Float64Array(n);let k=0,lx=X[0],ly=Y[0];KX[k]=lx;KY[k++]=ly;
+      for(let i=1;i<n;i++){const dx=X[i]-lx,dy=Y[i]-ly;if(dx*dx+dy*dy>=m2){lx=X[i];ly=Y[i];KX[k]=lx;KY[k++]=ly}}
+      if(k<n){this.x=KX.slice(0,k);this.y=KY.slice(0,k)}}
   }
+  // 細い串で引いたような、髪の毛ほどの線ととがった先まで形を追えるよう、輪郭の点をこまかく保つ
+  const SEG=1.1;
   class Tank{
     constructor(c,fw,fh){this.c=c;this.g=c.getContext('2d');this.inks=[];this.anims=[];this.dirty=true;this.fw=fw;this.fh=fh;this.resize()}
     resize(){if(this.fw){this.w=this.fw;this.h=this.fh;return}const r=this.c.getBoundingClientRect();this.w=r.width;this.h=r.height;const d=Math.min(2,devicePixelRatio||1);
       this.c.width=Math.round(this.w*d);this.c.height=Math.round(this.h*d);this.g.setTransform(d,0,0,d,0,0);this.dirty=true}
-    pushOut(cx,cy,r2,skip){for(const k of this.inks){if(k===skip)continue;k.subdivide(4);const X=k.x,Y=k.y;
+    pushOut(cx,cy,r2,skip){for(const k of this.inks){if(k===skip)continue;k.subdivide(2);const X=k.x,Y=k.y;
       for(let i=0;i<X.length;i++){const dx=X[i]-cx,dy=Y[i]-cy,d2=dx*dx+dy*dy;if(d2<1e-9)continue;const s=Math.sqrt(1+r2/d2);X[i]=cx+dx*s;Y[i]=cy+dy*s}}this.dirty=true}
-    tine(bx,by,mx,my,z,lam,sp){const nx=-my,ny=mx;for(const k of this.inks){k.subdivide(2.5);const X=k.x,Y=k.y;
+    tine(bx,by,mx,my,z,lam,sp){const nx=-my,ny=mx;for(const k of this.inks){k.subdivide(SEG);const X=k.x,Y=k.y;
       for(let i=0;i<X.length;i++){let d=(X[i]-bx)*nx+(Y[i]-by)*ny;if(sp){const m=((d%sp)+sp)%sp;d=Math.min(m,sp-m)}else d=Math.abs(d);
         const s=z*lam/(d+lam);X[i]+=mx*s;Y[i]+=my*s}}this.dirty=true}
     // 画面の外へ大きく出たインクは消して軽く保つ
@@ -724,39 +1142,46 @@ img.band{height:auto;object-fit:cover}
     stroke(bx,by,mx,my,Z,lam,ms,sp){return new Promise(res=>{let done=0,t0=null;const step=t=>{if(t0===null)t0=t;const p=Math.min(1,(t-t0)/ms),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
       this.tine(bx,by,mx,my,Z*(e-done),lam,sp);done=e;if(p<1)this.anims.push(step);else res()};this.anims.push(step)})}
     // 波：y に合わせて x を左右にゆらす（面積はそのまま）
-    wave(A,P,ph){for(const k of this.inks){k.subdivide(2.5);const X=k.x,Y=k.y;for(let i=0;i<X.length;i++)X[i]+=A*Math.sin(2*Math.PI*Y[i]/P+ph)}this.dirty=true}
+    wave(A,P,ph){for(const k of this.inks){k.subdivide(SEG);const X=k.x,Y=k.y;for(let i=0;i<X.length;i++)X[i]+=A*Math.sin(2*Math.PI*Y[i]/P+ph)}this.dirty=true}
     // 渦：中心に近いほど大きくまわる
-    swirl(cx,cy,th,lam){for(const k of this.inks){k.subdivide(2.5);const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const dx=X[i]-cx,dy=Y[i]-cy,r=Math.hypot(dx,dy),a=th*lam/(r+lam),c=Math.cos(a),s=Math.sin(a);X[i]=cx+dx*c-dy*s;Y[i]=cy+dx*s+dy*c}}this.dirty=true}
+    swirl(cx,cy,th,lam){for(const k of this.inks){k.subdivide(SEG);const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const dx=X[i]-cx,dy=Y[i]-cy,r=Math.hypot(dx,dy),a=th*lam/(r+lam),c=Math.cos(a),s=Math.sin(a);X[i]=cx+dx*c-dy*s;Y[i]=cy+dx*s+dy*c}}this.dirty=true}
     // 波形のくし：くしを左右にゆらしながら縦に通す。歯の通り道に沿って絵の具が引っぱられる
-    curveTine(x0,A,P,z,lam,sp){for(const k of this.inks){k.subdivide(2.5);const X=k.x,Y=k.y;
+    curveTine(x0,A,P,z,lam,sp){for(const k of this.inks){k.subdivide(SEG);const X=k.x,Y=k.y;
       for(let i=0;i<X.length;i++){const ph=2*Math.PI*Y[i]/P,off=A*Math.sin(ph);let d=X[i]-x0-off;const m=((d%sp)+sp)%sp;d=Math.min(m,sp-m);
         let tx=A*2*Math.PI/P*Math.cos(ph),ty=1;const L=Math.hypot(tx,ty);tx/=L;ty/=L;const s=z*lam/(d+lam);X[i]+=tx*s;Y[i]+=ty*s}}this.dirty=true}
     // 一本の串（スタイラス）を道すじに沿って動かす。串の近くの絵の具だけが一緒に引っぱられる
     stylus(path,lam,ms){return new Promise(res=>{let t0=null,prev=0;const step=t=>{if(t0===null)t0=t;const p=Math.min(1,(t-t0)/ms);
       const n=Math.max(1,Math.ceil((p-prev)*120));for(let j=1;j<=n;j++){const a=prev+(p-prev)*(j-1)/n,b=prev+(p-prev)*j/n,A=path(a),B=path(b),dx=B[0]-A[0],dy=B[1]-A[1];
-        for(const k of this.inks){k.subdivide(2.5);const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const ex=X[i]-B[0],ey=Y[i]-B[1],w=Math.exp(-(ex*ex+ey*ey)/(lam*lam));if(w>.002){X[i]+=dx*w;Y[i]+=dy*w}}}}
+        for(const k of this.inks){k.subdivide(SEG);const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const ex=X[i]-B[0],ey=Y[i]-B[1],w=Math.exp(-(ex*ex+ey*ey)/(lam*lam));if(w>.002){X[i]+=dx*w;Y[i]+=dy*w}}}}
       prev=p;this.dirty=true;if(p<1)this.anims.push(step);else res()};this.anims.push(step)})}
     // 何本もの串を同時に動かす（花びら）
-    multi(paths,lam,p0,p1){const n=Math.max(1,Math.ceil((p1-p0)*90)),L2=lam*lam,cut=L2*6;
-      for(const k of this.inks)k.subdivide(2.5);
-      for(let j=1;j<=n;j++){const a=p0+(p1-p0)*(j-1)/n,b=p0+(p1-p0)*j/n;for(const path of paths){const A=path(a),B=path(b),dx=B[0]-A[0],dy=B[1]-A[1];
-        for(const k of this.inks){const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const ex=X[i]-B[0],ey=Y[i]-B[1],d2=ex*ex+ey*ey;if(d2<cut){const w=Math.exp(-d2/L2);X[i]+=dx*w;Y[i]+=dy*w}}}}}this.dirty=true}
+    multi(paths,lam,p0,p1){const n=Math.max(1,Math.ceil((p1-p0)*120)),L2=lam*lam,cut=L2*6;
+      for(let j=1;j<=n;j++){if(j%3===1)for(const k of this.inks)k.subdivide(SEG);const a=p0+(p1-p0)*(j-1)/n,b=p0+(p1-p0)*j/n;for(const path of paths){const A=path(a),B=path(b),dx=B[0]-A[0],dy=B[1]-A[1];
+        for(const k of this.inks){const X=k.x,Y=k.y;for(let i=0;i<X.length;i++){const ex=X[i]-B[0],ey=Y[i]-B[1],d2=ex*ex+ey*ey;if(d2<cut){const w=Math.exp(-d2/L2);X[i]+=dx*w;Y[i]+=dy*w}}}}}
+      for(const k of this.inks)k.subdivide(SEG);this.dirty=true}
+    // 動き終わりに、寄りあつまった点を間引く
+    tidy(){for(const k of this.inks)k.simplify(.35);this.prune()}
     multiRun(paths,lam,ms){return new Promise(res=>{let t0=null,prev=0;const step=t=>{if(t0===null)t0=t;const lin=Math.min(1,(t-t0)/ms),p=lin<.5?2*lin*lin:1-Math.pow(-2*lin+2,2)/2;
       if(p>prev)this.multi(paths,lam,prev,p);prev=p;if(lin<1)this.anims.push(step);else res()};this.anims.push(step)})}
     animate(fn,ms){return new Promise(res=>{let done=0,t0=null;const step=t=>{if(t0===null)t0=t;const p=Math.min(1,(t-t0)/ms),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
       fn(e-done);done=e;if(p<1)this.anims.push(step);else res()};this.anims.push(step)})}
     frame(t){const a=this.anims;this.anims=[];for(const f of a)f(t);if(this.dirty){this.draw();this.dirty=false}}
-    draw(){const g=this.g;g.fillStyle=this.water;g.fillRect(0,0,this.w,this.h);
+    draw(fast){const g=this.g;g.fillStyle=this.water;g.fillRect(0,0,this.w,this.h);
       for(const k of this.inks){const X=k.x,Y=k.y,n=X.length;g.beginPath();g.moveTo(X[0],Y[0]);
-        for(let i=1;i<n;i++)g.lineTo(X[i],Y[i]);g.closePath();g.fillStyle=k.color;g.fill();g.lineWidth=.6;g.strokeStyle=rim(k.color);g.stroke()}}
+        for(let i=1;i<n;i++)g.lineTo(X[i],Y[i]);g.closePath();g.fillStyle=k.color;g.fill();if(!fast){g.lineWidth=.3;g.strokeStyle=rim(k.color);g.stroke()}}
+      grain(g)}
   }
-  const rimCache={};const rim=h=>rimCache[h]||(rimCache[h]=(()=>{const n=parseInt(h.slice(1),16),f=.78;return `rgba(${((n>>16)&255)*f|0},${((n>>8)&255)*f|0},${(n&255)*f|0},.55)`})());
+  const rimCache={};const rim=h=>rimCache[h]||(rimCache[h]=(()=>{const n=parseInt(h.slice(1),16),f=.86;return `rgba(${((n>>16)&255)*f|0},${((n>>8)&255)*f|0},${(n&255)*f|0},.5)`})());
+  // 紙と絵の具のこまかな粒（うっすら）
+  let grainPat=null;function grain(g){if(!grainPat){const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d'),d=x.createImageData(256,256);
+      for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0);grainPat=g.createPattern(c,'repeat')}
+    g.save();g.globalAlpha=.05;g.globalCompositeOperation='overlay';g.fillStyle=grainPat;g.setTransform(1,0,0,1,0,0);g.fillRect(0,0,g.canvas.width,g.canvas.height);g.restore()}
   const sleep=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
 
   // ---- 色えらび ----
   const chipsEl=document.getElementById('chips'),now=document.getElementById('now'),again=document.getElementById('again');
-  // はじめの色：レモン（水面）・ミント・さくら
-  let picked=[3,4,1],auto;
+  // はじめの色：さくら（水面）・コーラル・ミント
+  let picked=[0,1,2],auto;
   COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.style.setProperty('--i',i);b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
     b.addEventListener('click',()=>{chipsEl.classList.remove('hinting');const at=picked.indexOf(i);if(at>=0)picked.splice(at,1);else{if(picked.length===3)picked.shift();picked.push(i)}renderChips();clearTimeout(auto);if(picked.length>=2)auto=setTimeout(()=>{bringArch();make(true)},550)});chipsEl.appendChild(b)});
   // 窓が画面から外れているときだけ、模様が見える位置までそっと戻す
@@ -805,47 +1230,117 @@ img.band{height:auto;object-fit:cover}
   // ---- 1回ぶんの模様づくり ----
   const saveBtn=document.getElementById('save');
   const canvas=document.getElementById('arch'),pno=document.getElementById('pno'),pname=document.getElementById('pname');
-  let tank=null,run=0,seed=Date.now()%100000,pIndex=-1,firstRun=true,bag=[1,2,3,4,5].sort(()=>Math.random()-.5);
-  async function make(keep){
-    if(picked.length<2)return;const my=++run;saveBtn.disabled=true;seed=(seed*16807+11)%2147483647;let s=seed;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
-    // はじめは No.1、そのあとは前回とちがう模様をランダムに
-    if(firstRun){pIndex=0;firstRun=false}else if(keep!==true){if(!bag.length){bag=PATTERNS.map((_,i)=>i).sort(()=>Math.random()-.5);if(bag[0]===pIndex)bag.push(bag.shift())}pIndex=bag.shift()}
+  // ---- GPUで描く模様（WebGL2 が使えない端末では、これまでの描き方で5つの模様） ----
+  // r: 手順の名前 / pp: 手順の細かな値 / fy: 上下さかさまに
+  const HP=[{"n":"矢羽根","r":"tr_y0"},{"n":"なみ","r":"old2"},{"n":"花","r":"old3"},{"n":"ハート","r":"old4"},{"n":"大輪","r":"old5"},{"n":"つぼみ","r":"tr_y5"},{"n":"さざなみ","r":"tr_y8"},{"n":"鳥の巣","r":"tr_y10"},{"n":"ながれ","r":"tr_y11"},{"n":"うずしお","r":"v3_a1"},{"n":"波紋","r":"v3_a2"},{"n":"よこなみ","r":"v3_a3"},{"n":"かぜ","r":"v3_a4"},{"n":"あやおり","r":"v3_a5"},{"n":"こなみ","r":"v3_a6"},{"n":"羽根","r":"v3_a7"},{"n":"はごろも","r":"v3_a8"},{"n":"つむじ","r":"v3_a10"},{"n":"すだれ","r":"ins_i6"},{"n":"ななめ矢羽根","r":"ins_i9"},{"n":"ゆらぎ","r":"ins_i18"},{"n":"ひとかき","r":"ins_i20"},{"n":"カール","r":"hm_D","pp":{"rmin":7,"rmax":16}},{"n":"ブーケ","r":"hw_K","pp":{"nf":1,"rmin":7,"rmax":16}},{"n":"噴水","r":"hm_J","pp":{"dir":-1,"rmin":8,"rmax":18,"lam":0.07}},{"n":"パーム","r":"hm_I","pp":{"rmin":8,"rmax":18,"lam":0.1,"vz":0}},{"n":"波がしら","r":"hw_C","pp":{"back":0,"dir":"down","c":4.5,"rmin":9,"rmax":20}},{"n":"うろこ雲","r":"hw_C","pp":{"back":0,"dir":"down","rmin":9,"rmax":20},"fy":1},{"n":"くみひも","r":"hm_A","pp":{"rmin":7,"rmax":16}},{"n":"波の葉","r":"hm_H","pp":{"rmin":10,"rmax":24}}];
+  // 窓（アーチ）と同じ縦横比 3:4.2 で模様をつくる（ずれると、動きと仕上げで模様が上下にのびちぢみして見える）
+  const HW=320,HH=448;
+  // はじめに見せる模様（No.21 ゆらぎ・きれいに出る並びの滴）
+  const FIRST={pi:20,seed:404};
+  // 1色目は最初から水面いっぱいの地の色。ほかの色の滴を、地が少しのぞくくらいの数だけ落とす
+  window.COV=1.4;window.BG0=1;
+  // ?perf をつけると、描く速さを画面の下に出す（確認用）
+  const PERF=/[?&]perf/.test(location.search)?document.body.appendChild(Object.assign(document.createElement('div'),{style:'position:fixed;left:8px;right:8px;bottom:8px;z-index:99;font:11px/1.5 sans-serif;background:rgba(0,0,0,.75);color:#fff;padding:6px 10px;border-radius:8px'})):null;
+  const glc=document.createElement('canvas');let GL=null;try{GL=new GLM(glc)}catch(e){GL=null}
+  const patCache=new Map();
+  if(GL)glc.addEventListener('webglcontextlost',e=>{e.preventDefault();GL=null;patCache.clear();cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()},false);
+  const stCols=st=>st.picked.map(i=>COLORS[i][1]);
+  function buildOps(st,W,H){const P=HP[st.pi];let s=st.seed;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;const Rc=R.rec();REC[P.r](Rc,W,H,rnd,st.picked.length,Object.assign({},P.pp||{}));return Rc.ops}
+  // 動きの時間割り：滴は少しずつ重ねて落とし、そのあと櫛や串を一つずつ
+  function timeline(ops){const n=ops.length,st=new Float32Array(n),du=new Float32Array(n),drop=new Uint8Array(n);let nd=0;while(nd<n&&ops[nd][0]==='drop'){drop[nd]=1;nd++}
+    const DT=nd>60?1500:1100,gr=nd>60?280:220;for(let i=0;i<nd;i++){st[i]=(nd>1?i/(nd-1):0)*(DT-gr);du[i]=gr}
+    const mv=[];for(let i=nd;i<n;i++){const o=ops[i];let d;if(o[0]==='drop'){drop[i]=1;d=200}else if(o[0]==='comb')d=o[6]?950:700;else{const f=o[1][0];let L=0,pv=f(0);for(let k=1;k<=24;k++){const q=f(k/24);L+=Math.hypot(q[0]-pv[0],q[1]-pv[1]);pv=q}d=Math.min(1700,Math.max(650,500+L*2.4))}mv.push([i,d])}
+    const sum=mv.reduce((a,b)=>a+b[1]+60,0),k=sum>4800?4800/sum:1;let t=nd?DT+140:0;for(const [i,d] of mv){st[i]=t;du[i]=d*k;t+=(d+60)*k}
+    return{st,du,drop,total:t}}
+  function fitCanvas(){const r=canvas.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}return d}
+  const raf=()=>new Promise(r=>requestAnimationFrame(r));
+  // 1回ぶんを描く：動きは軽い大きさで、最後にくっきり描きなおして、そっと入れかえる
+  async function heroGL(my,st,anim){await glQ;if(my!==run||!GL)return false;const alive=()=>my===run&&!!GL,cols=stCols(st),P=HP[st.pi],flip=P.fy?HH:0,g=canvas.getContext('2d');
+    const ops=buildOps(st,HW,HH);GL.setOps(ops);const d=fitCanvas(),W=canvas.width,H=canvas.height,base=W/HW/d;g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';
+    const pf={n:P.n,frames:0,slow:0,as:0};const T0=performance.now();
+    if(anim&&!reduce){const tl=timeline(ops),fr=new Float32Array(ops.length),amin=base*Math.min(d,1)*.6;let as=base*d,t0=null,slow=0;
+      while(true){const t=await raf();if(!alive())return false;if(t0===null)t0=t;const tt=t-t0;
+        for(let i=0;i<ops.length;i++){const p=(tt-tl.st[i])/tl.du[i];fr[i]=p<=0?0:p>=1?1:tl.drop[i]?1-Math.pow(1-p,2.4):p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2}
+        GL.size(Math.max(1,Math.round(HW*as)),Math.max(1,Math.round(HH*as)));const a0=performance.now();GL.render(fr,{scale:as,ss:1,cols,flip});GL.sync();const rt=performance.now()-a0;pf.frames++;if(rt>33)pf.slow++;pf.as=as/base;
+        g.drawImage(glc,0,0,W,H);
+        // 端末が重そうなら、動いているあいだの細かさを下げる
+        // 動きも仕上がりと同じ細かさで描く。端末がどうしても重いときだけ、少しずつ下げる
+        if(rt>30&&as>amin){if(++slow>=2){as=Math.max(amin,as*Math.max(.8,Math.sqrt(24/rt)));slow=0}}else slow=0;
+        if(tt>=tl.total)break}}
+    const lo=document.createElement('canvas');lo.width=W;lo.height=H;lo.getContext('2d').drawImage(canvas,0,0);
+    pf.anim=Math.round(performance.now()-T0);const T1=performance.now();GL.size(W,H);if(!await GL.renderTiled({scale:W/HW,ss:d>=2?2:3,cols,flip},alive))return false;pf.fin=Math.round(performance.now()-T1);
+    if(PERF)PERF.textContent=pf.n+'｜動き '+pf.anim+'ms・'+pf.frames+'コマ（重いコマ '+pf.slow+'）・細かさ '+pf.as.toFixed(2)+'｜仕上げ '+pf.fin+'ms';
+    const ms=reduce?0:anim?180:420;let t0=null;
+    while(true){const t=ms?await raf():0;if(!alive())return false;if(t0===null)t0=t;const p=ms?Math.min(1,(t-t0)/ms):1;g.globalAlpha=1;g.drawImage(lo,0,0);g.globalAlpha=p;g.drawImage(glc,0,0,W,H);g.globalAlpha=1;if(p>=1)break}
+    return true}
+  // 保存用：同じ模様を、ほしい大きさ・形で描きなおす（つくった絵は少しのあいだ覚えておく）
+  // GPU は1枚ずつ順番に使う（同時に描くと、とちゅうの黒い帯が混ざるため）。同じ絵をたのまれたら、描いている途中のものを待つ
+  let glQ=Promise.resolve();
+  function patCanvas(Ww,Hw,pw,ph,ss){const st=cur,my=run,key=[st.pi,st.seed,st.picked.join(','),Ww,Hw,pw,ph,ss].join('|');if(patCache.has(key))return patCache.get(key);
+    const pr=glQ.then(async()=>{if(my!==run||!GL)return null;GL.setOps(buildOps(st,Ww,Hw));GL.size(pw,ph);if(!await GL.renderTiled({scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0},()=>my===run&&!!GL))return null;
+      const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return c});
+    glQ=pr.catch(()=>null);pr.then(c=>{if(!c)patCache.delete(key)},()=>patCache.delete(key));
+    patCache.set(key,pr);if(patCache.size>6)patCache.delete(patCache.keys().next().value);return pr}
+  let tank=null,run=0,seed=Date.now()%100000+1,pIndex=-1,firstRun=true,cur=null;const hist=[];
+  let bag=GL?HP.map((_,i)=>i).filter(i=>i!==FIRST.pi).sort(()=>Math.random()-.5):[2,3,4,5].sort(()=>Math.random()-.5);
+  const backBtn=document.getElementById('back'),syncBack=()=>{backBtn.hidden=!hist.length};
+  const refill=()=>{bag=(GL?HP.map((_,i)=>i):PATTERNS.map((_,i)=>i).filter(i=>i!==1)).sort(()=>Math.random()-.5);if(bag[0]===pIndex)bag.push(bag.shift())};
+  // keep: true=同じ模様で色だけ / 'resize'=画面の大きさが変わった / restore: もどるときの1回ぶん
+  async function make(keep,restore){
+    if(picked.length<2)return;const my=++run;saveBtn.disabled=true;
+    if(restore){pIndex=restore.pi;seed=restore.seed}
+    else{if(cur&&keep!=='resize'){hist.push(cur);if(hist.length>40)hist.shift()}
+      if(!(GL&&keep==='resize'&&cur))seed=((seed*16807+11)%2147483647)||1;
+      // はじめは No.1、そのあとは前回とちがう模様をランダムに
+      if(firstRun){pIndex=GL?FIRST.pi:0;if(GL)seed=FIRST.seed;firstRun=false}else if(keep!==true&&keep!=='resize'){if(!bag.length)refill();pIndex=bag.shift()}}
+    cur={pi:pIndex,seed,picked:picked.slice()};syncBack();
+    if(GL){pno.textContent='No.'+(pIndex+1);pname.textContent=HP[pIndex].n;
+      const ok=await heroGL(my,cur,!restore&&keep!=='resize');if(ok&&my===run)saveBtn.disabled=false;return}
+    let s=seed;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
     const P=PATTERNS[pIndex];pno.textContent='No.'+(pIndex+1);pname.textContent=P.name;
     const cols=picked.map(i=>COLORS[i][1]);
     tank=new Tank(canvas);tank.water=cols[0];      // 最初の色が水面いっぱいに広がる（地の色）
-    const W=tank.w,H=tank.h,alive=()=>my===run,order=cols.slice(1).concat(cols[0]);
+    const W=tank.w,H=tank.h,alive=()=>my===run,order=cols.slice(1).concat(cols[0]),thinOK=order.length>2;
     const sites=P.drops(W,H,rnd),area=W*H,R=Math.sqrt(area*.95/(Math.PI*sites.length*P.rings))*1.15*(typeof P.rscale==='function'?P.rscale(W,H):P.rscale||1);
     const dropSite=async([x,y],si)=>{await sleep(si*Math.min(110,900/sites.length));for(let r=0;r<P.rings;r++){if(!alive())return;const rr=R*(.6+rnd()*.55);
-      if(reduce)tank.dropNow(x,y,rr,order[r%order.length]);else await tank.growDrop(x,y,rr,order[r%order.length],120)}};
+      if(reduce)tank.dropNow(x,y,rr,order[r%order.length]);else await tank.growDrop(x,y,rr,order[r%order.length],120);
+      // ときどき小さな滴をはさむ：押し広げられて髪の毛ほどの細い線になる
+      if(thinOK&&r<P.rings-1&&rnd()<.35){const tr=R*(.16+rnd()*.1);if(reduce)tank.dropNow(x,y,tr,order[(r+2)%order.length]);else await tank.growDrop(x,y,tr,order[(r+2)%order.length],60)}}};
     await Promise.all(sites.map(dropSite));if(!alive())return;
     for(const m of P.moves(W,H)){const [kind,...v]=m,ms=v.pop();
       if(kind==='multi'){if(reduce)tank.multi(v[0],v[1],0,1);else await tank.multiRun(v[0],v[1],ms);if(!alive())return;continue}
       if(kind==='stylus'){if(reduce){await tank.stylus(v[0],v[1],1)}else{await tank.stylus(v[0],v[1],ms)}if(!alive())return;continue}
       const apply=kind==='tine'?f=>tank.tine(v[0],v[1],v[2],v[3],v[4]*f,v[5],v[6]):f=>tank.curveTine(v[0],v[1],v[2],v[3]*f,v[4],v[5]);
       if(reduce)apply(1);else{await tank.animate(apply,ms);if(!alive())return}}
-    tank.prune();tank.dirty=true;saveBtn.disabled=false;
+    tank.tidy();tank.dirty=true;saveBtn.disabled=false;
   }
   const tileTanks=new Set();
   const loop=t=>{if(tank)tank.frame(t);for(const tt of tileTanks){tt.frame(t);if(tt.finished&&!tt.anims.length)tileTanks.delete(tt)}requestAnimationFrame(loop)};requestAnimationFrame(loop);
   again.addEventListener('click',()=>make(false));
-  let rt,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rt);rt=setTimeout(()=>make(true),300)});
+  backBtn.addEventListener('click',()=>{if(!hist.length)return;const st=hist.pop();picked=st.picked.slice();renderChips();clearTimeout(auto);make(true,st)});
+  // 模様にふれたら、色をえらぶと変わることを、吹き出しでそっと伝える
+  const tip=document.getElementById('tip');let tipT;canvas.addEventListener('click',()=>{tip.classList.add('on');chipsEl.classList.remove('hinting','nudge');void chipsEl.offsetWidth;chipsEl.classList.add('nudge');clearTimeout(tipT);tipT=setTimeout(()=>{tip.classList.remove('on');chipsEl.classList.remove('nudge')},2600)});
+  let rt,lastW=innerWidth;addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rt);rt=setTimeout(()=>make('resize'),300)});
   // 読みこみ直後の混雑が落ちついてから、窓が開くのに合わせて模様づくりを始める
   // 文字の読みこみを待ってから一度に開く（途中で文字がずれて、かくっと見えないように）
   canvas.style.background=COLORS[picked[0]][1];
   const fontsReady=Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(r=>setTimeout(r,900))]);
   fontsReady.then(()=>requestAnimationFrame(()=>{document.documentElement.classList.add('ready');setTimeout(()=>make(),reduce?0:850)}));
 
+  // 輪を一周ずつ順番に落とす。ときどき小さな滴をはさんで、髪の毛ほどの線をつくる
+  function dropRings(t,sites,P,R,order,rnd){for(let r=0;r<P.rings;r++)sites.forEach(([x,y])=>{t.dropNow(x,y,R*(.6+rnd()*.55),order[r%order.length]);
+    if(order.length>2&&r<P.rings-1&&rnd()<.35)t.dropNow(x,y,R*(.16+rnd()*.1),order[(r+2)%order.length])})}
   // ---- 写真の代わりのマーブリング（あとで写真に差しかえ）----
   // 見えたときに、その場で模様ができていく（動きをへらす設定なら完成形だけ）
-  function paintTile(cv){const idx=+cv.dataset.tile,cols=(cv.dataset.cols||'0,1,3').split(',').map(n=>n[0]==='#'?n:COLORS[+n][1]);
+  function paintTile(cv){const idx=+cv.dataset.tile,cols=(cv.dataset.cols||'3,0,4').split(',').map(n=>n[0]==='#'?n:COLORS[+n][1]);
     const t=new Tank(cv);t.water=cols[0];const W=t.w,H=t.h,P=PATTERNS[idx]||EXTRA[cv.dataset.tile];let s=((idx||7)+1)*7919+cols.join('').length*31;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
     const sites=P.drops(W,H,rnd),R=Math.sqrt(W*H*.95/(Math.PI*sites.length*P.rings))*1.15*(typeof P.rscale==='function'?P.rscale(W,H):P.rscale||1),order=cols.slice(1).concat(cols[0]);
     // 一つの場所に全部落とすと、あとの滴に押されてかたよるので、輪を一周ずつ順番に落とす
-    for(let r=0;r<P.rings;r++)sites.forEach(([x,y])=>t.dropNow(x,y,R*(.6+rnd()*.55),order[r%order.length]));
+    dropRings(t,sites,P,R,order,rnd);
     const moves=P.moves(W,H).filter(m=>m[0]!=='stylus');
     const applyStep=(m,f,a)=>{const [kind,...v]=m;if(kind==='multi')t.multi(v[0],v[1],a,a+f);else if(kind==='tine')t.tine(v[0],v[1],v[2],v[3],v[4]*f,v[5],v[6]);else t.curveTine(v[0],v[1],v[2],v[3]*f,v[4],v[5])};
-    if(reduce){for(const m of moves)if(m[0]==='multi')applyStep(m,1,0);else for(let k=0;k<24;k++)applyStep(m,1/24);t.prune();t.draw();return}
-    t.draw();let i=0;const next=()=>{if(i>=moves.length){t.prune();t.dirty=true;t.finished=true;return}const m=moves[i++];
+    if(reduce){for(const m of moves)if(m[0]==='multi')applyStep(m,1,0);else for(let k=0;k<24;k++)applyStep(m,1/24);t.tidy();t.draw();return}
+    t.draw();let i=0;const next=()=>{if(i>=moves.length){t.tidy();t.dirty=true;t.finished=true;return}const m=moves[i++];
       // 小さく分けて動かすと、なめらかでギザギザしない
       let done=0;t.animate(e=>{const target=done+e;if(m[0]==='multi')applyStep(m,e,done);else{let steps=Math.max(1,Math.round(e*24));for(let k=0;k<steps;k++)applyStep(m,e/steps)}done=target},900).then(next)};
     tileTanks.add(t);next()}
@@ -905,11 +1400,12 @@ img.band{height:auto;object-fit:cover}
     const P=PATTERNS[pIndex],cols=picked.map(i=>COLORS[i][1]),t=new Tank(document.createElement('canvas'),W,H);t.water=cols[0];
     let s=seed||1;const rnd=()=>(s=(s*16807)%2147483647)/2147483647,order=cols.slice(1).concat(cols[0]);
     const sites=P.drops(W,H,rnd),R=Math.sqrt(W*H*.95/(Math.PI*sites.length*P.rings))*1.15*(typeof P.rscale==='function'?P.rscale(W,H):P.rscale||1);
-    for(let r=0;r<P.rings;r++)sites.forEach(([x,y])=>t.dropNow(x,y,R*(.6+rnd()*.55),order[r%order.length]));
+    dropRings(t,sites,P,R,order,rnd);
     for(const m of P.moves(W,H)){const [kind,...v]=m;if(kind==='multi')t.multi(v[0],v[1],0,1);else if(kind==='tine'){for(let k=0;k<24;k++)t.tine(v[0],v[1],v[2],v[3],v[4]/24,v[5],v[6])}else if(kind==='curve'){for(let k=0;k<24;k++)t.curveTine(v[0],v[1],v[2],v[3]/24,v[4],v[5])}}
-    t.prune();wallCache={key,t};return t}
+    t.tidy();wallCache={key,t};return t}
   function drawInks(g,t,x,y,sc){g.save();g.translate(x,y);g.scale(sc,sc);g.fillStyle=t.water;g.fillRect(0,0,t.w,t.h);
-    for(const k of t.inks){const X=k.x,Y=k.y,n=X.length;g.beginPath();g.moveTo(X[0],Y[0]);for(let i=1;i<n;i++)g.lineTo(X[i],Y[i]);g.closePath();g.fillStyle=k.color;g.fill();g.lineWidth=.6;g.strokeStyle=rim(k.color);g.stroke()}g.restore()}
+    for(const k of t.inks){const X=k.x,Y=k.y,n=X.length;g.beginPath();g.moveTo(X[0],Y[0]);for(let i=1;i<n;i++)g.lineTo(X[i],Y[i]);g.closePath();g.fillStyle=k.color;g.fill();g.lineWidth=.3;g.strokeStyle=rim(k.color);g.stroke()}
+    g.beginPath();g.rect(0,0,t.w,t.h);g.clip();grain(g);g.restore()}
   function archPath(g,x,y,w,h){g.beginPath();g.moveTo(x,y+w/2);g.arc(x+w/2,y+w/2,w/2,Math.PI,0);g.lineTo(x+w,y+h);g.lineTo(x,y+h);g.closePath()}
   function drawLogo(g,cx,y,lw,white){const lh=lw*1385/2083,fs=lw*.125;g.drawImage(white?logoW:logoImg,cx-lw/2-lw*.48,y,lw,lh);
     g.textAlign='left';g.fillStyle=white?'#FFFFFF':'#111213';g.font='500 '+fs+'px '+EN;ls(g,fs*.27);g.fillText('MARBLING',cx+lw*.12,y+lh*.62);g.fillText('STUDIO',cx+lw*.12,y+lh*.62+fs*1.45);g.textAlign='center'}
@@ -922,53 +1418,64 @@ img.band{height:auto;object-fit:cover}
     yy+=24;g.font='400 12px '+EN;ls(g,.5);for(let n=1;n<=days;n++){const p=st+n-1,c=p%7,r=Math.floor(p/7);g.fillStyle=c===0||c===6?'#A3A8AB':'#111213';g.fillText(String(n),cx-w/2+cw*(c+.5),yy+r*22)}}
   function calH(off){return 52+24+ (calRows(off)-1)*22+6}
   // カード（インスタ用 1080×1350）
-  function renderCard(){const o=opt.card,W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
-    g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);const aw=600,ah=aw*tank.h/tank.w,ax=(W-aw)/2;
-    const logoH=o.logo?110:0,ay=Math.max(110,(H-logoH-ah)/2-10);
-    g.save();archPath(g,ax,ay,aw,ah);g.clip();drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
+  const ratio=()=>GL?HH/HW:tank.h/tank.w;
+  // 保存用の絵は2枚だけ：アーチ用（カードと壁紙で共用、大きめに1回）と、壁紙の全面用。オプションを切りかえても描きなおさない
+  const archPat=()=>patCanvas(HW,HH,870,Math.round(870*HH/HW),2),fullPat=()=>patCanvas(HW,HW*932/430,1290,2796,1);
+  async function renderCard(){const o=opt.card,W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+    g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);const aw=600,ah=aw*ratio(),ax=(W-aw)/2;
+    const ay=(H-ah)/2-30;const pc=GL?await archPat():null;if(GL&&!pc)return null;
+    g.save();archPath(g,ax,ay,aw,ah);g.clip();if(pc)g.drawImage(pc,ax,ay,aw,ah);else drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
     if(o.logo)drawLogo(g,W/2,H-150,120);return c}
   // iPhoneの壁紙（1290×2796：いまのiPhoneの縦横比。上の時計と下のボタンにかからない位置に置く）
-  function renderWall(){const o=opt.wall,S=3,W=430,H=932,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
+  async function renderWall(){const o=opt.wall,S=3,W=430,H=932,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
     // 上の時計（〜350）と、下のライト・カメラ（826〜）にはかけない
-    const TOP=350,BOT=826,GAP=18,LOGO=o.cal?42:84;
+    const TOP=350,BOT=826,GAP=18,LOGO=o.cal?42:84,LOGOH=LOGO*1385/2083;
     const foot=[];if(o.logo)foot.push(['logo',LOGO*1385/2083]);
     const footH=foot.reduce((a,b)=>a+b[1],0)+GAP*Math.max(0,foot.length-1);
     const drawFoot=(y,white)=>{g.textAlign='center';for(const [k,h] of foot){
       drawLogo(g,W/2,y,LOGO,white);
       y+=h+GAP}};
     const cw=210,ch=o.cal?calH(o.month):0;
-    if(o.bg==='full'){const t=wallTank(W,H);drawInks(g,t,0,0,1);
+    if(o.bg==='full'){const pc=GL?await fullPat():null,t=GL?null:wallTank(W,H);if(GL&&!pc)return null;const full=()=>pc?g.drawImage(pc,0,0,W,H):drawInks(g,t,0,0,1);full();
       // 名前とロゴは、模様の上に白で直接（四角で囲まない）
       const fy=BOT-footH;if(foot.length){const gr=g.createLinearGradient(0,fy-150,0,H);gr.addColorStop(0,'rgba(17,18,19,0)');gr.addColorStop(.55,'rgba(17,18,19,.16)');gr.addColorStop(1,'rgba(17,18,19,.28)');g.fillStyle=gr;g.fillRect(0,fy-150,W,H-fy+150);g.save();g.shadowColor='rgba(0,0,0,.28)';g.shadowBlur=10;g.shadowOffsetY=1;drawFoot(fy,true);g.restore()}
       if(o.cal){// カレンダーは画面のまんなかに、すりガラスのように
-        const pw=cw+52,ph=ch+44,px=(W-pw)/2,lim=foot.length?fy-28:BOT,py=Math.max(TOP,(TOP+lim)/2-ph/2+10);
-        g.save();g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,26):g.rect(px,py,pw,ph);g.clip();
-        g.filter='blur(14px)';const blur=g.filter&&g.filter!=='none';if(blur){drawInks(g,t,0,0,1);g.filter='none'}
-        g.fillStyle=blur?'rgba(255,255,255,.62)':'rgba(255,255,255,.84)';g.fillRect(px,py,pw,ph);g.restore();
-        g.save();g.beginPath();g.roundRect?g.roundRect(px+.5,py+.5,pw-1,ph-1,26):g.rect(px,py,pw,ph);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1;g.stroke();g.restore();
-        drawCal(g,W/2,py+24,cw,o.month)}}
+        // 少し大きめに、画面のまんなかへ（ロゴのあるなしで動かない。上の時計にはかからない）
+        const k=1.22,pw=(cw+52)*k,ph=(ch+44)*k,px=(W-pw)/2,py=Math.max(TOP-24,(H-ph)/2);
+        // すりガラス：模様をうんと小さくしてから広げると、どの端末でも同じようにぼける
+        const sm=document.createElement('canvas'),mid=document.createElement('canvas');mid.width=Math.ceil(W/2);mid.height=Math.ceil(H/2);sm.width=Math.ceil(W/14);sm.height=Math.ceil(H/14);
+        const mg=mid.getContext('2d');if(pc)mg.drawImage(pc,0,0,mid.width,mid.height);else{mg.scale(.5,.5);drawInks(mg,t,0,0,1)}sm.getContext('2d').drawImage(mid,0,0,sm.width,sm.height);
+        g.save();g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,26*k):g.rect(px,py,pw,ph);g.clip();g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(sm,0,0,W,H);
+        g.fillStyle='rgba(255,255,255,.64)';g.fillRect(px,py,pw,ph);g.restore();
+        g.save();g.beginPath();g.roundRect?g.roundRect(px+.5,py+.5,pw-1,ph-1,26*k):g.rect(px,py,pw,ph);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1;g.stroke();g.restore();
+        g.save();g.translate(W/2,py+24*k);g.scale(k,k);drawCal(g,0,0,cw,o.month);g.restore()}}
     else{g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);
       // アーチは時計の下からのびて、文字はその下に（アーチは時計と重なってもよい）
-      const below=(o.cal?ch+30:0)+(foot.length?footH+28:0),A0=foot.length||o.cal?170:TOP-40,room=BOT-below-A0,aw=Math.min(290,room*tank.w/tank.h),ah=aw*tank.h/tank.w,ax=(W-aw)/2,ay=A0+(room-ah)/2;
-      g.save();archPath(g,ax,ay,aw,ah);g.clip();drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
+      // アーチの位置は、ロゴのあるときにそろえる（ロゴがなくても下がりすぎない）
+      const below=(o.cal?ch+30:0)+LOGOH+28,A0=170,room=BOT-below-A0,aw=Math.min(290,room/ratio()),ah=aw*ratio(),ax=(W-aw)/2,ay=A0+(room-ah)/2;
+      const pc=GL?await archPat():null;if(GL&&!pc)return null;
+      g.save();archPath(g,ax,ay,aw,ah);g.clip();if(pc)g.drawImage(pc,ax,ay,aw,ah);else drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
       let y=ay+ah+(o.cal||foot.length?30:0);if(o.cal){drawCal(g,W/2,y,cw,o.month);y+=ch+28}drawFoot(BOT-footH,false)}
     return c}
   const render=()=>opt.kind==='wall'?renderWall():renderCard();
-  function syncUI(){sheet.dataset.kind=opt.kind;const o=opt[opt.kind];sheet.dataset.cal=opt.kind==='wall'&&o.cal?'1':'';
+  let uiTok=0;
+  async function syncUI(){const tk=++uiTok;sheet.dataset.kind=opt.kind;const o=opt[opt.kind];sheet.dataset.cal=opt.kind==='wall'&&o.cal?'1':'';
     sheet.querySelectorAll('[data-k]').forEach(b=>{const k=b.dataset.k,v=b.dataset.v;let on;if(k==='kind')on=opt.kind===v;else if(v!==undefined)on=String(o[k])===v;else on=!!o[k];b.setAttribute('aria-pressed',on)});
-    const c=render(),r=prev.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1),ph=Math.min(r.height||300,360);
+    prev.classList.add('busy');const c=await render();if(tk!==uiTok||!c)return;prev.classList.remove('busy');const r=prev.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1),ph=Math.min(r.height||300,360);
     const pw=ph*c.width/c.height;prev.style.width=pw+'px';prev.width=Math.round(pw*d);prev.height=Math.round(ph*d);const pg=prev.getContext('2d');pg.imageSmoothingQuality='high';pg.drawImage(c,0,0,prev.width,prev.height)}
   sheet.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b){if(e.target===sheet)closeSheet();return}const k=b.dataset.k,v=b.dataset.v;
     if(k==='kind')opt.kind=v;else{const o=opt[opt.kind];if(v!==undefined)o[k]=isNaN(+v)?v:+v;else o[k]=!o[k]}syncUI()});
   let lastFocus=null;
-  async function openSheet(){if(saveBtn.disabled)return;lastFocus=document.activeElement;await prepare();sheet.hidden=false;document.body.style.overflow='hidden';requestAnimationFrame(()=>{sheet.classList.add('open');syncUI();doSave.focus()})}
+  async function openSheet(){if(saveBtn.disabled)return;lastFocus=document.activeElement;if(GL){archPat();fullPat()}await prepare();sheet.hidden=false;document.body.style.overflow='hidden';requestAnimationFrame(()=>{sheet.classList.add('open');syncUI();doSave.focus()})}
   function closeSheet(){sheet.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{sheet.hidden=true},250);if(lastFocus)lastFocus.focus()}
   saveBtn.addEventListener('click',openSheet);document.getElementById('sheetClose').addEventListener('click',closeSheet);
   addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.hidden)closeSheet()});
   doSave.addEventListener('click',async()=>{const label=doSave.textContent;doSave.disabled=true;doSave.textContent='画像をつくっています…';
-    try{const c=render(),blob=await new Promise(r=>c.toBlob(r,'image/png'));const fname='wai-'+pname.textContent+(opt.kind==='wall'?'-壁紙':'')+'.png';
+    try{const c=await render();if(!c)throw new Error('render');const blob=await new Promise(r=>c.toBlob(r,'image/png'));const fname='wai-'+pname.textContent+(opt.kind==='wall'?'-壁紙':'')+'.png';
       const file=new File([blob],fname,{type:'image/png'});
-      if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch(e){}}
+      // スマホは共有シート（写真に保存）、パソコンはそのままダウンロード
+      const phone=matchMedia('(pointer:coarse)').matches&&/iPhone|iPad|Android|Mobile/i.test(navigator.userAgent+(navigator.maxTouchPoints>1?' iPad':''));
+      if(phone&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch(e){}}
       else{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
     }catch(e){console.error(e)}
     doSave.textContent=label;doSave.disabled=false});
