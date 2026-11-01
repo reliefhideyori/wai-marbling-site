@@ -1254,7 +1254,7 @@ window.GLM=GLM;window.glBake=bake;
   function fitCanvas(){const r=canvas.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}return d}
   const raf=()=>new Promise(r=>requestAnimationFrame(r));
   // 1回ぶんを描く：動きは軽い大きさで、最後にくっきり描きなおして、そっと入れかえる
-  async function heroGL(my,st,anim){const alive=()=>my===run&&!!GL,cols=stCols(st),P=HP[st.pi],flip=P.fy?HH:0,g=canvas.getContext('2d');
+  async function heroGL(my,st,anim){await glQ;if(my!==run||!GL)return false;const alive=()=>my===run&&!!GL,cols=stCols(st),P=HP[st.pi],flip=P.fy?HH:0,g=canvas.getContext('2d');
     const ops=buildOps(st,HW,HH);GL.setOps(ops);const d=fitCanvas(),W=canvas.width,H=canvas.height,base=W/HW/d;g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';
     const pf={n:P.n,frames:0,slow:0,as:0};const T0=performance.now();
     if(anim&&!reduce){const tl=timeline(ops),fr=new Float32Array(ops.length),amin=base*Math.min(d,1)*.6;let as=base*d,t0=null,slow=0;
@@ -1273,9 +1273,13 @@ window.GLM=GLM;window.glBake=bake;
     while(true){const t=ms?await raf():0;if(!alive())return false;if(t0===null)t0=t;const p=ms?Math.min(1,(t-t0)/ms):1;g.globalAlpha=1;g.drawImage(lo,0,0);g.globalAlpha=p;g.drawImage(glc,0,0,W,H);g.globalAlpha=1;if(p>=1)break}
     return true}
   // 保存用：同じ模様を、ほしい大きさ・形で描きなおす（つくった絵は少しのあいだ覚えておく）
-  async function patCanvas(Ww,Hw,pw,ph,ss){const st=cur,my=run,key=[st.pi,st.seed,st.picked.join(','),Ww,Hw,pw,ph,ss].join('|');if(patCache.has(key))return patCache.get(key);
-    GL.setOps(buildOps(st,Ww,Hw));GL.size(pw,ph);if(!await GL.renderTiled({scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0},()=>my===run&&!!GL))return null;
-    const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);if(patCache.size>5)patCache.delete(patCache.keys().next().value);patCache.set(key,c);return c}
+  // GPU は1枚ずつ順番に使う（同時に描くと、とちゅうの黒い帯が混ざるため）。同じ絵をたのまれたら、描いている途中のものを待つ
+  let glQ=Promise.resolve();
+  function patCanvas(Ww,Hw,pw,ph,ss){const st=cur,my=run,key=[st.pi,st.seed,st.picked.join(','),Ww,Hw,pw,ph,ss].join('|');if(patCache.has(key))return patCache.get(key);
+    const pr=glQ.then(async()=>{if(my!==run||!GL)return null;GL.setOps(buildOps(st,Ww,Hw));GL.size(pw,ph);if(!await GL.renderTiled({scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0},()=>my===run&&!!GL))return null;
+      const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return c});
+    glQ=pr.catch(()=>null);pr.then(c=>{if(!c)patCache.delete(key)},()=>patCache.delete(key));
+    patCache.set(key,pr);if(patCache.size>6)patCache.delete(patCache.keys().next().value);return pr}
   let tank=null,run=0,seed=Date.now()%100000+1,pIndex=-1,firstRun=true,cur=null;const hist=[];
   let bag=GL?HP.map((_,i)=>i).slice(1).sort(()=>Math.random()-.5):[2,3,4,5].sort(()=>Math.random()-.5);
   const backBtn=document.getElementById('back'),syncBack=()=>{backBtn.hidden=!hist.length};
@@ -1414,35 +1418,41 @@ window.GLM=GLM;window.glBake=bake;
   function calH(off){return 52+24+ (calRows(off)-1)*22+6}
   // カード（インスタ用 1080×1350）
   const ratio=()=>GL?HH/HW:tank.h/tank.w;
+  // 保存用の絵は2枚だけ：アーチ用（カードと壁紙で共用、大きめに1回）と、壁紙の全面用。オプションを切りかえても描きなおさない
+  const archPat=()=>patCanvas(HW,HH,870,Math.round(870*HH/HW),2),fullPat=()=>patCanvas(HW,HW*932/430,1290,2796,1);
   async function renderCard(){const o=opt.card,W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
     g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);const aw=600,ah=aw*ratio(),ax=(W-aw)/2;
-    const logoH=o.logo?110:0,ay=Math.max(110,(H-logoH-ah)/2-10);const pc=GL?await patCanvas(HW,HH,aw,Math.round(ah),2):null;if(GL&&!pc)return null;
+    const ay=(H-ah)/2-30;const pc=GL?await archPat():null;if(GL&&!pc)return null;
     g.save();archPath(g,ax,ay,aw,ah);g.clip();if(pc)g.drawImage(pc,ax,ay,aw,ah);else drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
     if(o.logo)drawLogo(g,W/2,H-150,120);return c}
   // iPhoneの壁紙（1290×2796：いまのiPhoneの縦横比。上の時計と下のボタンにかからない位置に置く）
   async function renderWall(){const o=opt.wall,S=3,W=430,H=932,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
     // 上の時計（〜350）と、下のライト・カメラ（826〜）にはかけない
-    const TOP=350,BOT=826,GAP=18,LOGO=o.cal?42:84;
+    const TOP=350,BOT=826,GAP=18,LOGO=o.cal?42:84,LOGOH=LOGO*1385/2083;
     const foot=[];if(o.logo)foot.push(['logo',LOGO*1385/2083]);
     const footH=foot.reduce((a,b)=>a+b[1],0)+GAP*Math.max(0,foot.length-1);
     const drawFoot=(y,white)=>{g.textAlign='center';for(const [k,h] of foot){
       drawLogo(g,W/2,y,LOGO,white);
       y+=h+GAP}};
     const cw=210,ch=o.cal?calH(o.month):0;
-    if(o.bg==='full'){const pc=GL?await patCanvas(HW,HW*H/W,W*S,H*S,1):null,t=GL?null:wallTank(W,H);if(GL&&!pc)return null;const full=()=>pc?g.drawImage(pc,0,0,W,H):drawInks(g,t,0,0,1);full();
+    if(o.bg==='full'){const pc=GL?await fullPat():null,t=GL?null:wallTank(W,H);if(GL&&!pc)return null;const full=()=>pc?g.drawImage(pc,0,0,W,H):drawInks(g,t,0,0,1);full();
       // 名前とロゴは、模様の上に白で直接（四角で囲まない）
       const fy=BOT-footH;if(foot.length){const gr=g.createLinearGradient(0,fy-150,0,H);gr.addColorStop(0,'rgba(17,18,19,0)');gr.addColorStop(.55,'rgba(17,18,19,.16)');gr.addColorStop(1,'rgba(17,18,19,.28)');g.fillStyle=gr;g.fillRect(0,fy-150,W,H-fy+150);g.save();g.shadowColor='rgba(0,0,0,.28)';g.shadowBlur=10;g.shadowOffsetY=1;drawFoot(fy,true);g.restore()}
       if(o.cal){// カレンダーは画面のまんなかに、すりガラスのように
-        const pw=cw+52,ph=ch+44,px=(W-pw)/2,lim=foot.length?fy-28:BOT,py=Math.max(TOP,(TOP+lim)/2-ph/2+10);
-        g.save();g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,26):g.rect(px,py,pw,ph);g.clip();
-        g.filter='blur(14px)';const blur=g.filter&&g.filter!=='none';if(blur){full();g.filter='none'}
-        g.fillStyle=blur?'rgba(255,255,255,.62)':'rgba(255,255,255,.84)';g.fillRect(px,py,pw,ph);g.restore();
-        g.save();g.beginPath();g.roundRect?g.roundRect(px+.5,py+.5,pw-1,ph-1,26):g.rect(px,py,pw,ph);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1;g.stroke();g.restore();
-        drawCal(g,W/2,py+24,cw,o.month)}}
+        // 少し大きめに、画面のまんなかへ（ロゴのあるなしで動かない。上の時計にはかからない）
+        const k=1.22,pw=(cw+52)*k,ph=(ch+44)*k,px=(W-pw)/2,py=Math.max(TOP-24,(H-ph)/2);
+        // すりガラス：模様をうんと小さくしてから広げると、どの端末でも同じようにぼける
+        const sm=document.createElement('canvas'),mid=document.createElement('canvas');mid.width=Math.ceil(W/2);mid.height=Math.ceil(H/2);sm.width=Math.ceil(W/14);sm.height=Math.ceil(H/14);
+        const mg=mid.getContext('2d');if(pc)mg.drawImage(pc,0,0,mid.width,mid.height);else{mg.scale(.5,.5);drawInks(mg,t,0,0,1)}sm.getContext('2d').drawImage(mid,0,0,sm.width,sm.height);
+        g.save();g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,26*k):g.rect(px,py,pw,ph);g.clip();g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(sm,0,0,W,H);
+        g.fillStyle='rgba(255,255,255,.64)';g.fillRect(px,py,pw,ph);g.restore();
+        g.save();g.beginPath();g.roundRect?g.roundRect(px+.5,py+.5,pw-1,ph-1,26*k):g.rect(px,py,pw,ph);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1;g.stroke();g.restore();
+        g.save();g.translate(W/2,py+24*k);g.scale(k,k);drawCal(g,0,0,cw,o.month);g.restore()}}
     else{g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);
       // アーチは時計の下からのびて、文字はその下に（アーチは時計と重なってもよい）
-      const below=(o.cal?ch+30:0)+(foot.length?footH+28:0),A0=foot.length||o.cal?170:TOP-40,room=BOT-below-A0,aw=Math.min(290,room/ratio()),ah=aw*ratio(),ax=(W-aw)/2,ay=A0+(room-ah)/2;
-      const pc=GL?await patCanvas(HW,HH,Math.round(aw*S),Math.round(ah*S),2):null;if(GL&&!pc)return null;
+      // アーチの位置は、ロゴのあるときにそろえる（ロゴがなくても下がりすぎない）
+      const below=(o.cal?ch+30:0)+LOGOH+28,A0=170,room=BOT-below-A0,aw=Math.min(290,room/ratio()),ah=aw*ratio(),ax=(W-aw)/2,ay=A0+(room-ah)/2;
+      const pc=GL?await archPat():null;if(GL&&!pc)return null;
       g.save();archPath(g,ax,ay,aw,ah);g.clip();if(pc)g.drawImage(pc,ax,ay,aw,ah);else drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
       let y=ay+ah+(o.cal||foot.length?30:0);if(o.cal){drawCal(g,W/2,y,cw,o.month);y+=ch+28}drawFoot(BOT-footH,false)}
     return c}
@@ -1455,14 +1465,16 @@ window.GLM=GLM;window.glBake=bake;
   sheet.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b){if(e.target===sheet)closeSheet();return}const k=b.dataset.k,v=b.dataset.v;
     if(k==='kind')opt.kind=v;else{const o=opt[opt.kind];if(v!==undefined)o[k]=isNaN(+v)?v:+v;else o[k]=!o[k]}syncUI()});
   let lastFocus=null;
-  async function openSheet(){if(saveBtn.disabled)return;lastFocus=document.activeElement;await prepare();sheet.hidden=false;document.body.style.overflow='hidden';requestAnimationFrame(()=>{sheet.classList.add('open');syncUI();doSave.focus()})}
+  async function openSheet(){if(saveBtn.disabled)return;lastFocus=document.activeElement;if(GL){archPat();fullPat()}await prepare();sheet.hidden=false;document.body.style.overflow='hidden';requestAnimationFrame(()=>{sheet.classList.add('open');syncUI();doSave.focus()})}
   function closeSheet(){sheet.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{sheet.hidden=true},250);if(lastFocus)lastFocus.focus()}
   saveBtn.addEventListener('click',openSheet);document.getElementById('sheetClose').addEventListener('click',closeSheet);
   addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.hidden)closeSheet()});
   doSave.addEventListener('click',async()=>{const label=doSave.textContent;doSave.disabled=true;doSave.textContent='画像をつくっています…';
     try{const c=await render();if(!c)throw new Error('render');const blob=await new Promise(r=>c.toBlob(r,'image/png'));const fname='wai-'+pname.textContent+(opt.kind==='wall'?'-壁紙':'')+'.png';
       const file=new File([blob],fname,{type:'image/png'});
-      if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch(e){}}
+      // スマホは共有シート（写真に保存）、パソコンはそのままダウンロード
+      const phone=matchMedia('(pointer:coarse)').matches&&/iPhone|iPad|Android|Mobile/i.test(navigator.userAgent+(navigator.maxTouchPoints>1?' iPad':''));
+      if(phone&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch(e){}}
       else{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
     }catch(e){console.error(e)}
     doSave.textContent=label;doSave.disabled=false});
