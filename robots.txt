@@ -3,4 +3,4 @@ Allow: /
 Disallow: /preview-v2
 Disallow: /preview-v3
 
-Sitemap: https://www.wai-marbling.com/sitemap.xml
+Sitemap: https://wai-marbling.com/sitemap.xml

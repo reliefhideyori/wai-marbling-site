@@ -20,7 +20,7 @@
           "value": "wai-marbling-site.vercel.app"
         }
       ],
-      "destination": "https://www.wai-marbling.com/",
+      "destination": "https://wai-marbling.com/",
       "permanent": true
     },
     {
@@ -31,7 +31,7 @@
           "value": "wai-marbling-site.vercel.app"
         }
       ],
-      "destination": "https://www.wai-marbling.com/:path*",
+      "destination": "https://wai-marbling.com/:path*",
       "permanent": true
     }
   ]
