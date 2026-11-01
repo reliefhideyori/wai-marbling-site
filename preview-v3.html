@@ -1557,7 +1557,7 @@ window.GLM=GLM;window.glBake=bake;
     const cn=document.querySelector('link[rel="canonical"]');if(cn)cn.href=SITE+(name==='top'?'/':'/'+name);
     if(push){try{history.pushState({p:name},'',name==='top'?'/':'/'+name)}catch(e){}}}
   // パス（/story）でも、むかしのリンク（#story）でも開けるように
-  function current(){const p=location.pathname.replace(/^\/+|\/+$/g,'').replace(/\.html$/,'').replace(/^index$/,'');const h=location.hash.slice(1);return (p&&p.indexOf('/')<0?p:'')||h||'top'}
+  function current(){const p=location.pathname.replace(/^\/+|\/+$/g,'').replace(/\.html$/,'').replace(/^index$/,'');const h=location.hash.slice(1);const ok=n=>n&&n.indexOf('/')<0&&!!document.querySelector('.page[data-page="'+n+'"]');return (ok(p)?p:'')||(ok(h)?h:'')||'top'}
   document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();closeMenu();show(a.dataset.go,a.dataset.go!==current())});
   addEventListener('popstate',()=>show(current(),false));
 
