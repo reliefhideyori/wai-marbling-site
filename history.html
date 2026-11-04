@@ -917,7 +917,7 @@ class GLM{
         for(const bx of boxes)for(let c=0;c<nch;c++){const m=cr6+(np>1?trav[c]*1.5:0)+1,b=bx[c];tx.push(b[0]-m,b[1]-m,b[2]+m,b[3]+m)}}}
     const h=Math.max(1,Math.ceil(tx.length/4/TW)),d=new Float32Array(TW*h*4);d.set(tx);this.tex(this.tOps,0,d,h);
     this.n=ops.length;this.ty=ty;let nd=0;while(nd<ty.length&&ty[nd]===0)nd++;this.nd=nd;this.frH=Math.max(1,Math.ceil(this.n/TW));this.fr=new Float32Array(TW*this.frH*4);for(let i=0;i<this.n;i++){this.fr[i*4+1]=at[i];this.fr[i*4+2]=ty[i]}this.frNew=true}
-  size(w,h){if(this.cv.width!==w||this.cv.height!==h){this.cv.width=w;this.cv.height=h}}
+  size(w,h){if(this.cv.width!==w||this.cv.height!==h){this.cv.width=w;this.cv.height=h;const gl=this.gl;gl.disable(gl.SCISSOR_TEST);gl.viewport(0,0,w,h);gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT);this.sync()}}
   // fracs: 各工程の進み具合（0〜1、なしなら全部1）。rect: [x,y,w,h] を指定すると、その部分だけ描く
   render(fracs,o,rect){const gl=this.gl,cv=this.cv;let df=1;for(let i=0;i<this.n;i++){const f=fracs?fracs[i]:1;this.fr[i*4]=f;if(i<this.nd&&f<1)df=0}this.tex(this.tFr,1,this.fr,this.frH,!this.frNew);this.frNew=false;
     gl.viewport(0,0,cv.width,cv.height);gl.useProgram(this.pr);gl.uniform1i(this.U.uOps,0);gl.uniform1i(this.U.uFr,1);gl.uniform1i(this.U.uN,this.n);gl.uniform1i(this.U.uTexW,TW);
@@ -932,6 +932,7 @@ class GLM{
     while(y<H){if(alive&&!alive())return false;const h=Math.min(rows,H-y),t0=performance.now();this.render(null,o,[0,y,cv.width,h]);this.sync();const dt=performance.now()-t0;y+=h;
       rows=Math.max(4,Math.min(H,Math.round(h*Math.min(4,Math.max(.25,ms/Math.max(dt,.5))))));this.lastRows=rows;
       if(y<H)await new Promise(r=>setTimeout(r,0))}
+    if(alive&&!alive())return false;const h0=Math.min(H,Math.max(8,Math.round(o.rows0||48)));this.render(null,o,[0,0,cv.width,h0]);this.sync();
     return true}
 }
 window.GLM=GLM;window.glBake=bake;
@@ -1086,7 +1087,10 @@ window.GLM=GLM;window.glBake=bake;
   const PERF=/[?&]perf/.test(location.search)?document.body.appendChild(Object.assign(document.createElement('div'),{style:'position:fixed;left:8px;right:8px;bottom:8px;z-index:99;font:11px/1.5 sans-serif;background:rgba(0,0,0,.75);color:#fff;padding:6px 10px;border-radius:8px'})):null;
   const glc=document.createElement('canvas');let GL=null;try{GL=new GLM(glc)}catch(e){GL=null}
   const patCache=new Map();
-  if(GL)glc.addEventListener('webglcontextlost',e=>{e.preventDefault();GL=null;patCache.clear();cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()},false);
+  let lostT=0,glLost=false;if(GL){glc.addEventListener('webglcontextlost',e=>{e.preventDefault();GL=null;glLost=true;run++;patCache.clear();glQ=Promise.resolve();clearTimeout(lostT);
+      // ふつうは数秒で戻る。戻らないときだけ、これまでの描き方に切りかえる
+      lostT=setTimeout(()=>{if(GL)return;glLost=false;cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()},4000)},false);
+    glc.addEventListener('webglcontextrestored',()=>{clearTimeout(lostT);glLost=false;try{GL=new GLM(glc)}catch(err){GL=null}patCache.clear();glQ=Promise.resolve();if(GL&&cur){picked=cur.picked.slice();renderChips();make('resize')}else if(!GL){cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()}},false)}
   const stCols=st=>st.picked.map(i=>COLORS[i][1]);
   function buildOps(st,W,H){const P=HP[st.pi];let s=st.seed;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;const Rc=R.rec();REC[P.r](Rc,W,H,rnd,st.picked.length,Object.assign({},P.pp||{}));return Rc.ops}
   // 動きの時間割り：滴は少しずつ重ねて落とし、そのあと櫛や串を一つずつ
@@ -1110,7 +1114,7 @@ window.GLM=GLM;window.glBake=bake;
         // 動きも仕上がりと同じ細かさで描く。端末がどうしても重いときだけ、少しずつ下げる
         if(rt>30&&as>amin){if(++slow>=2){as=Math.max(amin,as*Math.max(.8,Math.sqrt(24/rt)));slow=0}}else slow=0;
         if(tt>=tl.total)break}}
-    const lo=document.createElement('canvas');lo.width=W;lo.height=H;lo.getContext('2d').drawImage(canvas,0,0);
+    const lo=loC||(loC=document.createElement('canvas'));if(lo.width!==W||lo.height!==H){lo.width=W;lo.height=H}const lg=lo.getContext('2d');lg.clearRect(0,0,W,H);lg.drawImage(canvas,0,0);
     pf.anim=Math.round(performance.now()-T0);const T1=performance.now();GL.size(W,H);if(!await GL.renderTiled({scale:W/HW,ss:d>=2?2:3,cols,flip},alive))return false;pf.fin=Math.round(performance.now()-T1);
     if(PERF)PERF.textContent=pf.n+'｜動き '+pf.anim+'ms・'+pf.frames+'コマ（重いコマ '+pf.slow+'）・細かさ '+pf.as.toFixed(2)+'｜仕上げ '+pf.fin+'ms';
     const ms=reduce?0:anim?180:420;let t0=null;
@@ -1118,19 +1122,19 @@ window.GLM=GLM;window.glBake=bake;
     return true}
   // 保存用：同じ模様を、ほしい大きさ・形で描きなおす（つくった絵は少しのあいだ覚えておく）
   // GPU は1枚ずつ順番に使う（同時に描くと、とちゅうの黒い帯が混ざるため）。同じ絵をたのまれたら、描いている途中のものを待つ
-  let glQ=Promise.resolve();
+  let glQ=Promise.resolve(),loC=null;
   function patCanvas(Ww,Hw,pw,ph,ss){const st=cur,my=run,key=[st.pi,st.seed,st.picked.join(','),Ww,Hw,pw,ph,ss].join('|');if(patCache.has(key))return patCache.get(key);
     const pr=glQ.then(async()=>{if(my!==run||!GL)return null;GL.setOps(buildOps(st,Ww,Hw));GL.size(pw,ph);if(!await GL.renderTiled({scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0},()=>my===run&&!!GL))return null;
       const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return c});
     glQ=pr.catch(()=>null);pr.then(c=>{if(!c)patCache.delete(key)},()=>patCache.delete(key));
-    patCache.set(key,pr);if(patCache.size>6)patCache.delete(patCache.keys().next().value);return pr}
+    patCache.set(key,pr);if(patCache.size>4){const k0=patCache.keys().next().value,old=patCache.get(k0);patCache.delete(k0);old.then(c=>{if(c){c.width=c.height=0}},()=>{})}return pr}
   let tank=null,run=0,seed=Date.now()%100000+1,pIndex=-1,firstRun=true,cur=null;const hist=[];
   let bag=GL?HP.map((_,i)=>i).filter(i=>i!==FIRST.pi).sort(()=>Math.random()-.5):[2,3,4,5].sort(()=>Math.random()-.5);
   const backBtn=document.getElementById('back'),syncBack=()=>{backBtn.hidden=!hist.length};
   const refill=()=>{bag=(GL?HP.map((_,i)=>i):PATTERNS.map((_,i)=>i).filter(i=>i!==1)).sort(()=>Math.random()-.5);if(bag[0]===pIndex)bag.push(bag.shift())};
   // keep: true=同じ模様で色だけ / 'resize'=画面の大きさが変わった / restore: もどるときの1回ぶん
   async function make(keep,restore){
-    if(picked.length<2)return;const my=++run;saveBtn.disabled=true;
+    if(picked.length<2||glLost)return;const my=++run;saveBtn.disabled=true;
     if(restore){pIndex=restore.pi;seed=restore.seed}
     else{if(cur&&keep!=='resize'){hist.push(cur);if(hist.length>40)hist.shift()}
       if(!(GL&&keep==='resize'&&cur))seed=((seed*16807+11)%2147483647)||1;
