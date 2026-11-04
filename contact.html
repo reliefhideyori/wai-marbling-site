@@ -1050,12 +1050,18 @@ window.GLM=GLM;window.glBake=bake;
   window.COV=1.4;window.BG0=1;
   // ?perf をつけると、描く速さを画面の下に出す（確認用）
   const PERF=/[?&]perf/.test(location.search)?document.body.appendChild(Object.assign(document.createElement('div'),{style:'position:fixed;left:8px;right:8px;bottom:8px;z-index:99;font:11px/1.5 sans-serif;background:rgba(0,0,0,.75);color:#fff;padding:6px 10px;border-radius:8px'})):null;
-  const glc=document.createElement('canvas');let GL=null;try{GL=new GLM(glc)}catch(e){GL=null}
+  let glc=document.createElement('canvas'),GL=null;try{GL=new GLM(glc)}catch(e){GL=null}
   const patCache=new Map();
-  let lostT=0,glLost=false;if(GL){glc.addEventListener('webglcontextlost',e=>{e.preventDefault();GL=null;glLost=true;run++;patCache.clear();glQ=Promise.resolve();clearTimeout(lostT);
-      // ふつうは数秒で戻る。戻らないときだけ、これまでの描き方に切りかえる
-      lostT=setTimeout(()=>{if(GL)return;glLost=false;cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()},4000)},false);
-    glc.addEventListener('webglcontextrestored',()=>{clearTimeout(lostT);glLost=false;try{GL=new GLM(glc)}catch(err){GL=null}patCache.clear();glQ=Promise.resolve();if(GL&&cur){picked=cur.picked.slice();renderChips();make('resize')}else if(!GL){cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()}},false)}
+  // iPhone では、アプリを切りかえたときなどに GPU がリセットされることがある。そのときは新しく作りなおして、同じ模様と「ひとつ前」の記録をそのまま使う
+  let lostT=0,glLost=false,tries=0;
+  const back2D=()=>{glLost=false;cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()};
+  const revive=()=>{clearTimeout(lostT);if(GL){glLost=false;return}if(document.hidden)return;
+    let ok=false;try{const nc=document.createElement('canvas'),g=new GLM(nc);glc=nc;GL=g;watchGL(nc);ok=true}catch(err){GL=null}
+    if(ok){glLost=false;tries=0;patCache.clear();glQ=Promise.resolve();if(cur){picked=cur.picked.slice();renderChips();make('resize')}else make();return}
+    if(++tries<4)lostT=setTimeout(revive,1500);else back2D()};
+  function watchGL(cv){cv.addEventListener('webglcontextlost',e=>{e.preventDefault();if(cv!==glc)return;GL=null;glLost=true;run++;patCache.clear();glQ=Promise.resolve();clearTimeout(lostT);lostT=setTimeout(revive,1200)},false)}
+  if(GL)watchGL(glc);else if(window.WebGL2RenderingContext){glLost=true;lostT=setTimeout(revive,600)}
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&glLost)lostT=setTimeout(revive,300)});
   const stCols=st=>st.picked.map(i=>COLORS[i][1]);
   function buildOps(st,W,H){const P=HP[st.pi];let s=st.seed;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;const Rc=R.rec();REC[P.r](Rc,W,H,rnd,st.picked.length,Object.assign({},P.pp||{}));return Rc.ops}
   // 動きの時間割り：滴は少しずつ重ねて落とし、そのあと櫛や串を一つずつ
