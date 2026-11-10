@@ -5,11 +5,11 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="google-site-verification" content="40oQvI67poMxD1WlT57Lth2__QjvOXS84tQT__CiKBg">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>64色のアトリエ｜wai marbling studio</title>
-<meta name="description" content="64色のアトリエ。色相・明度・彩度のちがう64色のパレットから色をえらんで、マーブリングの模様をつくれるページ。色相・彩度・明度のちがう色を組みあわせて、あなただけの模様を。wai marbling studio（名古屋）。">
+<title>水面の工房｜wai marbling studio</title>
+<meta name="description" content="水面の工房。色相・明度・彩度のちがう64色と、金・銀・ラメの16色から色をえらんで、マーブリングの模様をつくれるページ。wai marbling studio（名古屋）。">
 <meta property="og:site_name" content="wai marbling studio">
-<meta property="og:title" content="64色のアトリエ｜wai marbling studio">
-<meta property="og:description" content="64色のアトリエ。色相・明度・彩度のちがう64色のパレットから色をえらんで、マーブリングの模様をつくれるページ。色相・彩度・明度のちがう色を組みあわせて、あなただけの模様を。wai marbling studio（名古屋）。">
+<meta property="og:title" content="水面の工房｜wai marbling studio">
+<meta property="og:description" content="水面の工房。色相・明度・彩度のちがう64色と、金・銀・ラメの16色から色をえらんで、マーブリングの模様をつくれるページ。wai marbling studio（名古屋）。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wai-marbling.com/studio">
 <meta property="og:image" content="https://wai-marbling.com/og-v2.png">
@@ -117,12 +117,12 @@ h1.copy{margin:clamp(64px,10vh,112px) 0 0;margin:round(nearest,clamp(64px,10vh,1
 @media (prefers-reduced-motion:reduce){.chips.hinting .chip::before,.chips.nudge .chip::before{animation:none}.tip{transition:none}}
 .chips{display:flex;justify-content:space-between;width:100%}
 .chip{position:relative;width:28px;height:28px;flex:0 1 28px;touch-action:manipulation;border:0;padding:0;background:transparent;cursor:pointer}
-.chip::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .25s ease}
+.chip::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--g,var(--c));box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .25s ease}
 .chip[aria-pressed="true"]::before{transform:scale(1.1);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--fg)}
 .chip::after{content:"";position:absolute;inset:-8px -2px}
 @media (hover:hover){.chip:hover::before{transform:scale(1.12)}}
 .chip:focus-visible{outline:1px solid var(--fg);outline-offset:0;border-radius:50%}
-.chip .n{position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);font-family:var(--font-en);font-size:10px;line-height:1;color:var(--fg)}
+.chip .n{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--font-en);font-size:10px;font-weight:500;line-height:1;color:var(--nc,#fff)}
 .btn{margin-top:16px;font:inherit;font-size:13px;letter-spacing:.2em;min-width:220px;min-height:48px;padding:0 28px;border-radius:999px;border:1px solid var(--fg);background:var(--fg);color:var(--bg);cursor:pointer;transition:opacity .2s ease}
 .btn:hover{opacity:.82}
 .btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -388,7 +388,7 @@ a.inl{color:inherit;text-underline-offset:3px}
 .sheet .btn{margin-top:4px}
 .how .kit,.how .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px;max-width:34em}.how .kit li,.how .steps li{display:flex;flex-direction:column;gap:4px;line-height:1.95}.how .kit b,.how .steps b,.how .faq dt{font-weight:500;letter-spacing:.06em}.how .steps{counter-reset:st}.how .steps li{counter-increment:st;position:relative;padding-left:44px}.how .steps li::before{content:counter(st,decimal-leading-zero);position:absolute;left:0;top:2px;font-family:var(--font-en);font-size:12px;letter-spacing:.2em;color:var(--accent)}.how .kit li{padding-left:16px;border-left:1px solid var(--accent)}.how .faq{margin:0;display:flex;flex-direction:column;gap:20px;max-width:34em}.how .faq dd{margin:4px 0 0;line-height:1.95}.how .era h2{font-size:clamp(19px,4.6vw,24px)}
 .story-vow{}.read .vow{margin-top:clamp(8px,2vh,24px);margin-top:round(nearest,clamp(8px,2vh,24px),4px)}.vow-b{display:flex;flex-direction:column;gap:24px}.vow-b p{line-height:2.15;max-width:none}.vow-b p:last-child{margin-top:8px}
-.mk{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;letter-spacing:.18em;color:var(--fg);text-decoration:none;border:1px solid var(--line,rgba(0,0,0,.18));border-radius:999px;padding:8px 20px}.mk::after{content:"→";font-family:var(--font-en)}.mk:hover{border-color:var(--fg)}[data-studio] .mk,[data-studio] .side-r,[data-studio] .side-l{display:none!important}[data-studio] .hero{padding-block:12px 64px}[data-studio] .hero .stage{display:block;width:auto}[data-studio] .hero .arch{width:max(160px,min(84vw,360px,calc((100svh - 312px)*.714)))}[data-studio] .hero .pattern{margin-top:8px}[data-studio] .pick{max-width:480px;margin-top:8px;gap:12px}.st-lab{display:flex;align-items:baseline;justify-content:center;gap:12px;margin:0;font-size:12px;letter-spacing:.16em;color:var(--muted)}.st-lab b{font-family:var(--font-en);font-weight:400;font-size:11px;letter-spacing:.32em;color:var(--accent)}[data-studio] .chips{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:4px 0;justify-items:stretch}[data-studio] .chip{width:100%;height:auto;aspect-ratio:1;flex:none}[data-studio] .chip::before{inset:2px}[data-studio] .chip::after{inset:0}[data-studio] .chip[aria-pressed="true"]::before{transform:none;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--fg)}[data-studio] .chip .n{top:50%;bottom:auto;transform:translate(-50%,-50%);font-size:10px;font-weight:500;color:var(--nc,#fff)}.pnames{margin:0;font-size:12px;letter-spacing:.12em;color:var(--muted);min-height:1.8em;text-align:center}[data-studio] .st-back{align-self:center;margin-top:16px;font-size:12px;letter-spacing:.18em;color:var(--fg)}@media (min-width:900px){[data-studio] .hero{display:grid;grid-template-columns:auto minmax(0,480px);grid-template-rows:auto auto;column-gap:64px;justify-content:center;align-items:center;padding-block:24px 64px}[data-studio] .hero .stage{grid-column:1;grid-row:1}[data-studio] .hero .pattern{grid-column:1;grid-row:2;justify-self:center;text-align:center}[data-studio] .hero .pick{grid-column:2;grid-row:1/3;align-self:center;margin:0}[data-studio] .hero .arch{width:max(220px,min(420px,calc((100svh - 200px)*.714)))}}
+.mk{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;letter-spacing:.18em;color:var(--fg);text-decoration:none;border:1px solid var(--line,rgba(0,0,0,.18));border-radius:999px;padding:8px 20px}.mk::after{content:"→";font-family:var(--font-en)}.mk:hover{border-color:var(--fg)}[data-studio]{--ed-bd:#D9D6D0;--ed-ink:#2A2A2E;--ed-mut:#8A8780;--ed-acc:#1B998B;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;background:#F1EFEB}.ed{max-width:1180px;margin:0 auto;padding:12px 16px 64px;display:flex;flex-direction:column}.ed-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;height:40px;padding:0 12px;background:#FBFAF8;border:1px solid var(--ed-bd);border-radius:12px 12px 0 0;font-family:var(--mono);font-size:11px;color:var(--ed-mut);white-space:nowrap}.ed-ttl{display:flex;align-items:center;gap:8px;min-width:0}.ed-lights{display:flex;gap:4px}.ed-lights i{width:8px;height:8px;border-radius:50%;background:#DEDBD5}.ed-name{margin:0;font-family:var(--font-jp);font-weight:500;font-size:13px;letter-spacing:.14em;color:var(--ed-ink)}.ed-name small{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.08em;color:var(--ed-mut);margin-left:8px}.ed-file{display:flex;align-items:center;gap:4px;min-width:0;overflow:hidden;text-overflow:ellipsis}.ed-file b{font-weight:400;color:var(--ed-ink)}.ed-file #pname{color:var(--ed-ink)}.ed-main{display:flex;flex-direction:column;border:1px solid var(--ed-bd);border-top:0;border-radius:0 0 12px 12px;overflow:hidden;background:#fff}.ed-canvas{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 12px 8px;background:#E9E7E2 radial-gradient(circle,#CFCBC4 1px,transparent 1.2px) 0 0/16px 16px}.ed-art{position:relative;padding:8px}.ed-art .cm{position:absolute;width:12px;height:12px;border-color:#9E9A92;border-style:solid;border-width:0}.ed-art .cm.a{left:0;top:0;border-left-width:1px;border-top-width:1px}.ed-art .cm.b{right:0;top:0;border-right-width:1px;border-top-width:1px}.ed-art .cm.c{left:0;bottom:0;border-left-width:1px;border-bottom-width:1px}.ed-art .cm.d{right:0;bottom:0;border-right-width:1px;border-bottom-width:1px}[data-studio] .arch-w{opacity:1!important;transform:none!important;animation:none!important}[data-studio] .arch{width:max(150px,min(80vw,440px,calc((100svh - 392px)*.714)));box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08)}.ed-meta{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--ed-mut)}.ed-panel{display:flex;flex-direction:column;gap:8px;padding:12px;border-top:1px solid var(--ed-bd);background:#FBFAF8}.ed-ph{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--ed-mut);text-transform:uppercase}.ed-ph #now{font-family:var(--font-jp);letter-spacing:.08em;text-transform:none;color:var(--ed-acc)}.slots{display:flex;gap:8px}.slots span{display:flex;align-items:center;gap:8px;flex:1;min-width:0;height:32px;padding:0 8px;border:1px solid var(--ed-bd);border-radius:8px;background:#fff;font-size:11px;letter-spacing:.08em;color:var(--ed-ink)}.slots span::before{content:"";width:16px;height:16px;flex:none;border-radius:4px;background:var(--g,var(--c));box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}.slots span.empty{color:var(--ed-mut);border-style:dashed}.slots span.empty::before{background:none;box-shadow:inset 0 0 0 1px var(--ed-bd)}.slots b{font-family:var(--mono);font-weight:400;font-size:10px;color:var(--ed-mut)}[data-studio] .chips{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:2px;width:100%}[data-studio] .chip{width:100%;height:auto;aspect-ratio:1;flex:none}[data-studio] .chip::before{inset:1px;border-radius:4px;transition:none}[data-studio] .chip::after{inset:0}[data-studio] .chip:hover::before{transform:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}[data-studio] .chip[aria-pressed="true"]::before{transform:none;box-shadow:0 0 0 1.5px #fff,0 0 0 3px var(--ed-acc)}[data-studio] .chip .n{font-family:var(--mono);font-size:9px}.ed-tools{display:flex;gap:8px;flex-wrap:wrap}.ed-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 12px;font:inherit;font-size:12px;letter-spacing:.1em;color:var(--ed-ink);background:#fff;border:1px solid var(--ed-bd);border-radius:8px;cursor:pointer}.ed-btn:hover{border-color:var(--ed-ink)}.ed-btn:disabled,.ed-btn[hidden]{display:inline-flex;opacity:.4;pointer-events:none}.ed-btn.pri{flex:1;background:var(--ed-ink);color:#fff;border-color:var(--ed-ink)}.ed-btn svg{width:12px;height:12px}.ed-hint{margin:0;font-size:11px;letter-spacing:.08em;color:var(--ed-mut);line-height:1.8}.ed-foot{display:flex;justify-content:center;margin-top:24px}@media (max-width:899px){.ed-name small{display:none}.ed{padding:8px 12px 48px}.ed-canvas{padding:8px}.ed-art{padding:6px}.ed-meta{display:none}.ed-panel{padding:8px 12px 12px}.ed-panel .ph-s{order:1}.ed-panel .chips{order:2}.ed-panel .ph-p{order:3;margin-top:4px}.ed-panel .slots{order:4}.ed-panel .ed-tools{order:5}.ed-panel .ed-hint{order:6}[data-studio] .arch{width:max(150px,min(84vw,400px,calc((100svh - 216px - (100vw - 26px)*.335)*.714)))}}@media (min-width:900px){.ed{padding-top:16px}.ed-main{display:grid;grid-template-columns:minmax(0,1fr) 400px}.ed-canvas{padding:24px}[data-studio] .arch{width:max(220px,min(440px,calc((100svh - 260px)*.714)))}.ed-panel{border-top:0;border-left:1px solid var(--ed-bd);padding:16px;gap:12px;justify-content:flex-start}}
 </style>
 </head>
 <body>
@@ -427,31 +427,24 @@ a.inl{color:inherit;text-underline-offset:3px}
 <main id="pages">
 
 <!-- ===== TOP ===== -->
-<div class="page" data-page="top" data-studio="1">
-  <h1 class="sr">64色のアトリエ｜wai marbling studio</h1>
-  <section class="hero pad">
-    <div class="stage">
-      <div class="side side-l">
-        <p class="big-en" id="bigEn" aria-label="Float your colors."><span class="w"><span>Float</span></span><span class="w"><span>your</span></span><span class="w"><span><i class="ink">colors.</i></span></span></p>
-        <p class="tiny-en">MARBLING · ART — NAGOYA</p>
+<div class="page" data-page="top" data-studio="1"><h1 class="sr">水面の工房｜wai marbling studio</h1>
+  <section class="ed" aria-label="水面の工房">
+    <div class="ed-bar"><div class="ed-ttl"><span class="ed-lights" aria-hidden="true"><i></i><i></i><i></i></span><p class="ed-name">水面の工房<small>wai atelier</small></p></div><div class="ed-file" aria-live="polite"><b id="pno">No.1</b>_<span id="pname">矢羽根</span>.wai</div></div>
+    <div class="ed-main">
+      <div class="ed-canvas">
+        <div class="ed-art"><span class="cm a"></span><span class="cm b"></span><span class="cm c"></span><span class="cm d"></span><div class="arch-w"><canvas class="arch" id="arch" aria-label="えらんだ色でできるマーブリング模様"></canvas><p class="tip" id="tip" role="status">色をえらぶと、<br>模様が変わります</p></div></div>
+        <p class="ed-meta">ARTBOARD 3 : 4.2</p>
       </div>
-      <div class="arch-w"><canvas class="arch" id="arch" aria-label="えらんだ色でできるマーブリング模様"></canvas><p class="tip" id="tip" role="status">下の色をえらぶと、<br>模様が変わります</p></div>
-      <div class="side side-r">
-        <p class="side-jp">しあわせのかたちは、<br>人それぞれ。</p>
-        <p class="side-sub">水に浮かべた色が、<br>ひとつだけの模様になるように。<br>マーブリングで、あなたの「好き」が<br>かたちになる時間をつくっています。</p>
-        <p class="tiny-en">BOOTH ／ WORKSHOP ／ GOODS</p>
-        <p class="tiny-en scroll">SCROLL</p>
+      <div class="ed-panel">
+        <div class="ed-ph ph-p"><span>Paint</span><span id="now"></span></div>
+        <div class="slots" id="slots"><span><b>1</b>水面</span><span><b>2</b>色</span><span><b>3</b>色</span></div>
+        <div class="ed-ph ph-s"><span id="q">Swatches</span><span>80</span></div>
+        <div class="chips" id="chips" role="group" aria-labelledby="q"></div>
+        <div class="ed-tools"><button class="ed-btn pri" id="again">新しい模様</button><button class="ed-btn" id="back" hidden aria-label="ひとつ前の模様にもどる"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2 3.5 6l4 4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>ひとつ前</button><button class="ed-btn" id="save" disabled>画像で保存</button></div>
+        <p class="ed-hint">1の色が水面になり、2と3の色を落として模様をつくります。3色までえらべます。</p>
       </div>
     </div>
-    <p class="pattern" aria-live="polite"><b id="pno">No.1</b><span id="pname">矢羽根</span></p>
-    <div class="pick">
-      <p class="pick-q st-lab" id="q"><b>ATELIER</b><span>64色のアトリエ</span><span id="now"></span></p>
-      <div class="chips" id="chips" role="group" aria-labelledby="q"></div>
-      <p class="pnames" id="pnames" aria-live="polite"></p>
-      <button class="btn" id="again">ほかの模様をつくる</button>
-      <div class="subs"><button class="save back" id="back" hidden aria-label="ひとつ前の模様にもどる"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2 3.5 6l4 4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>ひとつ前にもどる</button><button class="save" id="save" disabled>この模様を画像で保存</button></div>
-      <a class="more st-back" href="/preview-v3">トップにもどる</a>
-    </div>
+    <div class="ed-foot"><a class="more st-back" href="/preview-v3">トップにもどる</a></div>
   </section>
 </div>
 
@@ -900,11 +893,33 @@ window.GLM=GLM;window.glBake=bake;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // /studio（もっと詳しく作る）では、色相・彩度・明度のちがう64色から選べる
   const STUDIO=!!document.querySelector('[data-studio]');
-  const PAL64=[["あわい あか","#FFCDC8"],["あわい しゅ","#FECEBE"],["あわい だいだい","#FED0AE"],["あわい やまぶき","#F5D6A3"],["あわい きいろ","#E6DDA3"],["あわい うぐいす","#D2E3AC"],["あわい みどり","#BDE9BD"],["あわい あおみどり","#A9EBD3"],["あわい ティール","#9FEBE7"],["あわい みずいろ","#A2E7FD"],["あわい あお","#C0DEFF"],["あわい あい","#CED9FF"],["あわい むらさき","#E0D2FE"],["あわい ふじ","#F3CBF9"],["あわい べに","#FEC9E1"],["しろ","#F7F4EF"],["あざやかな あか","#FB605C"],["あざやかな しゅ","#F96830"],["あざやかな だいだい","#EC8209"],["あざやかな やまぶき","#F0AC0A"],["あざやかな きいろ","#E5CB04"],["あざやかな うぐいす","#9FC305"],["あざやかな みどり","#3BBB4A"],["あざやかな あおみどり","#05B68E"],["あざやかな ティール","#04B2AE"],["あざやかな みずいろ","#0DACD0"],["あざやかな あお","#379FFE"],["あざやかな あい","#7992FF"],["あざやかな むらさき","#AF7AFE"],["あざやかな ふじ","#D06DE0"],["あざやかな べに","#ED60AC"],["ぎんねず","#BDBAB5"],["くすんだ あか","#B48480"],["くすんだ しゅ","#B38677"],["くすんだ だいだい","#B18B70"],["くすんだ やまぶき","#B09972"],["くすんだ きいろ","#AAA377"],["くすんだ うぐいす","#93A076"],["くすんだ みどり","#7C9D7D"],["くすんだ あおみどり","#6D9F8D"],["くすんだ ティール","#659E9C"],["くすんだ みずいろ","#689BAC"],["くすんだ あお","#7695B6"],["くすんだ あい","#8590B8"],["くすんだ むらさき","#988AB2"],["くすんだ ふじ","#A486A8"],["くすんだ べに","#AF8397"],["はいいろ","#77746F"],["こい あか","#852E2C"],["こい しゅ","#843312"],["こい だいだい","#783F02"],["こい やまぶき","#694902"],["こい きいろ","#5B5003"],["こい うぐいす","#475801"],["こい みどり","#176020"],["こい あおみどり","#035E49"],["こい ティール","#065C5A"],["こい みずいろ","#01596D"],["こい あお","#03528E"],["こい あい","#3A4891"],["こい むらさき","#5B3D87"],["こい ふじ","#6D3576"],["こい べに","#7E2E59"],["すみ","#2B2A2E"]];
+  const PAL64=[["あわい あか","#FFCDC8"],["あわい しゅ","#FECEBE"],["あわい だいだい","#FED0AE"],["あわい やまぶき","#F5D6A3"],["あわい きいろ","#E6DDA3"],["あわい うぐいす","#D2E3AC"],["あわい みどり","#BDE9BD"],["あわい あおみどり","#A9EBD3"],["あわい ティール","#9FEBE7"],["あわい みずいろ","#A2E7FD"],["あわい あお","#C0DEFF"],["あわい あい","#CED9FF"],["あわい むらさき","#E0D2FE"],["あわい ふじ","#F3CBF9"],["あわい べに","#FEC9E1"],["しろ","#F7F4EF"],["あざやかな あか","#FB605C"],["あざやかな しゅ","#F96830"],["あざやかな だいだい","#EC8209"],["あざやかな やまぶき","#F0AC0A"],["あざやかな きいろ","#E5CB04"],["あざやかな うぐいす","#9FC305"],["あざやかな みどり","#3BBB4A"],["あざやかな あおみどり","#05B68E"],["あざやかな ティール","#04B2AE"],["あざやかな みずいろ","#0DACD0"],["あざやかな あお","#379FFE"],["あざやかな あい","#7992FF"],["あざやかな むらさき","#AF7AFE"],["あざやかな ふじ","#D06DE0"],["あざやかな べに","#ED60AC"],["ぎんねず","#BDBAB5"],["くすんだ あか","#B48480"],["くすんだ しゅ","#B38677"],["くすんだ だいだい","#B18B70"],["くすんだ やまぶき","#B09972"],["くすんだ きいろ","#AAA377"],["くすんだ うぐいす","#93A076"],["くすんだ みどり","#7C9D7D"],["くすんだ あおみどり","#6D9F8D"],["くすんだ ティール","#659E9C"],["くすんだ みずいろ","#689BAC"],["くすんだ あお","#7695B6"],["くすんだ あい","#8590B8"],["くすんだ むらさき","#988AB2"],["くすんだ ふじ","#A486A8"],["くすんだ べに","#AF8397"],["はいいろ","#77746F"],["こい あか","#852E2C"],["こい しゅ","#843312"],["こい だいだい","#783F02"],["こい やまぶき","#694902"],["こい きいろ","#5B5003"],["こい うぐいす","#475801"],["こい みどり","#176020"],["こい あおみどり","#035E49"],["こい ティール","#065C5A"],["こい みずいろ","#01596D"],["こい あお","#03528E"],["こい あい","#3A4891"],["こい むらさき","#5B3D87"],["こい ふじ","#6D3576"],["こい べに","#7E2E59"],["すみ","#2B2A2E"],["ゴールド","#C9A24A","","metal"],["シャンパンゴールド","#DCC79C","","metal"],["ローズゴールド","#D39C8C","","metal"],["カッパー","#B8724A","","metal"],["ブロンズ","#8E6B3A","","metal"],["シルバー","#B8BCC3","","metal"],["プラチナ","#DDDFE3","","metal"],["ガンメタル","#4F535A","","metal"],["パール","#EEE8DE","","metal"],["オーロラ","#CFD9EA","","holo"],["ゴールドラメ","#D6B054","","glitter"],["シルバーラメ","#C6C9CF","","glitter"],["ピンクラメ","#E9A2BA","","glitter"],["ブルーラメ","#6F9CDA","","glitter"],["グリーンラメ","#70C190","","glitter"],["ブラックラメ","#303036","","glitter"]];
   const COLORS = STUDIO?PAL64:[
     ['さくら','#F2A7A0'],['コーラル','#F0544F'],['ミント','#9CCFC2'],['ティール','#1B998B'],['レモン','#F5D27A'],['ラベンダー','#B9A7E0'],
     ['ネイビー','#26315A'],['そら','#7EC8E3'],['みかん','#F39A4B'],['ローズ','#D94F8A'],['わかば','#6BBF59'],['すみ','#3A3A40']
   ];
+
+
+  // 金・銀・ラメ：仕上がった模様の、その色のところだけに光沢やきらめきをのせる
+  const h2r=h=>[1,3,5].map(k=>parseInt(h.substr(k,2),16));
+  const shade=(h,k)=>'#'+h2r(h).map(v=>Math.max(0,Math.min(255,Math.round(k>0?v+(255-v)*k:v*(1+k)))).toString(16).padStart(2,'0')).join('');
+  function swatchBG(c){const h=c[1],fx=c[3];if(!fx)return '';
+    if(fx==='holo')return 'linear-gradient(135deg,#F7C9E6,#C9E6FF 30%,#D8FBDF 55%,#FFF1BC 78%,#F3C7F0)';
+    const m='linear-gradient(135deg,'+shade(h,-.32)+' 0%,'+shade(h,.55)+' 38%,'+h+' 55%,'+shade(h,.38)+' 74%,'+shade(h,-.28)+' 100%)';
+    if(fx!=='glitter')return m;const dot=(x,y,r)=>'radial-gradient(circle at '+x+'% '+y+'%,rgba(255,255,255,.95) 0 '+r+'px,transparent '+(r+.8)+'px)';
+    return [dot(28,30,1),dot(68,22,.8),dot(52,58,1.1),dot(22,72,.8),dot(78,70,1),m].join(',')}
+  function applyFX(cv,st){const sp=st.picked.map(i=>COLORS[i]).filter(c=>c&&c[3]).map(c=>({rgb:h2r(c[1]),fx:c[3]}));if(!sp.length)return cv;
+    const W=cv.width,H=cv.height,g=cv.getContext('2d'),im=g.getImageData(0,0,W,H),d=im.data,cell=Math.max(1,Math.round(W/320)),TAU=Math.PI*2;
+    const hash=(x,y,s)=>{let h=(x*374761393+y*668265263+s*982451653)|0;h=(h^(h>>>13))*1274126177|0;return((h^(h>>>16))>>>0)/4294967296};
+    for(let y=0;y<H;y++)for(let x=0;x<W;x++){const o=(y*W+x)*4,r=d[o],gg=d[o+1],b=d[o+2];let s=null;for(const q of sp){if(Math.abs(r-q.rgb[0])+Math.abs(gg-q.rgb[1])+Math.abs(b-q.rgb[2])<=9){s=q;break}}if(!s)continue;
+      const u=x/W,v=y/H,band=.5+.5*Math.sin(TAU*((u*1.0+v*.62)*2.3+.35*Math.sin(TAU*v*1.4)+.2*Math.sin(TAU*u*2.1)));let f=.78+.46*band*band;
+      let R=r,G=gg,B=b;
+      if(s.fx==='holo'){const hu=((u*.9+v*.7)*1.6)%1,k=x=>Math.max(0,Math.min(1,Math.abs((hu*6+x)%6-3)-1));R=R*.55+255*(.62+.38*k(0))*.45;G=G*.55+255*(.62+.38*k(4))*.45;B=B*.55+255*(.62+.38*k(2))*.45}
+      const lift=f>1?(f-1):0;R=R*Math.min(f,1)+(255-R*Math.min(f,1))*lift*.9;G=G*Math.min(f,1)+(255-G*Math.min(f,1))*lift*.9;B=B*Math.min(f,1)+(255-B*Math.min(f,1))*lift*.9;
+      if(s.fx==='glitter'){const t=hash((x/cell)|0,(y/cell)|0,7);if(t<.045){const w=t<.018?.85:.5;R+=(255-R)*w;G+=(255-G)*w;B+=(255-B)*w}else if(t<.09){R*=.72;G*=.72;B*=.72}}
+      d[o]=R;d[o+1]=G;d[o+2]=B}
+    g.putImageData(im,0,0);return cv}
+  let fxC=null;function fxFrom(src,W,H,st){if(!st.picked.some(i=>COLORS[i]&&COLORS[i][3]))return src;const c=fxC||(fxC=document.createElement('canvas'));if(c.width!==W||c.height!==H){c.width=W;c.height=H}const x=c.getContext('2d');x.clearRect(0,0,W,H);x.drawImage(src,0,0,W,H);return applyFX(c,st)}
 
   // ---- 数学的マーブリング ----
   // 滴下: 新しい滴の外側にある点は、面積を保ったまま外へ押し出される（色どうしは混ざらない）
@@ -986,13 +1001,13 @@ window.GLM=GLM;window.glBake=bake;
   // はじめの色：さくら（水面）・コーラル・ミント
   let picked=[0,1,2],auto;
   if(STUDIO){const d=(a,b)=>{const p=h=>[1,3,5].map(k=>parseInt(h.substr(k,2),16));const x=p(a),y=p(b);return x.reduce((s,v,k)=>s+(v-y[k])**2,0)};picked=['#F2A7A0','#F0544F','#9CCFC2'].map(h=>COLORS.reduce((bi,c,i)=>d(c[1],h)<d(COLORS[bi][1],h)?i:bi,0))}
-  COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.title=name;if(STUDIO){const v=[1,3,5].map(k=>parseInt(hex.substr(k,2),16)/255);b.style.setProperty('--nc',(.2126*v[0]+.7152*v[1]+.0722*v[2])>.55?'#26262B':'#fff')}b.style.setProperty('--i',i);b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
+  COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.title=name;{const v=[1,3,5].map(k=>parseInt(hex.substr(k,2),16)/255);b.style.setProperty('--nc',(.2126*v[0]+.7152*v[1]+.0722*v[2])>.55?'#26262B':'#fff')}if(STUDIO&&COLORS[i][3])b.style.setProperty('--g',swatchBG(COLORS[i]));b.style.setProperty('--i',i);b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
     b.addEventListener('click',()=>{chipsEl.classList.remove('hinting');const at=picked.indexOf(i);if(at>=0)picked.splice(at,1);else{if(picked.length===3)picked.shift();picked.push(i)}renderChips();clearTimeout(auto);if(picked.length>=2)auto=setTimeout(()=>{bringArch();make(true)},550)});chipsEl.appendChild(b)});
   // 窓が画面から外れているときだけ、模様が見える位置までそっと戻す
   function bringArch(){const r=canvas.getBoundingClientRect(),top=document.querySelector('.top').offsetHeight;
     if(r.top>=top-4&&r.bottom<=innerHeight+4)return;scrollTo({top:scrollY+r.top-top-16,behavior:reduce?'auto':'smooth'})}
   function renderChips(){COLORS.forEach((c,i)=>{const b=document.getElementById('chip'+i),at=picked.indexOf(i);b.setAttribute('aria-pressed',at>=0);b.querySelector('.n').textContent=at>=0?at+1:''});
-    now.textContent=picked.length>=2?'':'（あと'+(2-picked.length)+'色）';const pn=document.getElementById('pnames');if(pn)pn.textContent=picked.map((i,k)=>(k+1)+' '+COLORS[i][0]).join('　');
+    now.textContent=picked.length>=2?'':'（あと'+(2-picked.length)+'色）';const sl=document.getElementById('slots');if(sl)[...sl.children].forEach((e,k)=>{const i=picked[k],c=i!=null?COLORS[i]:null;e.classList.toggle('empty',!c);e.style.setProperty('--c',c?c[1]:'transparent');e.style.setProperty('--g',c&&c[3]?swatchBG(c):'none')});
     const bg=document.getElementById('bigEn'),pc=picked.map(i=>COLORS[i][1]);if(bg&&pc.length){bg.style.setProperty('--c1',pc[0]);bg.style.setProperty('--c2',pc[1]||pc[0]);bg.style.setProperty('--c3',pc[2]||pc[0]);const rs=document.documentElement.style;rs.setProperty('--g1',pc[0]);rs.setProperty('--g2',pc[1]||pc[0]);rs.setProperty('--g3',pc[2]||pc[1]||pc[0])}}
   renderChips();
 
@@ -1086,15 +1101,15 @@ window.GLM=GLM;window.glBake=bake;
     const lo=loC||(loC=document.createElement('canvas'));if(lo.width!==W||lo.height!==H){lo.width=W;lo.height=H}const lg=lo.getContext('2d');lg.clearRect(0,0,W,H);lg.drawImage(canvas,0,0);
     pf.anim=Math.round(performance.now()-T0);const T1=performance.now();GL.size(W,H);if(!await GL.renderTiled({scale:W/HW,ss:d>=2?2:3,cols,flip},alive))return false;pf.fin=Math.round(performance.now()-T1);
     if(PERF)PERF.textContent=pf.n+'｜動き '+pf.anim+'ms・'+pf.frames+'コマ（重いコマ '+pf.slow+'）・細かさ '+pf.as.toFixed(2)+'｜仕上げ '+pf.fin+'ms';
-    const ms=reduce?0:anim?180:420;let t0=null;
-    while(true){const t=ms?await raf():0;if(!alive())return false;if(t0===null)t0=t;const p=ms?Math.min(1,(t-t0)/ms):1;g.globalAlpha=1;g.drawImage(lo,0,0);g.globalAlpha=p;g.drawImage(glc,0,0,W,H);g.globalAlpha=1;if(p>=1)break}
+    const fin=fxFrom(glc,W,H,st);const ms=reduce?0:anim?180:420;let t0=null;
+    while(true){const t=ms?await raf():0;if(!alive())return false;if(t0===null)t0=t;const p=ms?Math.min(1,(t-t0)/ms):1;g.globalAlpha=1;g.drawImage(lo,0,0);g.globalAlpha=p;g.drawImage(fin,0,0,W,H);g.globalAlpha=1;if(p>=1)break}
     return true}
   // 保存用：同じ模様を、ほしい大きさ・形で描きなおす（つくった絵は少しのあいだ覚えておく）
   // GPU は1枚ずつ順番に使う（同時に描くと、とちゅうの黒い帯が混ざるため）。同じ絵をたのまれたら、描いている途中のものを待つ
   let glQ=Promise.resolve(),loC=null;
   function patCanvas(Ww,Hw,pw,ph,ss){const st=cur,my=run,key=[st.pi,st.seed,st.picked.join(','),Ww,Hw,pw,ph,ss].join('|');if(patCache.has(key))return patCache.get(key);
     const pr=glQ.then(async()=>{if(my!==run||!GL)return null;GL.setOps(buildOps(st,Ww,Hw));GL.size(pw,ph);if(!await GL.renderTiled({scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0},()=>my===run&&!!GL))return null;
-      const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return c});
+      const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return applyFX(c,st)});
     glQ=pr.catch(()=>null);pr.then(c=>{if(!c)patCache.delete(key)},()=>patCache.delete(key));
     patCache.set(key,pr);if(patCache.size>4){const k0=patCache.keys().next().value,old=patCache.get(k0);patCache.delete(k0);old.then(c=>{if(c){c.width=c.height=0}},()=>{})}return pr}
   let tank=null,run=0,seed=Date.now()%100000+1,pIndex=-1,firstRun=true,cur=null;const hist=[];
