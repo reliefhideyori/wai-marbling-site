@@ -388,6 +388,7 @@ a.inl{color:inherit;text-underline-offset:3px}
 .sheet .btn{margin-top:4px}
 .how .kit,.how .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px;max-width:34em}.how .kit li,.how .steps li{display:flex;flex-direction:column;gap:4px;line-height:1.95}.how .kit b,.how .steps b,.how .faq dt{font-weight:500;letter-spacing:.06em}.how .steps{counter-reset:st}.how .steps li{counter-increment:st;position:relative;padding-left:44px}.how .steps li::before{content:counter(st,decimal-leading-zero);position:absolute;left:0;top:2px;font-family:var(--font-en);font-size:12px;letter-spacing:.2em;color:var(--accent)}.how .kit li{padding-left:16px;border-left:1px solid var(--accent)}.how .faq{margin:0;display:flex;flex-direction:column;gap:20px;max-width:34em}.how .faq dd{margin:4px 0 0;line-height:1.95}.how .era h2{font-size:clamp(19px,4.6vw,24px)}
 .story-vow{}.read .vow{margin-top:clamp(8px,2vh,24px);margin-top:round(nearest,clamp(8px,2vh,24px),4px)}.vow-b{display:flex;flex-direction:column;gap:24px}.vow-b p{line-height:2.15;max-width:none}.vow-b p:last-child{margin-top:8px}
+.mk{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;letter-spacing:.18em;color:var(--fg);text-decoration:none;border:1px solid var(--line,rgba(0,0,0,.18));border-radius:999px;padding:8px 20px}.mk::after{content:"→";font-family:var(--font-en)}.mk:hover{border-color:var(--fg)}[data-studio] .mk,[data-studio] .side-r,[data-studio] .side-l .tiny-en{display:none}.st-top{padding-top:clamp(24px,5vh,56px);padding-top:round(nearest,clamp(24px,5vh,56px),4px)}.st-head{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:24px}.st-head h1{font-weight:300;font-size:clamp(20px,5vw,26px);letter-spacing:.14em;margin:0}.st-head p{margin:0;font-size:12px;letter-spacing:.12em;color:var(--muted)}[data-studio] .pick{max-width:760px}[data-studio] .chips{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:12px 4px;justify-items:center}[data-studio] .chip{width:32px;height:32px}@media (max-width:640px){[data-studio] .chips{grid-template-columns:repeat(8,minmax(0,1fr));gap:12px 0}[data-studio] .chip{width:36px;height:36px}}.pnames{margin:0;font-size:12px;letter-spacing:.12em;color:var(--muted);min-height:1.8em;text-align:center}[data-studio] .st-back{margin-top:24px;font-size:12px;letter-spacing:.18em;color:var(--fg)}
 </style>
 </head>
 <body>
@@ -448,6 +449,7 @@ a.inl{color:inherit;text-underline-offset:3px}
       <div class="chips hinting" id="chips" role="group" aria-labelledby="q"></div>
       <button class="btn" id="again">ほかの模様をつくる</button>
       <div class="subs"><button class="save back" id="back" hidden aria-label="ひとつ前の模様にもどる"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2 3.5 6l4 4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>ひとつ前にもどる</button><button class="save" id="save" disabled>この模様を画像で保存</button></div>
+      <a class="mk" href="/preview-studio">もっと詳しく作る</a>
     </div>
   </section>
 
@@ -1356,7 +1358,10 @@ window.GLM=GLM;window.glBake=bake;
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const COLORS = [
+  // /studio（もっと詳しく作る）では、色相・彩度・明度のちがう64色から選べる
+  const STUDIO=!!document.querySelector('[data-studio]');
+  const PAL64=[["あわい あか","#FFCDC8"],["あわい しゅ","#FECEBE"],["あわい だいだい","#FED0AE"],["あわい やまぶき","#F5D6A3"],["あわい きいろ","#E6DDA3"],["あわい うぐいす","#D2E3AC"],["あわい みどり","#BDE9BD"],["あわい あおみどり","#A9EBD3"],["あわい ティール","#9FEBE7"],["あわい みずいろ","#A2E7FD"],["あわい あお","#C0DEFF"],["あわい あい","#CED9FF"],["あわい むらさき","#E0D2FE"],["あわい ふじ","#F3CBF9"],["あわい べに","#FEC9E1"],["しろ","#F7F4EF"],["あざやかな あか","#FB605C"],["あざやかな しゅ","#F96830"],["あざやかな だいだい","#EC8209"],["あざやかな やまぶき","#F0AC0A"],["あざやかな きいろ","#E5CB04"],["あざやかな うぐいす","#9FC305"],["あざやかな みどり","#3BBB4A"],["あざやかな あおみどり","#05B68E"],["あざやかな ティール","#04B2AE"],["あざやかな みずいろ","#0DACD0"],["あざやかな あお","#379FFE"],["あざやかな あい","#7992FF"],["あざやかな むらさき","#AF7AFE"],["あざやかな ふじ","#D06DE0"],["あざやかな べに","#ED60AC"],["ぎんねず","#BDBAB5"],["くすんだ あか","#B48480"],["くすんだ しゅ","#B38677"],["くすんだ だいだい","#B18B70"],["くすんだ やまぶき","#B09972"],["くすんだ きいろ","#AAA377"],["くすんだ うぐいす","#93A076"],["くすんだ みどり","#7C9D7D"],["くすんだ あおみどり","#6D9F8D"],["くすんだ ティール","#659E9C"],["くすんだ みずいろ","#689BAC"],["くすんだ あお","#7695B6"],["くすんだ あい","#8590B8"],["くすんだ むらさき","#988AB2"],["くすんだ ふじ","#A486A8"],["くすんだ べに","#AF8397"],["はいいろ","#77746F"],["こい あか","#852E2C"],["こい しゅ","#843312"],["こい だいだい","#783F02"],["こい やまぶき","#694902"],["こい きいろ","#5B5003"],["こい うぐいす","#475801"],["こい みどり","#176020"],["こい あおみどり","#035E49"],["こい ティール","#065C5A"],["こい みずいろ","#01596D"],["こい あお","#03528E"],["こい あい","#3A4891"],["こい むらさき","#5B3D87"],["こい ふじ","#6D3576"],["こい べに","#7E2E59"],["すみ","#2B2A2E"]];
+  const COLORS = STUDIO?PAL64:[
     ['さくら','#F2A7A0'],['コーラル','#F0544F'],['ミント','#9CCFC2'],['ティール','#1B998B'],['レモン','#F5D27A'],['ラベンダー','#B9A7E0'],
     ['ネイビー','#26315A'],['そら','#7EC8E3'],['みかん','#F39A4B'],['ローズ','#D94F8A'],['わかば','#6BBF59'],['すみ','#3A3A40']
   ];
@@ -1440,13 +1445,14 @@ window.GLM=GLM;window.glBake=bake;
   const chipsEl=document.getElementById('chips'),now=document.getElementById('now'),again=document.getElementById('again');
   // はじめの色：さくら（水面）・コーラル・ミント
   let picked=[0,1,2],auto;
-  COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.style.setProperty('--i',i);b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
+  if(STUDIO){const d=(a,b)=>{const p=h=>[1,3,5].map(k=>parseInt(h.substr(k,2),16));const x=p(a),y=p(b);return x.reduce((s,v,k)=>s+(v-y[k])**2,0)};picked=['#F2A7A0','#F0544F','#9CCFC2'].map(h=>COLORS.reduce((bi,c,i)=>d(c[1],h)<d(COLORS[bi][1],h)?i:bi,0))}
+  COLORS.forEach(([name,hex],i)=>{const b=document.createElement('button');b.className='chip';b.title=name;b.style.setProperty('--i',i);b.id='chip'+i;b.style.setProperty('--c',hex);b.setAttribute('aria-label',name);b.innerHTML='<span class="n"></span>';
     b.addEventListener('click',()=>{chipsEl.classList.remove('hinting');const at=picked.indexOf(i);if(at>=0)picked.splice(at,1);else{if(picked.length===3)picked.shift();picked.push(i)}renderChips();clearTimeout(auto);if(picked.length>=2)auto=setTimeout(()=>{bringArch();make(true)},550)});chipsEl.appendChild(b)});
   // 窓が画面から外れているときだけ、模様が見える位置までそっと戻す
   function bringArch(){const r=canvas.getBoundingClientRect(),top=document.querySelector('.top').offsetHeight;
     if(r.top>=top-4&&r.bottom<=innerHeight+4)return;scrollTo({top:scrollY+r.top-top-16,behavior:reduce?'auto':'smooth'})}
   function renderChips(){COLORS.forEach((c,i)=>{const b=document.getElementById('chip'+i),at=picked.indexOf(i);b.setAttribute('aria-pressed',at>=0);b.querySelector('.n').textContent=at>=0?at+1:''});
-    now.textContent=picked.length>=2?'':'（あと'+(2-picked.length)+'色）';
+    now.textContent=picked.length>=2?'':'（あと'+(2-picked.length)+'色）';const pn=document.getElementById('pnames');if(pn)pn.textContent=picked.map((i,k)=>(k+1)+' '+COLORS[i][0]).join('　');
     const bg=document.getElementById('bigEn'),pc=picked.map(i=>COLORS[i][1]);if(bg&&pc.length){bg.style.setProperty('--c1',pc[0]);bg.style.setProperty('--c2',pc[1]||pc[0]);bg.style.setProperty('--c3',pc[2]||pc[0]);const rs=document.documentElement.style;rs.setProperty('--g1',pc[0]);rs.setProperty('--g2',pc[1]||pc[0]);rs.setProperty('--g3',pc[2]||pc[1]||pc[0])}}
   renderChips();
 
@@ -1638,6 +1644,7 @@ window.GLM=GLM;window.glBake=bake;
   let booting=true;
   function show(name,push){if(!pages.some(p=>p.dataset.page===name))name='top';
     pages.forEach(p=>{p.hidden=p.dataset.page!==name;p.classList.toggle('pin',!booting&&!p.hidden)});
+    if(STUDIO)return;
     document.querySelectorAll('.nav [data-go]').forEach(a=>{if(a.dataset.go===name&&name!=='top')a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
     scrollTo({top:0,behavior:'auto'});const pg=document.querySelector('.page[data-page="'+name+'"]');watchTiles(pg);watchReveal(pg);
     document.title=TITLES[name]?TITLES[name]+'｜wai marbling studio':TOP_TITLE;
@@ -1648,7 +1655,7 @@ window.GLM=GLM;window.glBake=bake;
   function current(){const p=location.pathname.replace(/^\/+|\/+$/g,'').replace(/\.html$/,'').replace(/^index$/,'');const h=location.hash.slice(1);const ok=n=>n&&n.indexOf('/')<0&&!!document.querySelector('.page[data-page="'+n+'"]');return (ok(p)?p:'')||(ok(h)?h:'')||'top'}
   document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;
     // このファイルにないページは、ふつうのリンクとして開く（ページごとに別のHTML）
-    const tg=pages.find(p=>p.dataset.page===a.dataset.go);if(!tg||tg.dataset.partial)return;e.preventDefault();closeMenu();show(a.dataset.go,a.dataset.go!==current())});
+    const tg=pages.find(p=>p.dataset.page===a.dataset.go);if(!tg||tg.dataset.partial||STUDIO)return;e.preventDefault();closeMenu();show(a.dataset.go,a.dataset.go!==current())});
   addEventListener('popstate',()=>show(current(),false));
 
   // ---- スマホのメニュー ----
