@@ -1305,16 +1305,24 @@ float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hsh(i
 float bw(float f){return 1.-smoothstep(.35,.9,f*gpw);}
 float fb(vec2 p){float w0=bw(1.),w1=bw(2.17),w2=bw(4.6);return .5+w0*.55*(vn(p)-.5)+w1*.3*(vn(p*2.17+7.1)-.5)+w2*.15*(vn(p*4.6+3.3)-.5);}
 vec3 grain(vec3 c,int k,vec2 p){
-  // 金箔のようなざらざら：絵の具といっしょに動く細かい凹凸に、左上から光をあてる
+  // 金箔のようなざらざら：粒は絵の具の中に一様に散っていて、模様が動いてものびない。粒ごとに色味を変えて光らせる
   float fq=k==2?1.6:1.15;gpw=fq/(uScale*float(uSS));vec2 g=p*fq;float h=fb(g),hx=fb(g+vec2(.3,0.)),hy=fb(g+vec2(0.,.3));float e=(h-hx)+(h-hy);float lo=vn(p*.035+11.);
   float amp=k==2?1.:k==3?.6:.75;
-  vec3 r=c*(.8+.32*h+.16*(lo-.5));
-  r*=1.+e*2.4*amp;
-  r+=(1.-r)*clamp(e*3.*amp,0.,.5);
-  if(k==3){float hu=vn(p*.06+3.)*6.;vec3 t=clamp(abs(mod(hu+vec3(0.,4.,2.),6.)-3.)-1.,0.,1.);r=mix(r,r*(.7+.5*t),.55);}
+  vec3 r=c*(.82+.28*h+.16*(lo-.5));
+  r*=1.+e*2.*amp;
+  // 粒：セルごとに、明るい淡い色・濃い暖色・すこし色ずれ、のどれかを混ぜる
+  float cs=k==2?.55:.8;vec2 G=p*cs;vec2 ci=floor(G),cf=fract(G);float fl=0.,dk=0.,tn=0.;
+  for(int yy=-1;yy<=1;yy++)for(int xx=-1;xx<=1;xx++){vec2 nb=ci+vec2(xx,yy);float a=hsh(nb),b=hsh(nb+17.3),t=hsh(nb+41.7);vec2 pt=vec2(xx,yy)+vec2(a,b)-cf;float d=length(pt);float s=smoothstep(.55,.08,d)*bw(cs*2.);
+    if(t>.72)fl=max(fl,s*(.4+.6*(t-.72)/.28));else if(t<.22)dk=max(dk,s);else if(t<.4)tn=max(tn,s*(a-.5));}
+  float fa=k==2?1.:.75;
+  vec3 hi=mix(c,vec3(1.,.99,.93),.85)*1.12;vec3 lo2=c*vec3(.55,.44,.3);
+  r=mix(r,lo2,dk*.6*fa);
+  r=mix(r,r*vec3(1.+tn*.25,1.,1.-tn*.35),fa);
+  r=mix(r,hi,fl*fa);
+  if(k==3){float hu=hsh(floor(G))*6.;vec3 t=clamp(abs(mod(hu+vec3(0.,4.,2.),6.)-3.)-1.,0.,1.);r=mix(r,r*(.7+.5*t),.55);}
   return clamp(r,0.,1.);}
 void main(){vec2 px=vec2(gl_FragCoord.x,uSize.y-gl_FragCoord.y);vec3 acc=vec3(0.);
-  for(int sy=0;sy<uSS;sy++)for(int sx=0;sx<uSS;sx++){vec2 q=(px-.5+(vec2(sx,sy)+.5)/float(uSS))/uScale;if(uFlip>0.)q.y=uFlip-q.y;int ci=trace(q);vec3 c=uCol[ci];if(uFx[ci]>0)c=grain(c,uFx[ci],gq);acc+=c;}
+  for(int sy=0;sy<uSS;sy++)for(int sx=0;sx<uSS;sx++){vec2 q=(px-.5+(vec2(sx,sy)+.5)/float(uSS))/uScale;if(uFlip>0.)q.y=uFlip-q.y;int ci=trace(q);vec3 c=uCol[ci];if(uFx[ci]>0)c=grain(c,uFx[ci],q);acc+=c;}
   o=vec4(acc/float(uSS*uSS),1.);}`;
 const KW=1.5,CH=8,TW=1024;
 // 道すじ（関数）を、点を並べた折れ線にする
