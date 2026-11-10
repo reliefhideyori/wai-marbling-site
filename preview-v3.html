@@ -1273,15 +1273,15 @@ const VS=`#version 300 es
 in vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
 const FS=`#version 300 es
 precision highp float;precision highp int;
-uniform highp sampler2D uOps;uniform highp sampler2D uFr;uniform int uN;uniform vec2 uSize;uniform float uScale;uniform int uSS;uniform vec3 uCol[8];uniform int uTexW;uniform float uKw;uniform float uFlip;uniform int uND;uniform int uDF;
-out vec4 o;
+uniform highp sampler2D uOps;uniform highp sampler2D uFr;uniform int uN;uniform vec2 uSize;uniform float uScale;uniform int uSS;uniform vec3 uCol[8];uniform int uTexW;uniform float uKw;uniform float uFlip;uniform int uND;uniform int uDF;uniform int uFx[8];
+out vec4 o;vec2 gq;float gpw;
 vec4 T(int i){return texelFetch(uOps,ivec2(i%uTexW,i/uTexW),0);}
 float tri(float d,float sp){if(sp<=0.)return abs(d);float m=mod(d,sp);return min(m,sp-m);}
 float fall(float d,float sp,float lam){if(sp<=0.)return lam/(d+lam);float h=sp*.5;float g0=lam/(d+lam)+lam/(sp-d+lam),gm=2.*lam/(h+lam),gt=1.+lam/(sp+lam);float r=(g0-gm)/(gt-gm);return mix(lam/(h+lam),1.,r);}
 int trace(vec2 q){
   for(int k=uN-1;k>=uND;k--){
     vec4 h=texelFetch(uFr,ivec2(k%uTexW,k/uTexW),0);float f=h.x;if(f<=0.)continue;int at=int(h.y+.5),ty=int(h.z+.5);
-    if(ty==0){vec4 a=T(at);float r=a.z*f;vec2 d=q-a.xy;float d2=dot(d,d),r2=r*r;if(d2<r2)return int(a.w+.5);q=a.xy+d*sqrt(1.-r2/d2);}
+    if(ty==0){vec4 a=T(at);float r=a.z*f;vec2 d=q-a.xy;float d2=dot(d,d),r2=r*r;if(d2<r2){gq=d+a.xy*1.37;return int(a.w+.5);}q=a.xy+d*sqrt(1.-r2/d2);}
     else if(ty==1){vec4 a=T(at),b=T(at+1);float th=a.x,sp=a.y,z=a.z*f,lam=a.w,off=b.x,A=b.y,P=b.z;float c=cos(th),s=sin(th);
       if(A==0.){float v=-q.x*s+q.y*c;float d=tri(v-off,sp);float m=z*fall(d,sp,lam);q-=m*vec2(c,s);}
       else{for(int j=0;j<12;j++){vec2 r=q;for(int it=0;it<2;it++){float u=r.x*c+r.y*s,v=-r.x*s+r.y*c,ph=6.2831853*u/P,w=A*sin(ph);float tv=A*6.2831853/P*cos(ph);float L=sqrt(1.+tv*tv);float tu=1./L;tv/=L;
@@ -1298,10 +1298,23 @@ int trace(vec2 q){
   }
   // 最初にまとめて落とした滴（工程の番号＝詰めた場所）。全部落ちきっていれば進み具合を読まない
   for(int k=uND-1;k>=0;k--){float f=1.;if(uDF==0){f=texelFetch(uFr,ivec2(k%uTexW,k/uTexW),0).x;if(f<=0.)continue;}
-    vec4 a=T(k);float r=a.z*f;vec2 d=q-a.xy;float d2=dot(d,d),r2=r*r;if(d2<r2)return int(a.w+.5);q=a.xy+d*sqrt(1.-r2/d2);}
-  return 0;}
+    vec4 a=T(k);float r=a.z*f;vec2 d=q-a.xy;float d2=dot(d,d),r2=r*r;if(d2<r2){gq=d+a.xy*1.37;return int(a.w+.5);}q=a.xy+d*sqrt(1.-r2/d2);}
+  gq=q;return 0;}
+float hsh(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
+float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hsh(i),hsh(i+vec2(1.,0.)),f.x),mix(hsh(i+vec2(0.,1.)),hsh(i+1.),f.x),f.y);}
+float bw(float f){return 1.-smoothstep(.35,.9,f*gpw);}
+float fb(vec2 p){float w0=bw(1.),w1=bw(2.17),w2=bw(4.6);return .5+w0*.55*(vn(p)-.5)+w1*.3*(vn(p*2.17+7.1)-.5)+w2*.15*(vn(p*4.6+3.3)-.5);}
+vec3 grain(vec3 c,int k,vec2 p){
+  // 金箔のようなざらざら：絵の具といっしょに動く細かい凹凸に、左上から光をあてる
+  float fq=k==2?1.6:1.15;gpw=fq/(uScale*float(uSS));vec2 g=p*fq;float h=fb(g),hx=fb(g+vec2(.3,0.)),hy=fb(g+vec2(0.,.3));float e=(h-hx)+(h-hy);float lo=vn(p*.035+11.);
+  float amp=k==2?1.:k==3?.6:.75;
+  vec3 r=c*(.8+.32*h+.16*(lo-.5));
+  r*=1.+e*2.4*amp;
+  r+=(1.-r)*clamp(e*3.*amp,0.,.5);
+  if(k==3){float hu=vn(p*.06+3.)*6.;vec3 t=clamp(abs(mod(hu+vec3(0.,4.,2.),6.)-3.)-1.,0.,1.);r=mix(r,r*(.7+.5*t),.55);}
+  return clamp(r,0.,1.);}
 void main(){vec2 px=vec2(gl_FragCoord.x,uSize.y-gl_FragCoord.y);vec3 acc=vec3(0.);
-  for(int sy=0;sy<uSS;sy++)for(int sx=0;sx<uSS;sx++){vec2 q=(px-.5+(vec2(sx,sy)+.5)/float(uSS))/uScale;if(uFlip>0.)q.y=uFlip-q.y;acc+=uCol[trace(q)];}
+  for(int sy=0;sy<uSS;sy++)for(int sx=0;sx<uSS;sx++){vec2 q=(px-.5+(vec2(sx,sy)+.5)/float(uSS))/uScale;if(uFlip>0.)q.y=uFlip-q.y;int ci=trace(q);vec3 c=uCol[ci];if(uFx[ci]>0)c=grain(c,uFx[ci],gq);acc+=c;}
   o=vec4(acc/float(uSS*uSS),1.);}`;
 const KW=1.5,CH=8,TW=1024;
 // 道すじ（関数）を、点を並べた折れ線にする
@@ -1311,7 +1324,7 @@ class GLM{
     const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(x));return x};
     const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(pr));this.pr=pr;gl.useProgram(pr);
     const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
-    this.U={};for(const n of ['uOps','uFr','uN','uSize','uScale','uSS','uCol','uTexW','uKw','uFlip','uND','uDF'])this.U[n]=gl.getUniformLocation(pr,n);
+    this.U={};for(const n of ['uOps','uFr','uN','uSize','uScale','uSS','uCol','uTexW','uKw','uFlip','uND','uDF','uFx'])this.U[n]=gl.getUniformLocation(pr,n);
     this.tOps=gl.createTexture();this.tFr=gl.createTexture();this.px=new Uint8Array(4)}
   tex(t,unit,data,h,same){const gl=this.gl;gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);
     if(same){gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,TW,h,gl.RGBA,gl.FLOAT,data);return}
@@ -1338,7 +1351,7 @@ class GLM{
   render(fracs,o,rect){const gl=this.gl,cv=this.cv;let df=1;for(let i=0;i<this.n;i++){const f=fracs?fracs[i]:1;this.fr[i*4]=f;if(i<this.nd&&f<1)df=0}this.tex(this.tFr,1,this.fr,this.frH,!this.frNew);this.frNew=false;
     gl.viewport(0,0,cv.width,cv.height);gl.useProgram(this.pr);gl.uniform1i(this.U.uOps,0);gl.uniform1i(this.U.uFr,1);gl.uniform1i(this.U.uN,this.n);gl.uniform1i(this.U.uTexW,TW);
     gl.uniform2f(this.U.uSize,cv.width,cv.height);gl.uniform1f(this.U.uScale,o.scale);gl.uniform1i(this.U.uSS,o.ss||1);gl.uniform1f(this.U.uKw,KW);gl.uniform1f(this.U.uFlip,o.flip||0);gl.uniform1i(this.U.uND,this.nd);gl.uniform1i(this.U.uDF,df);
-    const c=new Float32Array(24);o.cols.forEach((h,i)=>{const n=parseInt(h.slice(1),16);c[i*3]=((n>>16)&255)/255;c[i*3+1]=((n>>8)&255)/255;c[i*3+2]=(n&255)/255});gl.uniform3fv(this.U.uCol,c);
+    const c=new Float32Array(24);o.cols.forEach((h,i)=>{const n=parseInt(h.slice(1),16);c[i*3]=((n>>16)&255)/255;c[i*3+1]=((n>>8)&255)/255;c[i*3+2]=(n&255)/255});gl.uniform3fv(this.U.uCol,c);const fx=new Int32Array(8);o.cols.forEach((h,i)=>{fx[i]=(window.__FX&&window.__FX[h.toUpperCase()])||0});gl.uniform1iv(this.U.uFx,fx);
     if(rect){gl.enable(gl.SCISSOR_TEST);gl.scissor(rect[0],cv.height-rect[1]-rect[3],rect[2],rect[3])}else gl.disable(gl.SCISSOR_TEST);
     gl.drawArrays(gl.TRIANGLES,0,3);gl.disable(gl.SCISSOR_TEST)}
   // 描き終わるまで待つ（時間をはかるため）
@@ -1389,7 +1402,8 @@ window.GLM=GLM;window.glBake=bake;
           if(dx)lx.fillRect(x-len,y-th/2,len*2,th);else lx.fillRect(x-th/2,y-len,th,len*2)}}}
       lx.globalCompositeOperation='destination-in';lx.drawImage(mk,0,0);g.drawImage(L,0,0)}
     return cv}
-  let fxC=null;function fxFrom(src,W,H,st){if(!st.picked.some(i=>COLORS[i]&&COLORS[i][3]))return src;const c=fxC||(fxC=document.createElement('canvas'));if(c.width!==W||c.height!==H){c.width=W;c.height=H}const x=c.getContext('2d');x.clearRect(0,0,W,H);x.drawImage(src,0,0,W,H);return applyFX(c,st)}
+  window.__FX={};COLORS.forEach(c=>{if(c[3])window.__FX[c[1].toUpperCase()]=c[3]==='glitter'?2:c[3]==='holo'?3:1});
+  let fxC=null;function fxFrom(src,W,H,st){return src;if(!st.picked.some(i=>COLORS[i]&&COLORS[i][3]))return src;const c=fxC||(fxC=document.createElement('canvas'));if(c.width!==W||c.height!==H){c.width=W;c.height=H}const x=c.getContext('2d');x.clearRect(0,0,W,H);x.drawImage(src,0,0,W,H);return applyFX(c,st)}
 
   // ---- 数学的マーブリング ----
   // 滴下: 新しい滴の外側にある点は、面積を保ったまま外へ押し出される（色どうしは混ざらない）
@@ -1579,7 +1593,7 @@ window.GLM=GLM;window.glBake=bake;
   let glQ=Promise.resolve(),loC=null;
   function patCanvas(Ww,Hw,pw,ph,ss){const st=cur,my=run,key=[st.pi,st.seed,st.picked.join(','),Ww,Hw,pw,ph,ss].join('|');if(patCache.has(key))return patCache.get(key);
     const pr=glQ.then(async()=>{if(my!==run||!GL)return null;GL.setOps(buildOps(st,Ww,Hw));GL.size(pw,ph);if(!await GL.renderTiled({scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0},()=>my===run&&!!GL))return null;
-      const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return applyFX(c,st)});
+      const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return c});
     glQ=pr.catch(()=>null);pr.then(c=>{if(!c)patCache.delete(key)},()=>patCache.delete(key));
     patCache.set(key,pr);if(patCache.size>4){const k0=patCache.keys().next().value,old=patCache.get(k0);patCache.delete(k0);old.then(c=>{if(c){c.width=c.height=0}},()=>{})}return pr}
   let tank=null,run=0,seed=Date.now()%100000+1,pIndex=-1,firstRun=true,cur=null;const hist=[];
