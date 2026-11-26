@@ -907,7 +907,7 @@ class GLM{
   // fracs: 各工程の進み具合（0〜1、なしなら全部1）。rect: [x,y,w,h] を指定すると、その部分だけ描く
   render(fracs,o,rect){const gl=this.gl,cv=this.cv;let df=1;for(let i=0;i<this.n;i++){const f=fracs?fracs[i]:1;this.fr[i*4]=f;if(i<this.nd&&f<1)df=0}this.tex(this.tFr,1,this.fr,this.frH,!this.frNew);this.frNew=false;
     gl.viewport(0,0,cv.width,cv.height);gl.useProgram(this.pr);gl.uniform1i(this.U.uOps,0);gl.uniform1i(this.U.uFr,1);gl.uniform1i(this.U.uN,this.n);gl.uniform1i(this.U.uTexW,TW);
-    gl.uniform2f(this.U.uSize,cv.width,cv.height);gl.uniform1f(this.U.uScale,o.scale);gl.uniform1i(this.U.uSS,o.ss||1);gl.uniform1f(this.U.uKw,KW);gl.uniform1f(this.U.uFlip,o.flip||0);gl.uniform1i(this.U.uND,this.nd);gl.uniform1i(this.U.uDF,df);
+    gl.uniform2f(this.U.uSize,cv.width,cv.height+(o.yOff||0));gl.uniform1f(this.U.uScale,o.scale);gl.uniform1i(this.U.uSS,o.ss||1);gl.uniform1f(this.U.uKw,KW);gl.uniform1f(this.U.uFlip,o.flip||0);gl.uniform1i(this.U.uND,this.nd);gl.uniform1i(this.U.uDF,df);
     const c=new Float32Array(24);o.cols.forEach((h,i)=>{const n=parseInt(h.slice(1),16);c[i*3]=((n>>16)&255)/255;c[i*3+1]=((n>>8)&255)/255;c[i*3+2]=(n&255)/255});gl.uniform3fv(this.U.uCol,c);const fx=new Int32Array(8);o.cols.forEach((h,i)=>{fx[i]=(window.__FX&&window.__FX[h.toUpperCase()])||0});gl.uniform1iv(this.U.uFx,fx);
     if(rect){gl.enable(gl.SCISSOR_TEST);gl.scissor(rect[0],cv.height-rect[1]-rect[3],rect[2],rect[3])}else gl.disable(gl.SCISSOR_TEST);
     gl.drawArrays(gl.TRIANGLES,0,3);gl.disable(gl.SCISSOR_TEST)}
@@ -1108,11 +1108,16 @@ window.GLM=GLM;window.glBake=bake;
   const patCache=new Map();
   // iPhone では、アプリを切りかえたときなどに GPU がリセットされることがある。そのときは新しく作りなおして、同じ模様と「ひとつ前」の記録をそのまま使う
   let lostT=0,glLost=false,tries=0;
-  const back2D=()=>{glog('fallback to 6 patterns');glLost=false;cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()};
-  const revive=()=>{clearTimeout(lostT);if(GL){glLost=false;return}if(document.hidden)return;
-    let ok=false;try{const nc=document.createElement('canvas'),g=new GLM(nc);glc=nc;GL=g;watchGL(nc);ok=true;glog('revive ok')}catch(err){GL=null;glog('revive fail '+tries+': '+(err&&err.message))}
-    if(ok){glLost=false;tries=0;patCache.clear();glQ=Promise.resolve();if(cur){picked=cur.picked.slice();renderChips();make('resize')}else make();return}
-    if(++tries<4)lostT=setTimeout(revive,1500);else back2D()};
+  // GPU がしばらく戻らないときだけ、いったん6つの模様で描く。そのあとも「新しい模様」を押すたびに GPU をためし、戻ったら30の模様にもどす
+  let in2D=false;
+  const back2D=()=>{glog('fallback to 6 patterns');glLost=false;in2D=true;cur=null;hist.length=0;syncBack();bag=[];firstRun=true;make()};
+  const tryGL=()=>{try{const nc=document.createElement('canvas'),g=new GLM(nc);const old=glc;glc=nc;GL=g;watchGL(nc);if(old&&old!==nc){old.width=old.height=1}glog('revive ok');return true}catch(err){GL=null;glog('revive fail '+tries+': '+(err&&err.message));return false}};
+  const revive=(noMake)=>{clearTimeout(lostT);if(GL){glLost=false;return true}if(document.hidden&&!noMake)return false;
+    const ok=tryGL();
+    if(ok){glLost=false;tries=0;patCache.clear();glQ=Promise.resolve();
+      if(in2D){in2D=false;cur=null;hist.length=0;syncBack();bag=[];if(!noMake)make();return true}
+      if(noMake)return true;if(cur){picked=cur.picked.slice();renderChips();make('resize')}else make();return true}
+    if(noMake)return false;if(++tries<4)lostT=setTimeout(revive,1500);else back2D();return false};
   function watchGL(cv){cv.addEventListener('webglcontextlost',e=>{e.preventDefault();if(cv!==glc)return;glog('context lost');GL=null;glLost=true;run++;patCache.clear();glQ=Promise.resolve();clearTimeout(lostT);lostT=setTimeout(revive,1200)},false)}
   if(GL)watchGL(glc);else if(window.WebGL2RenderingContext){glLost=true;lostT=setTimeout(revive,600)}
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&glLost)lostT=setTimeout(revive,300)});
@@ -1149,17 +1154,21 @@ window.GLM=GLM;window.glBake=bake;
   // GPU は1枚ずつ順番に使う（同時に描くと、とちゅうの黒い帯が混ざるため）。同じ絵をたのまれたら、描いている途中のものを待つ
   let glQ=Promise.resolve(),loC=null;
   function patCanvas(Ww,Hw,pw,ph,ss){const st=cur,my=run,key=[st.pi,st.seed,st.picked.join(','),Ww,Hw,pw,ph,ss].join('|');if(patCache.has(key))return patCache.get(key);
-    const pr=glQ.then(async()=>{if(my!==run||!GL)return null;GL.setOps(buildOps(st,Ww,Hw));GL.size(pw,ph);if(!await GL.renderTiled({scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0},()=>my===run&&!!GL))return null;
-      const c=document.createElement('canvas');c.width=pw;c.height=ph;c.getContext('2d').drawImage(glc,0,0);return c});
+    // 大きな絵は、横長の帯に分けて GPU で描き、1枚の絵にはりあわせる（iPhone で GPU のメモリがあふれないように）
+    const pr=glQ.then(async()=>{if(my!==run||!GL)return null;const ok=()=>my===run&&!!GL,o={scale:pw/Ww,ss,cols:stCols(st),flip:HP[st.pi].fy?Hw:0};GL.setOps(buildOps(st,Ww,Hw));
+      const c=document.createElement('canvas');c.width=pw;c.height=ph;const cg=c.getContext('2d'),BAND=Math.max(64,Math.min(ph,Math.floor(400000/pw)));
+      for(let y=0;y<ph;y+=BAND){const h=Math.min(BAND,ph-y);GL.size(pw,h);o.yOff=y;if(!await GL.renderTiled(o,ok)){c.width=c.height=0;return null}cg.drawImage(glc,0,y)}
+      return c});
     glQ=pr.catch(()=>null);pr.then(c=>{if(!c)patCache.delete(key)},()=>patCache.delete(key));
-    patCache.set(key,pr);if(patCache.size>4){const k0=patCache.keys().next().value,old=patCache.get(k0);patCache.delete(k0);old.then(c=>{if(c){c.width=c.height=0}},()=>{})}return pr}
+    patCache.set(key,pr);if(patCache.size>2){const k0=patCache.keys().next().value,old=patCache.get(k0);patCache.delete(k0);old.then(c=>{if(c){c.width=c.height=0}},()=>{})}return pr}
   let tank=null,run=0,seed=Date.now()%100000+1,pIndex=-1,firstRun=true,cur=null;const hist=[];
   let bag=GL?HP.map((_,i)=>i).filter(i=>i!==FIRST.pi).sort(()=>Math.random()-.5):[2,3,4,5].sort(()=>Math.random()-.5);
   const backBtn=document.getElementById('back'),syncBack=()=>{backBtn.hidden=!hist.length};
   const refill=()=>{bag=(GL?HP.map((_,i)=>i):PATTERNS.map((_,i)=>i).filter(i=>i!==1)).sort(()=>Math.random()-.5);if(bag[0]===pIndex)bag.push(bag.shift())};
   // keep: true=同じ模様で色だけ / 'resize'=画面の大きさが変わった / restore: もどるときの1回ぶん
   async function make(keep,restore){
-    if(picked.length<2||glLost)return;const my=++run;saveBtn.disabled=true;
+    if(picked.length<2)return;if((glLost||in2D)&&window.WebGL2RenderingContext){const was=in2D;if(revive(true)){glLost=false;if(was){restore=null;if(keep===true)keep=false}}else if(glLost){tries=0;clearTimeout(lostT);back2D();return}}
+    const my=++run;saveBtn.disabled=true;
     if(restore){pIndex=restore.pi;seed=restore.seed}
     else{if(cur&&keep!=='resize'){hist.push(cur);if(hist.length>40)hist.shift()}
       if(!(GL&&keep==='resize'&&cur))seed=((seed*16807+11)%2147483647)||1;
@@ -1297,13 +1306,15 @@ window.GLM=GLM;window.glBake=bake;
   const ratio=()=>GL?HH/HW:tank.h/tank.w;
   // 保存用の絵は2枚だけ：アーチ用（カードと壁紙で共用、大きめに1回）と、壁紙の全面用。オプションを切りかえても描きなおさない
   const archPat=()=>patCanvas(HW,HH,870,Math.round(870*HH/HW),2),fullPat=()=>patCanvas(HW,HW*932/430,1290,2796,1);
-  async function renderCard(){const o=opt.card,W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  // できあがりの絵は、カード用・壁紙用に1枚ずつを使いまわす（タップのたびに大きな絵が増えて重くならないように）
+  const outC={};const outCanvas=(k,w,h)=>{const c=outC[k]||(outC[k]=document.createElement('canvas'));if(c.width!==w||c.height!==h){c.width=w;c.height=h}const g=c.getContext('2d');g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;return c};
+  async function renderCard(){const o=opt.card,W=1080,H=1350;const pc=GL?await archPat():null;if(GL&&!pc)return null;const c=outCanvas('card',W,H),g=c.getContext('2d');
     g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);const aw=600,ah=aw*ratio(),ax=(W-aw)/2;
-    const ay=(H-ah)/2-30;const pc=GL?await archPat():null;if(GL&&!pc)return null;
+    const ay=(H-ah)/2-30;
     g.save();archPath(g,ax,ay,aw,ah);g.clip();if(pc)g.drawImage(pc,ax,ay,aw,ah);else drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
     if(o.logo)drawLogo(g,W/2,H-150,120);return c}
   // iPhoneの壁紙（1290×2796：いまのiPhoneの縦横比。上の時計と下のボタンにかからない位置に置く）
-  async function renderWall(){const o=opt.wall,S=3,W=430,H=932,c=document.createElement('canvas');c.width=W*S;c.height=H*S;const g=c.getContext('2d');g.scale(S,S);
+  async function renderWall(){const o=opt.wall,S=3,W=430,H=932;const pc=GL?await(o.bg==='full'?fullPat():archPat()):null;if(GL&&!pc)return null;const c=outCanvas('wall',W*S,H*S),g=c.getContext('2d');g.scale(S,S);
     // 上の時計（〜350）と、下のライト・カメラ（826〜）にはかけない
     const TOP=350,BOT=826,GAP=18,LOGO=o.cal?42:84,LOGOH=LOGO*1385/2083;
     const foot=[];if(o.logo)foot.push(['logo',LOGO*1385/2083]);
@@ -1312,14 +1323,14 @@ window.GLM=GLM;window.glBake=bake;
       drawLogo(g,W/2,y,LOGO,white);
       y+=h+GAP}};
     const cw=210,ch=o.cal?calH(o.month):0;
-    if(o.bg==='full'){const pc=GL?await fullPat():null,t=GL?null:wallTank(W,H);if(GL&&!pc)return null;const full=()=>pc?g.drawImage(pc,0,0,W,H):drawInks(g,t,0,0,1);full();
+    if(o.bg==='full'){const t=GL?null:wallTank(W,H);const full=()=>pc?g.drawImage(pc,0,0,W,H):drawInks(g,t,0,0,1);full();
       // 名前とロゴは、模様の上に白で直接（四角で囲まない）
       const fy=BOT-footH;if(foot.length){const gr=g.createLinearGradient(0,fy-150,0,H);gr.addColorStop(0,'rgba(17,18,19,0)');gr.addColorStop(.55,'rgba(17,18,19,.16)');gr.addColorStop(1,'rgba(17,18,19,.28)');g.fillStyle=gr;g.fillRect(0,fy-150,W,H-fy+150);g.save();g.shadowColor='rgba(0,0,0,.28)';g.shadowBlur=10;g.shadowOffsetY=1;drawFoot(fy,true);g.restore()}
       if(o.cal){// カレンダーは画面のまんなかに、すりガラスのように
         // 少し大きめに、画面のまんなかへ（ロゴのあるなしで動かない。上の時計にはかからない）
         const k=1.22,pw=(cw+52)*k,ph=(ch+44)*k,px=(W-pw)/2,py=Math.max(TOP-24,(H-ph)/2);
         // すりガラス：模様をうんと小さくしてから広げると、どの端末でも同じようにぼける
-        const sm=document.createElement('canvas'),mid=document.createElement('canvas');mid.width=Math.ceil(W/2);mid.height=Math.ceil(H/2);sm.width=Math.ceil(W/14);sm.height=Math.ceil(H/14);
+        const sm=outC.sm||(outC.sm=document.createElement('canvas')),mid=outC.mid||(outC.mid=document.createElement('canvas'));mid.width=Math.ceil(W/2);mid.height=Math.ceil(H/2);sm.width=Math.ceil(W/14);sm.height=Math.ceil(H/14);
         const mg=mid.getContext('2d');if(pc)mg.drawImage(pc,0,0,mid.width,mid.height);else{mg.scale(.5,.5);drawInks(mg,t,0,0,1)}sm.getContext('2d').drawImage(mid,0,0,sm.width,sm.height);
         g.save();g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,26*k):g.rect(px,py,pw,ph);g.clip();g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(sm,0,0,W,H);
         g.fillStyle='rgba(255,255,255,.64)';g.fillRect(px,py,pw,ph);g.restore();
@@ -1329,7 +1340,6 @@ window.GLM=GLM;window.glBake=bake;
       // アーチは時計の下からのびて、文字はその下に（アーチは時計と重なってもよい）
       // アーチの位置は、ロゴのあるときにそろえる（ロゴがなくても下がりすぎない）
       const below=(o.cal?ch+30:0)+LOGOH+28,A0=170,room=BOT-below-A0,aw=Math.min(290,room/ratio()),ah=aw*ratio(),ax=(W-aw)/2,ay=A0+(room-ah)/2;
-      const pc=GL?await archPat():null;if(GL&&!pc)return null;
       g.save();archPath(g,ax,ay,aw,ah);g.clip();if(pc)g.drawImage(pc,ax,ay,aw,ah);else drawInks(g,tank,ax,ay,aw/tank.w);g.restore();
       let y=ay+ah+(o.cal||foot.length?30:0);if(o.cal){drawCal(g,W/2,y,cw,o.month);y+=ch+28}drawFoot(BOT-footH,false)}
     return c}
@@ -1342,7 +1352,7 @@ window.GLM=GLM;window.glBake=bake;
   sheet.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b){if(e.target===sheet)closeSheet();return}const k=b.dataset.k,v=b.dataset.v;
     if(k==='kind')opt.kind=v;else{const o=opt[opt.kind];if(v!==undefined)o[k]=isNaN(+v)?v:+v;else o[k]=!o[k]}syncUI()});
   let lastFocus=null;
-  async function openSheet(){if(saveBtn.disabled)return;lastFocus=document.activeElement;if(GL){archPat();fullPat()}await prepare();sheet.hidden=false;document.body.style.overflow='hidden';requestAnimationFrame(()=>{sheet.classList.add('open');syncUI();doSave.focus()})}
+  async function openSheet(){if(saveBtn.disabled)return;lastFocus=document.activeElement;if(GL)archPat();await prepare();sheet.hidden=false;document.body.style.overflow='hidden';requestAnimationFrame(()=>{sheet.classList.add('open');syncUI();doSave.focus()})}
   function closeSheet(){sheet.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{sheet.hidden=true},250);if(lastFocus)lastFocus.focus()}
   saveBtn.addEventListener('click',openSheet);document.getElementById('sheetClose').addEventListener('click',closeSheet);
   addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.hidden)closeSheet()});
